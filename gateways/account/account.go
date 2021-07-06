@@ -6,7 +6,7 @@ import (
 	"net/http"
 
 	"github.com/francisleide/ChallangeGo/domain/account"
-	"github.com/francisleide/ChallangeGo/entities"
+	"github.com/francisleide/ChallangeGo/domain/entities"
 	"github.com/gorilla/mux"
 )
 

@@ -1,7 +1,7 @@
 package usecase
 
 import (
-	"github.com/francisleide/ChallangeGo/entities"
+	"github.com/francisleide/ChallangeGo/domain/entities"
 )
 
 func (a AccountUc) List_all_accounts() []entities.Account {

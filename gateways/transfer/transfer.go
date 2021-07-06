@@ -6,8 +6,8 @@ import (
 	"log"
 	"net/http"
 
+	"github.com/francisleide/ChallangeGo/domain/entities"
 	"github.com/francisleide/ChallangeGo/domain/transfer"
-	"github.com/francisleide/ChallangeGo/entities"
 	"github.com/francisleide/ChallangeGo/gateways/middlware"
 	"github.com/gorilla/mux"
 )

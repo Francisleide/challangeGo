@@ -4,8 +4,8 @@ import (
 	"errors"
 	"fmt"
 
-	"github.com/francisleide/ChallangeGo/entities"
-	"github.com/francisleide/ChallangeGo/repository"
+	"github.com/francisleide/ChallangeGo/domain/entities"
+	"github.com/francisleide/ChallangeGo/gateways/repository"
 )
 
 type TransferUc struct {

@@ -3,7 +3,7 @@ package repository
 import (
 	"fmt"
 
-	"github.com/francisleide/ChallangeGo/entities"
+	"github.com/francisleide/ChallangeGo/domain/entities"
 )
 
 var (
