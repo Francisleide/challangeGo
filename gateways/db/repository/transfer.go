@@ -20,7 +20,6 @@ func (r Repository) List_all_transfers() []entities.Transfer {
 	rows, err := r.Db.Query("SELECT id, account_origin_id, account_destination_id, amount,transfer_created_at, from transfer;")
 	defer rows.Close()
 	checkError(err)
-	fmt.Println("Reading data:")
 	for rows.Next() {
 		err = rows.Scan(&id_transfer, &account_origin_id, &account_destination_id, &amount, &transfer_created_at)
 		tranfer := entities.Transfer{id_transfer, account_origin_id, account_destination_id, amount, transfer_created_at}
@@ -29,14 +28,11 @@ func (r Repository) List_all_transfers() []entities.Transfer {
 	}
 	checkError(err)
 	err = rows.Err()
-	fmt.Println("Done.")
 	return tranfers
 }
 
 func (r Repository) InsertTransfer(account_origem, account_destino entities.Account, ammount float64) (*entities.Transfer, error) {
 	//Atualizar o balance da conta de origem
-	fmt.Println("Valor na conta de origem atualizado: ", account_origem.Balance)
-	fmt.Println("Valor na conta de destino atualizado: ", account_destino.Balance)
 	r.UpdateBalance(account_origem)
 	//Atualizar o balance da conta de destino
 	r.UpdateBalance(account_destino)

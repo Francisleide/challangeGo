@@ -6,7 +6,7 @@ import (
 	"log"
 	"net/http"
 
-	"github.com/francisleide/ChallangeGo/gateways/middlware"
+	"github.com/francisleide/ChallangeGo/gateways/http/middlware"
 )
 
 type Withdraw struct {
@@ -25,8 +25,8 @@ func (h Handler) Withdraw(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		log.Fatal(err)
 	}
-	ok:=h.autentic.WithDraw(accountId, withdraw.Ammount)
-	if !ok{
+	ok := h.autentic.WithDraw(accountId, withdraw.Ammount)
+	if !ok {
 		log.Panic("Saldo insuficiente!")
 	}
 	fmt.Println(withdraw.Ammount)

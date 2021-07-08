@@ -2,7 +2,7 @@ package usecase
 
 import (
 	"github.com/francisleide/ChallangeGo/domain/entities"
-	"github.com/francisleide/ChallangeGo/gateways/repository"
+	"github.com/francisleide/ChallangeGo/gateways/db/repository"
 )
 
 type Autentic struct {
@@ -23,9 +23,8 @@ func (a Autentic) Deposite(cpf string, ammount float64) {
 
 }
 
-
 //withdraw aqui!
-func (a Autentic)WithDraw(cpf string, ammount float64) bool {
+func (a Autentic) WithDraw(cpf string, ammount float64) bool {
 	var account entities.Account
 	account = a.r.FindOne(cpf)
 	if account.Balance > ammount {

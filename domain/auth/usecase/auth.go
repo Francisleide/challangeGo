@@ -9,7 +9,7 @@ import (
 
 	"github.com/dgrijalva/jwt-go"
 	"github.com/francisleide/ChallangeGo/domain/entities"
-	"github.com/francisleide/ChallangeGo/gateways/repository"
+	"github.com/francisleide/ChallangeGo/gateways/db/repository"
 	"golang.org/x/crypto/bcrypt"
 )
 

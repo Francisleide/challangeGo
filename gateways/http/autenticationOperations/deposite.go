@@ -6,7 +6,7 @@ import (
 	"log"
 	"net/http"
 
-	"github.com/francisleide/ChallangeGo/gateways/middlware"
+	"github.com/francisleide/ChallangeGo/gateways/http/middlware"
 )
 
 type Deposite struct {
@@ -33,5 +33,5 @@ func (h Handler) Deposite(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		log.Fatal(err)
 	}
-	
+
 }

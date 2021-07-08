@@ -9,8 +9,8 @@ import (
 	autentic "github.com/francisleide/ChallangeGo/domain/autenticOperations/usecase"
 	au "github.com/francisleide/ChallangeGo/domain/auth/usecase"
 	tr "github.com/francisleide/ChallangeGo/domain/transfer/usecase"
-	"github.com/francisleide/ChallangeGo/gateways"
-	"github.com/francisleide/ChallangeGo/gateways/repository"
+	"github.com/francisleide/ChallangeGo/gateways/http"
+	"github.com/francisleide/ChallangeGo/gateways/db/repository"
 	_ "github.com/go-sql-driver/mysql"
 )
 

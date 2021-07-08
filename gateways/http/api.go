@@ -10,11 +10,11 @@ import (
 	aut "github.com/francisleide/ChallangeGo/domain/autenticOperations/usecase"
 	a "github.com/francisleide/ChallangeGo/domain/auth/usecase"
 	tr "github.com/francisleide/ChallangeGo/domain/transfer/usecase"
-	"github.com/francisleide/ChallangeGo/gateways/account"
-	autenticationoperations "github.com/francisleide/ChallangeGo/gateways/autenticationOperations"
-	"github.com/francisleide/ChallangeGo/gateways/auth"
-	"github.com/francisleide/ChallangeGo/gateways/middlware"
-	"github.com/francisleide/ChallangeGo/gateways/transfer"
+	"github.com/francisleide/ChallangeGo/gateways/http/account"
+	autenticationoperations "github.com/francisleide/ChallangeGo/gateways/http/autenticationOperations"
+	"github.com/francisleide/ChallangeGo/gateways/http/auth"
+	"github.com/francisleide/ChallangeGo/gateways/http/middlware"
+	"github.com/francisleide/ChallangeGo/gateways/http/transfer"
 	"github.com/gorilla/mux"
 )
 

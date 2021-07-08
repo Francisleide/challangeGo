@@ -4,7 +4,7 @@ import (
 	"fmt"
 
 	"github.com/francisleide/ChallangeGo/domain/entities"
-	"github.com/francisleide/ChallangeGo/gateways/repository"
+	"github.com/francisleide/ChallangeGo/gateways/db/repository"
 )
 
 type AccountUc struct {
