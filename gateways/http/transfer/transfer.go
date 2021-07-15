@@ -6,7 +6,6 @@ import (
 	"log"
 	"net/http"
 
-	"github.com/francisleide/ChallangeGo/domain/entities"
 	"github.com/francisleide/ChallangeGo/domain/transfer"
 	"github.com/francisleide/ChallangeGo/gateways/http/middlware"
 	"github.com/gorilla/mux"
@@ -27,7 +26,7 @@ func Transfer(serv *mux.Router, usecase transfer.UseCase) *Handler {
 }
 
 func (h Handler) Create_transfer(w http.ResponseWriter, r *http.Request) {
-	var tr entities.TransferInput
+	var tr transfer.TransferInput
 	accountId, ok := middlware.GetAccountID(r.Context())
 	if !ok || accountId == "" {
 		w.Header().Set("Content-Type", "application/json")

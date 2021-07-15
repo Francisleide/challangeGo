@@ -4,6 +4,7 @@ import (
 	"fmt"
 
 	"github.com/francisleide/ChallangeGo/domain/entities"
+	"github.com/francisleide/ChallangeGo/domain/transfer"
 )
 
 var (
@@ -33,15 +34,17 @@ func (r Repository) List_all_transfers() []entities.Transfer {
 
 func (r Repository) InsertTransfer(account_origem, account_destino entities.Account, ammount float64) (*entities.Transfer, error) {
 	//Atualizar o balance da conta de origem
+	//isso é regra de negócio, deveria estar no usecase
 	r.UpdateBalance(account_origem)
 	//Atualizar o balance da conta de destino
+	//isso é regra de negócio, deveria estar no usecase
 	r.UpdateBalance(account_destino)
 	//inserir a transferência
 
-	t := entities.NewTransferInput(account_origem.Id, account_destino.Id, ammount)
+	t := transfer.NewTransferInput(account_origem.Id, account_destino.Id, ammount)
 	fmt.Printf(t.Id)
 	_, err := r.Db.Query("insert into  transfer (id, account_origin_id, account_destination_id,amount,created_at) values (?,?,?,?,?)",
-		t.Id, t.Account_origin_id, t.Account_destination_id, t.Ammount, t.Created_at)
+		t.Id, t.Account_origin_id, t.Account_destination_id, t.Amount, t.Created_at)
 
 	if err != nil {
 		checkError(err)

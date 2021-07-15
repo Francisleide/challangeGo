@@ -1,6 +1,7 @@
 package repository
 
 import (
+	"errors"
 	"fmt"
 	"log"
 	"reflect"
@@ -36,7 +37,6 @@ func (r Repository) List_all_accounts() []entities.Account {
 	return accounts
 }
 
-
 func (r Repository) FindOne(cpf string) entities.Account {
 
 	var accounts []entities.Account
@@ -44,7 +44,7 @@ func (r Repository) FindOne(cpf string) entities.Account {
 	sql = "SELECT id, nome, cpf, secret,balance, created_at from account where cpf=?"
 	rows, err := r.Db.Query(sql, cpf)
 	fmt.Println(sql, cpf)
-	
+
 	checkError(err)
 	for rows.Next() {
 		err := rows.Scan(&id, &nome, &cpf, &secret, &balance, &created_at)
@@ -54,19 +54,21 @@ func (r Repository) FindOne(cpf string) entities.Account {
 		checkError(err)
 	}
 	fmt.Println("CPF da conta : ", accounts[0].Cpf)
-	if(len(accounts)== 0){
+	if len(accounts) == 0 {
 		return entities.Account{}
 	}
 	return accounts[0]
 
 }
 
+///retornar erro (tratar)
 func (r Repository) UpdateBalance(account entities.Account) {
 
 	rows, err := r.Db.Exec("UPDATE account SET balance = ? WHERE id = ?", account.Balance, account.Id)
 	checkError(err)
 	rowCount, err := rows.RowsAffected()
 	fmt.Println(rowCount)
+
 }
 
 func (r Repository) InsertAccount(accountInput entities.AccountInput) (*entities.Account, error) {
@@ -75,8 +77,8 @@ func (r Repository) InsertAccount(accountInput entities.AccountInput) (*entities
 	fmt.Println("CPF no Repository: ", account.Cpf)
 	fmt.Printf(account.Id)
 	account_exist := r.FindOne(accountInput.Cpf)
-	if !reflect.DeepEqual(account_exist, entities.Account{}){
-		log.Fatal("Já existe uma conta com este CPF")
+	if !reflect.DeepEqual(account_exist, entities.Account{}) {
+		return nil, errors.New("Já exite este CPF no banco.")
 	}
 	_, err := r.Db.Query("insert into  account (id, nome, cpf, secret,balance, created_at) values (?,?,?,?,?,? )",
 		account.Id, account.Nome, account.Cpf, account.Secret, account.Balance, account.Created_at)

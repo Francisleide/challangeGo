@@ -5,14 +5,14 @@ import (
 	"fmt"
 
 	"github.com/francisleide/ChallangeGo/domain/entities"
-	"github.com/francisleide/ChallangeGo/gateways/db/repository"
+	"github.com/francisleide/ChallangeGo/domain/transfer"
 )
 
 type TransferUc struct {
-	r repository.Repository
+	r transfer.Repository
 }
 
-func NewTransfer(repo repository.Repository) TransferUc {
+func NewTransfer(repo transfer.Repository) TransferUc {
 	return TransferUc{
 		r: repo,
 	}
@@ -23,7 +23,7 @@ func (t TransferUc) Create_transfer(origem, destino string, ammount float64) (*e
 	var account_origem entities.Account
 	var account_destino entities.Account
 	account_origem = t.r.FindOne(origem)
-	fmt.Printf("CPF da conta de origem: ", account_origem.Cpf)
+	fmt.Println("CPF da conta de origem: ", account_origem.Cpf)
 	fmt.Println("Saldo anterior na conta de origem: ", account_origem.Balance)
 	account_destino = t.r.FindOne(destino)
 	fmt.Println("Saldo anterior na conta de destino: ", account_destino.Balance)

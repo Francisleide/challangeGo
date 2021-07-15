@@ -3,21 +3,20 @@ package usecase
 import (
 	"fmt"
 
+	"github.com/francisleide/ChallangeGo/domain/account"
 	"github.com/francisleide/ChallangeGo/domain/entities"
-	"github.com/francisleide/ChallangeGo/gateways/db/repository"
 )
 
 type AccountUc struct {
-	r repository.Repository
+	r account.Repository
 }
 
-func NewAccountUc(repo repository.Repository) AccountUc {
+func NewAccountUc(repo account.Repository) AccountUc {
 	return AccountUc{
 		r: repo,
 	}
 }
 
-//
 func (c AccountUc) Create_account(account entities.AccountInput) (*entities.Account, error) {
 	fmt.Println("CPF no Usecase: ", account.Cpf)
 	account2, err := c.r.InsertAccount(account)
@@ -25,4 +24,10 @@ func (c AccountUc) Create_account(account entities.AccountInput) (*entities.Acco
 		return nil, err
 	}
 	return account2, nil
+}
+
+func (c AccountUc) List_all_accounts() []entities.Account {
+	accounts := c.r.List_all_accounts()
+	return accounts
+
 }

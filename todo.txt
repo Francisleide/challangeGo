@@ -1,0 +1,8 @@
+[x] Ajuste com interfaces em todas as implementações de banco
+[] Criar testes unitários para cada método específico
+[] Retornos de erro em funções
+[] Criar arquivos de mensagens de erro para cada usecase
+[] UTilizar Swegger para doc
+[] Criar o readme
+[] Criar dockerfile e docker-compose
+[] Criar o migrations

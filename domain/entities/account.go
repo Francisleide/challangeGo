@@ -8,8 +8,6 @@ import (
 	"golang.org/x/crypto/bcrypt"
 )
 
-//import "time"
-
 
 type Account struct {
 	Id         string  `json: "account_id"`

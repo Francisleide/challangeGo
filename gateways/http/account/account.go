@@ -21,8 +21,6 @@ func Accounts(serv *mux.Router, usecase account.UseCase) *Handler {
 
 	serv.HandleFunc("/accounts", h.Create_account).Methods("Post")
 	serv.HandleFunc("/accounts", h.List_all_accounts).Methods("Get")
-	//serv.HandleFunc("/withdraw", h.Withdraw).Methods("Post")
-
 
 	return h
 }
