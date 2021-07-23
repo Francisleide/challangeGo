@@ -25,6 +25,14 @@ func Accounts(serv *mux.Router, usecase account.UseCase) *Handler {
 	return h
 }
 
+// ShowAccount godoc
+// @Summary Create an account
+// @Description Create an account with the basic information
+// @Param Body body entities.AccountInput true "Body"
+// @Accept  json
+// @Produce  json
+// @Header 201 {string} Token "x-request-id"
+// @Router /accounts [post]
 func (h Handler) Create_account(w http.ResponseWriter, r *http.Request) {
 	var acc entities.AccountInput
 	decoder := json.NewDecoder(r.Body)
@@ -41,5 +49,4 @@ func (h Handler) Create_account(w http.ResponseWriter, r *http.Request) {
 	})
 	w.Header().Set("Content-Type", "application/json")
 
-	//return json.NewEncoder(w).Encode(a)
 }

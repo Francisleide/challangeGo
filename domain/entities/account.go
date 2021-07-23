@@ -8,7 +8,6 @@ import (
 	"golang.org/x/crypto/bcrypt"
 )
 
-
 type Account struct {
 	Id         string  `json: "account_id"`
 	Nome       string  `json: "nome"`
@@ -18,17 +17,17 @@ type Account struct {
 	Created_at string  `json: "created_at"`
 }
 
-type AccountInput struct{
-	Nome       string  `json: "nome"`
-	Cpf        string  `json: "cpf"`
-	Secret     string  `json: "secret"`
+type AccountInput struct {
+	Nome   string `json: "nome"`
+	Cpf    string `json: "cpf"`
+	Secret string `json: "secret"`
 }
-//refatorar
-func GenerateId() string{
+
+func GenerateId() string {
 	return uuid.NewV4().String()
 }
 
-func EncryptSecret(pass string)  (string, error){
+func EncryptSecret(pass string) (string, error) {
 	secret, err := bcrypt.GenerateFromPassword([]byte(pass), bcrypt.DefaultCost)
 	if err != nil {
 		return "", err
@@ -36,16 +35,16 @@ func EncryptSecret(pass string)  (string, error){
 	return string(secret), nil
 
 }
-func NewAccount(nome, cpf, secret string)  Account{
-	secret, err:=  EncryptSecret(secret)
-	if err!= nil{
+func NewAccount(nome, cpf, secret string) Account {
+	secret, err := EncryptSecret(secret)
+	if err != nil {
 		log.Fatal(err)
-	}  
+	}
 	return Account{
-		Id: GenerateId(),
-		Nome: nome,
-		Cpf: cpf,
-		Secret: secret,
+		Id:         GenerateId(),
+		Nome:       nome,
+		Cpf:        cpf,
+		Secret:     secret,
 		Created_at: time.Now().Format(time.RFC822),
 	}
 }

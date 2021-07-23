@@ -21,7 +21,7 @@ func (c AccountUc) Create_account(account entities.AccountInput) (*entities.Acco
 	fmt.Println("CPF no Usecase: ", account.Cpf)
 	account2, err := c.r.InsertAccount(account)
 	if err != nil {
-		return nil, err
+		return nil, ErrorAccountAlreadyExists
 	}
 	return account2, nil
 }

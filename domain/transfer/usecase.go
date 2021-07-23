@@ -12,7 +12,7 @@ type UseCase interface {
 
 type TransferInput struct {
 	Cpf_destino string  `json: "cpf_destino"`
-	Ammount     float64 `json: "ammount"`
+	Amount     float64 `json: "amount"`
 }
 
 type Repository interface{

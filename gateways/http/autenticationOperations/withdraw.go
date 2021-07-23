@@ -10,9 +10,17 @@ import (
 )
 
 type Withdraw struct {
-	Ammount float64 `json: "ammount"`
+	Amount float64 `json: "amount"`
 }
 
+// ShowAccount godoc
+// @Summary Make a Withdraw
+// @Description Make a Withdraw from an authentic account
+// @Param Body body Withdraw true "Body"
+// @Accept  json
+// @Produce  json
+// @Header 201 {string} Token "x-request-id"
+// @Router /withdraw [post]
 func (h Handler) Withdraw(w http.ResponseWriter, r *http.Request) {
 	var withdraw Withdraw
 
@@ -25,11 +33,9 @@ func (h Handler) Withdraw(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		log.Fatal(err)
 	}
-	ok := h.autentic.WithDraw(accountId, withdraw.Ammount)
+	ok := h.autentic.WithDraw(accountId, withdraw.Amount)
 	if !ok {
 		log.Panic("Saldo insuficiente!")
 	}
-	fmt.Println(withdraw.Ammount)
-	fmt.Println("Conta : ", accountId)
 
 }

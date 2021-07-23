@@ -25,6 +25,15 @@ func Transfer(serv *mux.Router, usecase transfer.UseCase) *Handler {
 	return h
 }
 
+// ShowAccount godoc
+// @Summary Make a transfer
+// @Description Transfer between accounts. The account that will make the transfer must be authenticated with a token.
+// @Param Body body TransferInput true "Body"
+// @Param Authorization header string true "Bearer Authorization Token"
+// @Accept  json
+// @Produce  json
+// @Header 201 {string} Token "x-request-id"
+// @Router /transfer [post]
 func (h Handler) Create_transfer(w http.ResponseWriter, r *http.Request) {
 	var tr transfer.TransferInput
 	accountId, ok := middlware.GetAccountID(r.Context())
@@ -36,12 +45,12 @@ func (h Handler) Create_transfer(w http.ResponseWriter, r *http.Request) {
 	decoder := json.NewDecoder(r.Body)
 	decoder.DisallowUnknownFields()
 	err := decoder.Decode(&tr)
-	fmt.Println("Na rota, ammount: ", tr.Ammount)
+	fmt.Println("Na rota, ammount: ", tr.Amount)
 	fmt.Println("Id na rota: ", accountId)
 	if err != nil {
 		log.Fatal("Erro na hora de pegar elementos do body: ", err)
 	}
-	_, erro := h.transfer.Create_transfer(accountId, tr.Cpf_destino, tr.Ammount)
+	_, erro := h.transfer.Create_transfer(accountId, tr.Cpf_destino, tr.Amount)
 	if erro != nil {
 		fmt.Println("Erro! Saldo insuficiente")
 		w.WriteHeader(r.Response.StatusCode)

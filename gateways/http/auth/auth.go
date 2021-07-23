@@ -29,6 +29,13 @@ func Auth(serv *mux.Router, usecase auth.UseCase) *Handler {
 	return h
 }
 
+// ShowAccount godoc
+// @Summary Get a Auth
+// @Description It takes a token to authenticate yorself to the application
+// @Param Body body Login true "Body"
+// @Accept  json
+// @Produce  json
+// @Router /auth [post]
 func (h Handler) Authorization(w http.ResponseWriter, r *http.Request) {
 	var login Login
 	decoder := json.NewDecoder(r.Body)

@@ -1,0 +1,158 @@
+basePath: /
+definitions:
+  autenticationoperations.Deposite:
+    properties:
+      amount:
+        type: number
+    type: object
+  autenticationoperations.Withdraw:
+    properties:
+      amount:
+        type: number
+    type: object
+  auth.Login:
+    properties:
+      cpf:
+        type: string
+      secret:
+        type: string
+    type: object
+  entities.Account:
+    properties:
+      balance:
+        type: number
+      cpf:
+        type: string
+      created_at:
+        type: string
+      id:
+        type: string
+      nome:
+        type: string
+      secret:
+        type: string
+    type: object
+  entities.AccountInput:
+    properties:
+      cpf:
+        type: string
+      nome:
+        type: string
+      secret:
+        type: string
+    type: object
+  transfer.TransferInput:
+    properties:
+      amount:
+        type: number
+      cpf_destino:
+        type: string
+    type: object
+info:
+  contact: {}
+  description: Documentation for Challenge-Go API
+  title: Swagger Challenge API
+  version: "2.0"
+paths:
+  /accounts:
+    get:
+      consumes:
+      - application/json
+      description: List all accounts
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/entities.Account'
+            type: array
+        "400":
+          description: Failed to decode
+        "404":
+          description: Accounts not found
+        "500":
+          description: Unexpected internal server error
+      summary: Get accounts
+    post:
+      consumes:
+      - application/json
+      description: Create an account with the basic information
+      parameters:
+      - description: Body
+        in: body
+        name: Body
+        required: true
+        schema:
+          $ref: '#/definitions/entities.AccountInput'
+      produces:
+      - application/json
+      summary: Create an account
+  /auth:
+    post:
+      consumes:
+      - application/json
+      description: It takes a token to authenticate yorself to the application
+      parameters:
+      - description: Body
+        in: body
+        name: Body
+        required: true
+        schema:
+          $ref: '#/definitions/auth.Login'
+      produces:
+      - application/json
+      summary: Get a Auth
+  /deposite:
+    post:
+      consumes:
+      - application/json
+      description: Make a deposite from an authentic account
+      parameters:
+      - description: Body
+        in: body
+        name: Body
+        required: true
+        schema:
+          $ref: '#/definitions/autenticationoperations.Deposite'
+      produces:
+      - application/json
+      summary: Make a deposite
+  /transfer:
+    post:
+      consumes:
+      - application/json
+      description: Transfer between accounts. The account that will make the transfer
+        must be authenticated with a token.
+      parameters:
+      - description: Body
+        in: body
+        name: Body
+        required: true
+        schema:
+          $ref: '#/definitions/transfer.TransferInput'
+      - description: Bearer Authorization Token
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      produces:
+      - application/json
+      summary: Make a transfer
+  /withdraw:
+    post:
+      consumes:
+      - application/json
+      description: Make a Withdraw from an authentic account
+      parameters:
+      - description: Body
+        in: body
+        name: Body
+        required: true
+        schema:
+          $ref: '#/definitions/autenticationoperations.Withdraw'
+      produces:
+      - application/json
+      summary: Make a Withdraw
+swagger: "2.0"

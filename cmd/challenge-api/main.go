@@ -5,12 +5,13 @@ import (
 	"fmt"
 	"log"
 
+	"github.com/francisleide/ChallangeGo/docs"
 	ac "github.com/francisleide/ChallangeGo/domain/account/usecase"
 	autentic "github.com/francisleide/ChallangeGo/domain/autenticOperations/usecase"
 	au "github.com/francisleide/ChallangeGo/domain/auth/usecase"
 	tr "github.com/francisleide/ChallangeGo/domain/transfer/usecase"
-	"github.com/francisleide/ChallangeGo/gateways/http"
 	"github.com/francisleide/ChallangeGo/gateways/db/repository"
+	gateways "github.com/francisleide/ChallangeGo/gateways/http"
 	_ "github.com/go-sql-driver/mysql"
 )
 
@@ -40,6 +41,13 @@ func connect() *sql.DB {
 	return db
 }
 
+// @title Swagger Challenge API
+// @version 2.0
+// @description Documentation for Challenge-Go API
+
+// TODO edit basepath !!!
+// @BasePath /
+
 func main() {
 	db := connect()
 	defer db.Close()
@@ -50,6 +58,6 @@ func main() {
 	a := au.NewAuth(*r)
 	aut := autentic.NewAutentic(*r)
 	x := gateways.NewApi(auc, tuc, aut, a)
-
+	docs.SwaggerInfo.Host = "localhost:3000"
 	x.Run("localhost", "3000")
 }

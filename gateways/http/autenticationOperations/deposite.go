@@ -10,9 +10,17 @@ import (
 )
 
 type Deposite struct {
-	Ammount float64 `json: "ammount"`
+	Amount float64 `json: "ammount"`
 }
 
+// ShowAccount godoc
+// @Summary Make a deposite
+// @Description Make a deposite from an authentic account
+// @Param Body body Deposite true "Body"
+// @Accept  json
+// @Produce  json
+// @Header 201 {string} Token "x-request-id"
+// @Router /deposite [post]
 func (h Handler) Deposite(w http.ResponseWriter, r *http.Request) {
 	var deposite Deposite
 	usr, ok := middlware.GetAccountID(r.Context())
@@ -28,7 +36,7 @@ func (h Handler) Deposite(w http.ResponseWriter, r *http.Request) {
 		log.Fatal("Não consegui ler o body")
 	}
 
-	h.autentic.Deposite(usr, deposite.Ammount)
+	h.autentic.Deposite(usr, deposite.Amount)
 
 	if err != nil {
 		log.Fatal(err)

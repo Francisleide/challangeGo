@@ -5,6 +5,8 @@ import (
 	"log"
 	"net/http"
 
+	// gin-swagger middleware
+	// swagger embed files
 	"github.com/francisleide/ChallangeGo/domain/account/usecase"
 	acc "github.com/francisleide/ChallangeGo/domain/account/usecase"
 	aut "github.com/francisleide/ChallangeGo/domain/autenticOperations/usecase"
@@ -16,6 +18,7 @@ import (
 	"github.com/francisleide/ChallangeGo/gateways/http/middlware"
 	"github.com/francisleide/ChallangeGo/gateways/http/transfer"
 	"github.com/gorilla/mux"
+	http_swagger "github.com/swaggo/http-swagger"
 )
 
 var c_account account.Handler
@@ -36,13 +39,15 @@ func NewApi(acc usecase.AccountUc, transf tr.TransferUc, autentic aut.Autentic, 
 	}
 }
 
-func (a Api) Run(host string, port string) {
+func (api Api) Run(host string, port string) {
 	r := mux.NewRouter()
+
 	Auth := r.PathPrefix("").Subrouter()
-	account.Accounts(r, a.account)
-	transfer.Transfer(Auth, a.transfer)
-	auth.Auth(r, a.auth)
-	autenticationoperations.AutenticationOperations(Auth, a.autentic)
+	account.Accounts(r, api.account)
+	transfer.Transfer(Auth, api.transfer)
+	auth.Auth(r, api.auth)
+	autenticationoperations.AutenticationOperations(Auth, api.autentic)
+	r.PathPrefix("/docs/swagger").Handler(http_swagger.WrapHandler).Methods(http.MethodGet)
 
 	Auth.Use(middlware.Authorize)
 	endpoint := fmt.Sprintf("%s:%s", host, port)
@@ -50,6 +55,7 @@ func (a Api) Run(host string, port string) {
 		Handler: r,
 		Addr:    endpoint,
 	}
+
 	log.Fatal(serv.ListenAndServe())
 
 }
