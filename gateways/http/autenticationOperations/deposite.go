@@ -33,7 +33,7 @@ func (h Handler) Deposite(w http.ResponseWriter, r *http.Request) {
 	decoder.DisallowUnknownFields()
 	err := decoder.Decode(&deposite)
 	if err != nil {
-		log.Fatal("Não consegui ler o body")
+		log.Fatal("Não consegui ler o body: ", err)
 	}
 
 	h.autentic.Deposite(usr, deposite.Amount)

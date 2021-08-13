@@ -41,11 +41,12 @@ func NewApi(acc usecase.AccountUc, transf tr.TransferUc, autentic aut.Autentic, 
 
 func (api Api) Run(host string, port string) {
 	r := mux.NewRouter()
-
+	
 	Auth := r.PathPrefix("").Subrouter()
 	account.Accounts(r, api.account)
 	transfer.Transfer(Auth, api.transfer)
 	auth.Auth(r, api.auth)
+	fmt.Println("Executing Run() with:  ", host, port )
 	autenticationoperations.AutenticationOperations(Auth, api.autentic)
 	r.PathPrefix("/docs/swagger").Handler(http_swagger.WrapHandler).Methods(http.MethodGet)
 
@@ -55,7 +56,7 @@ func (api Api) Run(host string, port string) {
 		Handler: r,
 		Addr:    endpoint,
 	}
-
+	
 	log.Fatal(serv.ListenAndServe())
 
 }

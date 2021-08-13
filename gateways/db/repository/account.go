@@ -44,16 +44,14 @@ func (r Repository) FindOne(cpf string) entities.Account {
 	sql = "SELECT id, nome, cpf, secret,balance, created_at from account where cpf=?"
 	rows, err := r.Db.Query(sql, cpf)
 	fmt.Println(sql, cpf)
-
+	fmt.Println("Quantidade de linhas: ", len(accounts))
 	checkError(err)
 	for rows.Next() {
 		err := rows.Scan(&id, &nome, &cpf, &secret, &balance, &created_at)
 		account := entities.Account{id, nome, cpf, secret, balance, created_at}
 		accounts = append(accounts, account)
-
 		checkError(err)
 	}
-	fmt.Println("CPF da conta : ", accounts[0].Cpf)
 	if len(accounts) == 0 {
 		return entities.Account{}
 	}

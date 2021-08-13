@@ -35,6 +35,8 @@ func NewAuth(repo repository.Repository) AuthUc {
 
 func (a AuthUc) Login(cpf, secret string) bool {
 	var account entities.Account
+	account.Cpf = cpf
+	account.Secret = secret
 	acc := a.r.FindOne(account.Cpf)
 	if reflect.DeepEqual(acc, entities.Account{}) {
 		fmt.Printf("Usuário/senha incorreto")

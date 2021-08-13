@@ -1,0 +1,39 @@
+version: '3.4'
+
+services:
+    mysql:
+        container_name: mysql
+        image: mysql
+        restart: always
+        environment: 
+            MYSQL_ROOT_PASSWORD: 123456
+            MYSQL_DATABASE: sys
+
+        healthcheck:
+            test: mysqladmin ping -h 127.0.0.1  --password=$$MYSQL_ROOT_PASSWORD
+            interval: 5s
+            timeout: 5s
+            retries: 5
+        ports: 
+            - 3306:3306  
+    api:
+        build: .
+        container_name: api
+        links: 
+            - mysql:mysql
+        ports: 
+            - 8080:8080
+        environment: 
+            - DB_PASS=123456
+            - DB_HOST=mysql
+            - DB_NAME=sys
+            - DB_PORT=3306
+            - DB_USER=root
+            - MULTI_STATEMENTS=true
+        deploy:
+            restart_policy:
+                condition: on-failure
+        depends_on:
+            mysql:
+                condition: service_healthy
+ 
