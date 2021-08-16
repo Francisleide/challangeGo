@@ -19,9 +19,12 @@ docker-compose up
 <h2> Devs </h2>
 ```bash
 make build
-make run
-make test
 
+```bash
+make run
+```
+```bash
+make test
 ```
 
 <h2> Environment variables </h2>
