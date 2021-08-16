@@ -12,22 +12,26 @@
 
 # Getting Start
 Execute the command
-'docker-compose up'
+```bash
+docker-compose up
+```
 
 <h2> Devs </h2>
+```bash
+make build
+make run
+make test
 
-'make build'
-'make run'
-'make test'
+```
 
 <h2> Environment variables </h2>
 
-DB_NAME=
-DB_USER=
-DB_PASS=
-DB_HOST=
-DB_PORT=
-MULTI_STATEMENTS=
+DB_NAME=<br>
+DB_USER=<br>
+DB_PASS=<br>
+DB_HOST=<br>
+DB_PORT=<br>
+MULTI_STATEMENTS=<br>
 
 
 
