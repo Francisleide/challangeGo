@@ -6,6 +6,6 @@
 [] Criar o readme
 [x] Criar dockerfile e docker-compose
 [x] Criar o migrate
-[] Criar o makefile
+[x] Criar o makefile
 
 
