@@ -1,3 +1,27 @@
+# Tecnologias
+
+* Go 1.16.5
+
+* Docker 🐳
+
+* MySQL 5.7 🐬
+
+* Clean Architecture
+
+  
+
+# Bibliotecas
+
+* [Migrate](https://github.com/golang-migrate/migrate)
+
+* [Swaggo](https://github.com/swaggo/swag)
+
+* [JWT-GO](https://github.com/dgrijalva/jwt-go)
+
+* [MUX](https://github.com/gorilla/mux)
+
+* [Satori UUID](https://github.com/satori/go.uuid)
+
 
 # ChallengeGo
 
@@ -12,6 +36,8 @@ O ChallengeGo é uma API para um simples sistema bancário, com os seguintes obj
 A API acessa um banco de dados em MySQL, onde são mantidas duas tabelas:
 * account
 * transfer
+
+# Como utilizar
 
 O banco é versionado com migrate. Ao fazer o deploy da API, as tabelas serão criadas. Para alterar as tabelas, versionando o banco, podem ser executados os comandos:
 
@@ -50,32 +76,6 @@ http://localhost:8080/auth<br>
 }
 ```
 
-# Tecnologias
-
-* Go 1.16.5
-
-* Docker 🐳
-
-* MySQL 5.7 🐬
-
-* Clean Architecture
-
-  
-
-# Bibliotecas
-
-* Migrate
-
-* Swaggo
-
-* JWT-GO
-
-* MUX
-
-* Satori UUID
-
-
-# Como utilizar
 
 A API acompanha um dockerfile e um docker-compose, que já faz o deploy de um banco mysql na versão 5.7 e da API na porta 8080. Para realizar tais ações, basta executar o comando:
 
