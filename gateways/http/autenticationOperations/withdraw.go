@@ -24,8 +24,8 @@ type Withdraw struct {
 func (h Handler) Withdraw(w http.ResponseWriter, r *http.Request) {
 	var withdraw Withdraw
 
-	accountId, _ := middlware.GetAccountID(r.Context())
-	fmt.Println(accountId)
+	accountID, _ := middlware.GetAccountID(r.Context())
+	fmt.Println(accountID)
 
 	decoder := json.NewDecoder(r.Body)
 	decoder.DisallowUnknownFields()
@@ -33,7 +33,7 @@ func (h Handler) Withdraw(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		log.Fatal(err)
 	}
-	ok := h.autentic.WithDraw(accountId, withdraw.Amount)
+	ok := h.autentic.WithDraw(accountID, withdraw.Amount)
 	if !ok {
 		log.Panic("Saldo insuficiente!")
 	}

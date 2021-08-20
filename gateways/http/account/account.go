@@ -19,8 +19,8 @@ func Accounts(serv *mux.Router, usecase account.UseCase) *Handler {
 		account: usecase,
 	}
 
-	serv.HandleFunc("/accounts", h.Create_account).Methods("Post")
-	serv.HandleFunc("/accounts", h.List_all_accounts).Methods("Get")
+	serv.HandleFunc("/accounts", h.CreateAccount).Methods("Post")
+	serv.HandleFunc("/accounts", h.ListAllAccounts).Methods("Get")
 
 	return h
 }
@@ -33,18 +33,18 @@ func Accounts(serv *mux.Router, usecase account.UseCase) *Handler {
 // @Produce  json
 // @Header 201 {string} Token "x-request-id"
 // @Router /accounts [post]
-func (h Handler) Create_account(w http.ResponseWriter, r *http.Request) {
+func (h Handler) CreateAccount(w http.ResponseWriter, r *http.Request) {
 	var acc entities.AccountInput
 	decoder := json.NewDecoder(r.Body)
 	decoder.DisallowUnknownFields()
 	err := decoder.Decode(&acc)
-	fmt.Println("CPF na rota: ", acc.Cpf)
+	fmt.Println("CPF na rota: ", acc.CPF)
 	if err != nil {
 		//implenmentar erro aqui
 	}
-	h.account.Create_account(entities.AccountInput{
+	h.account.CreateAccount(entities.AccountInput{
 		Nome:   acc.Nome,
-		Cpf:    acc.Cpf,
+		CPF:    acc.CPF,
 		Secret: acc.Secret,
 	})
 	w.Header().Set("Content-Type", "application/json")

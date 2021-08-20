@@ -20,7 +20,7 @@ func Transfer(serv *mux.Router, usecase transfer.UseCase) *Handler {
 		transfer: usecase,
 	}
 
-	serv.HandleFunc("/transfer", h.Create_transfer).Methods("Post")
+	serv.HandleFunc("/transfer", h.CreateTransfer).Methods("Post")
 
 	return h
 }
@@ -34,10 +34,10 @@ func Transfer(serv *mux.Router, usecase transfer.UseCase) *Handler {
 // @Produce  json
 // @Header 201 {string} Token "x-request-id"
 // @Router /transfer [post]
-func (h Handler) Create_transfer(w http.ResponseWriter, r *http.Request) {
+func (h Handler) CreateTransfer(w http.ResponseWriter, r *http.Request) {
 	var tr transfer.TransferInput
-	accountId, ok := middlware.GetAccountID(r.Context())
-	if !ok || accountId == "" {
+	accountID, ok := middlware.GetAccountID(r.Context())
+	if !ok || accountID == "" {
 		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(r.Response.StatusCode)
 		return
@@ -45,12 +45,10 @@ func (h Handler) Create_transfer(w http.ResponseWriter, r *http.Request) {
 	decoder := json.NewDecoder(r.Body)
 	decoder.DisallowUnknownFields()
 	err := decoder.Decode(&tr)
-	fmt.Println("Na rota, ammount: ", tr.Amount)
-	fmt.Println("Id na rota: ", accountId)
 	if err != nil {
 		log.Fatal("Erro na hora de pegar elementos do body: ", err)
 	}
-	_, erro := h.transfer.Create_transfer(accountId, tr.Cpf_destino, tr.Amount)
+	_, erro := h.transfer.CreateTransfer(accountID, tr.CPFDestino, tr.Amount)
 	if erro != nil {
 		fmt.Println("Erro! Saldo insuficiente")
 		w.WriteHeader(r.Response.StatusCode)

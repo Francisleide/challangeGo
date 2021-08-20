@@ -18,9 +18,9 @@ import (
 // @Failure 404 "Accounts not found"
 // @Failure 500 "Unexpected internal server error"
 // @Router /accounts [GET]
-func (h Handler) List_all_accounts(w http.ResponseWriter, r *http.Request) {
+func (h Handler) ListAllAccounts(w http.ResponseWriter, r *http.Request) {
 	var accounts []entities.Account
-	accounts = h.account.List_all_accounts()
+	accounts = h.account.ListAllAccounts()
 	w.Header().Set("Content-Type", "application/json")
 	err := json.NewEncoder(w).Encode(accounts)
 	if err != nil {
