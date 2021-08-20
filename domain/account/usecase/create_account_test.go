@@ -8,65 +8,63 @@ import (
 	"github.com/francisleide/ChallangeGo/domain/entities"
 )
 
-type repo_mock struct {
+type repoMock struct {
 	Account entities.Account
 }
 
-func (r *repo_mock) List_all_accounts() []entities.Account{
+func (r *repoMock) ListAllAccounts() []entities.Account {
 	return nil
 }
 
-func (r *repo_mock) FindOne(cpf string) entities.Account {
+func (r *repoMock) FindOne(CPF string) entities.Account {
 	return entities.Account{
 		Balance: 100.0,
-		Cpf:     "12345679210",
+		CPF:     "12345679210",
 	}
 }
-func (r *repo_mock) UpdateBalance(account entities.Account) {
+func (r *repoMock) UpdateBalance(account entities.Account) {
 	r.Account = account
 }
-func (r *repo_mock) InsertAccount(accountInput entities.AccountInput) (*entities.Account, error) {
-	if accountInput.Cpf == "12345678911"{
+func (r *repoMock) InsertAccount(accountInput entities.AccountInput) (*entities.Account, error) {
+	if accountInput.CPF == "12345678911" {
 		return nil, errors.New("Conta já existente")
-	} 
+	}
 	return &r.Account, nil
 }
 
-func Test_Create_account(t *testing.T) {
-	//Caso1: cpf não existe no banco e a conta é criada
-	//Caso2: cpf existe no banco e a conta não é criada
+func TestCreateAccount(t *testing.T) {
 
 	var account entities.Account
-	account.Cpf = "12345678910"
+	account.CPF = "12345678910"
 	t.Run("Cpf não existe no banco e a conta é criada", func(t *testing.T) {
-		r := repo_mock{}
+		r := repoMock{}
 		r.Account = account
 		a := usecase.NewAccountUc(&r)
 		var accountInput entities.AccountInput
-		accountInput.Cpf = "12345678910"
+		accountInput.CPF = "12345678910"
 		accountInput.Nome = "Teste"
 		accountInput.Secret = "111"
-		account_recebido, err := a.Create_account(accountInput)
+		accountRecived, err := a.CreateAccount(accountInput)
 		if err != nil {
 			t.Errorf("Erros: %s", err)
 		}
-		if account_recebido.Cpf != "12345678910" {
-			t.Errorf("Esperado %s e recebido %s", accountInput.Cpf, account_recebido.Cpf)
+		if accountRecived.CPF != "12345678910" {
+			t.Errorf("Esperado %s e recebido %s", accountInput.CPF, accountRecived.CPF)
 		}
 
 	})
 
 	t.Run("cpf existe no banco e a conta não é criada", func(t *testing.T) {
-		r := repo_mock{}
+		r := repoMock{}
 		a := usecase.NewAccountUc(&r)
 		var accountInput entities.AccountInput
-		accountInput.Cpf = "12345678911"
+		accountInput.CPF = "12345678911"
 		accountInput.Nome = "Teste"
 		accountInput.Secret = "111"
-		_, err := a.Create_account(accountInput)
-		if err == nil{
+		_, err := a.CreateAccount(accountInput)
+		if err == nil {
 			t.Error("Já existia uma conta com o mesmo cpf e a conta foi criada", err)
 		}
-		
+
 	})
 }

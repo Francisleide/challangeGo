@@ -14,12 +14,12 @@ import (
 )
 
 type Credentials struct {
-	Cpf    string `json:"cpf"`
+	CPF    string `json:"cpf"`
 	Secret string `json:"secret"`
 }
 
 type Claims struct {
-	Cpf string `json:"cpf"`
+	CPF string `json:"cpf"`
 	jwt.StandardClaims
 }
 
@@ -33,11 +33,11 @@ func NewAuth(repo repository.Repository) AuthUc {
 	}
 }
 
-func (a AuthUc) Login(cpf, secret string) bool {
+func (a AuthUc) Login(CPF, secret string) bool {
 	var account entities.Account
-	account.Cpf = cpf
+	account.CPF = CPF
 	account.Secret = secret
-	acc := a.r.FindOne(account.Cpf)
+	acc := a.r.FindOne(account.CPF)
 	if reflect.DeepEqual(acc, entities.Account{}) {
 		fmt.Printf("Usuário/senha incorreto")
 		return false
@@ -53,17 +53,15 @@ func (a AuthUc) Login(cpf, secret string) bool {
 
 }
 
-func (a AuthUc) CreateToken(cpf string, secret string) (string, error) {
-	//var err error
-	//Creating Access Token
-	b := a.Login(cpf, secret)
+func (a AuthUc) CreateToken(CPF string, secret string) (string, error) {
+	b := a.Login(CPF, secret)
 	if !b {
 		log.Fatal("Erro na autenticação")
 	}
 	os.Setenv("ACCESS_SECRET", "asdhjkasjheee")
 
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
-		"user": cpf,
+		"user": CPF,
 		"exp":  time.Now().Add(time.Hour * time.Duration(1)).Unix(),
 		"iat":  time.Now().Unix(),
 	})
@@ -74,31 +72,17 @@ func (a AuthUc) CreateToken(cpf string, secret string) (string, error) {
 	}
 
 	return tokenString, nil
-	/*os.Setenv("ACCESS_SECRET", "cfdfgdfg") //this should be in an env file
-	atClaims := jwt.MapClaims{}
-	atClaims["authorized"] = true
-	atClaims["Id"] = cpf
-	atClaims["exp"] = time.Now().Add(time.Minute * 60).Unix()
-	at := jwt.NewWithClaims(jwt.SigningMethodHS256, atClaims)
-	token, err := at.SignedString([]byte(os.Getenv("ACCESS_SECRET")))
-	if err != nil {
-		return "", err
-	}
-	return token, nil*/
-
 }
 
 func Authorize(token *jwt.Token) interface{} {
 	fmt.Println("Token no authorize: ", token)
 	
-	var accessUuid string
+	var accessUuID string
 	claims, ok := token.Claims.(jwt.MapClaims)
 	if ok {
-		fmt.Println("claims ok!")
-		accessUuid, _ = claims["user"].(string)
+		accessUuID, _ = claims["user"].(string)
 
 	}
-	fmt.Println("O id: ", accessUuid)
-	return accessUuid
+	return accessUuID
 
 }

@@ -5,13 +5,13 @@ import (
 )
 
 type UseCase interface {
-	Create_account(account entities.AccountInput) (*entities.Account, error)
-	List_all_accounts() []entities.Account
+	CreateAccount(account entities.AccountInput) (*entities.Account, error)
+	ListAllAccounts() []entities.Account
 }
 
 type Repository interface {
-	FindOne(cpf string) entities.Account
+	FindOne(CPF string) entities.Account
 	UpdateBalance(account entities.Account)
 	InsertAccount(accountInput entities.AccountInput) (*entities.Account, error)
-	List_all_accounts() []entities.Account
+	ListAllAccounts() []entities.Account
 }

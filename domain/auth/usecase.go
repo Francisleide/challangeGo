@@ -1,5 +1,5 @@
 package auth
 
 type UseCase interface {
-	CreateToken(cpf string, secret string) (string, error)
+	CreateToken(CPF string, secret string) (string, error)
 }
