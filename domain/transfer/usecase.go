@@ -7,25 +7,25 @@ import (
 )
 
 type UseCase interface {
-	Create_transfer(origem, destino string, ammount float64)  (*entities.Transfer, error)
+	CreateTransfer(origem, destino string, ammount float64) (*entities.Transfer, error)
 }
 
 type TransferInput struct {
-	Cpf_destino string  `json: "cpf_destino"`
-	Amount     float64 `json: "amount"`
+	CPFDestino string
+	Amount     float64
 }
 
-type Repository interface{
-	InsertTransfer(account_origem, account_destino entities.Account, ammount float64)(*entities.Transfer, error)
-	FindOne(cpf string) entities.Account
+type Repository interface {
+	InsertTransfer(accountOrigem, accountDestino entities.Account, ammount float64) (*entities.Transfer, error)
+	FindOne(CPF string) entities.Account
 }
 
-func NewTransferInput(account_origin_id, account_destination_id string, ammount float64) entities.Transfer {
+func NewTransferInput(accountOriginId, accountDestinationId string, ammount float64) entities.Transfer {
 	return entities.Transfer{
-		Id:                     entities.GenerateId(),
-		Account_origin_id:      account_origin_id,
-		Account_destination_id: account_destination_id,
-		Amount:                ammount,
-		Created_at:             time.Now().Format(time.RFC822),
+		ID:                   entities.GenerateID(),
+		AccountOriginID:      accountOriginId,
+		AccountDestinationID: accountDestinationId,
+		Amount:               ammount,
+		CreatedAt:            time.Now().Format(time.RFC822),
 	}
 }

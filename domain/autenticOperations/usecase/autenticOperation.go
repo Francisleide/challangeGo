@@ -15,10 +15,10 @@ func NewAutentic(repo autenticoperations.Repository) Autentic {
 	}
 }
 
-func (a Autentic) Deposite(cpf string, amount float64) {
+func (a Autentic) Deposite(CPF string, amount float64) {
 	var account entities.Account
 	if amount > 0 {
-		account = a.r.FindOne(cpf)
+		account = a.r.FindOne(CPF)
 		account.Balance += amount
 		a.r.UpdateBalance(account)
 
@@ -26,9 +26,9 @@ func (a Autentic) Deposite(cpf string, amount float64) {
 
 }
 
-func (a Autentic) WithDraw(cpf string, ammount float64) bool {
+func (a Autentic) WithDraw(CPF string, ammount float64) bool {
 	var account entities.Account
-	account = a.r.FindOne(cpf)
+	account = a.r.FindOne(CPF)
 	if account.Balance > ammount {
 		account.Balance -= ammount
 		a.r.UpdateBalance(account)

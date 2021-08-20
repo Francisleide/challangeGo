@@ -17,8 +17,8 @@ func NewAccountUc(repo account.Repository) AccountUc {
 	}
 }
 
-func (c AccountUc) Create_account(account entities.AccountInput) (*entities.Account, error) {
-	fmt.Println("CPF no Usecase: ", account.Cpf)
+func (c AccountUc) CreateAccount(account entities.AccountInput) (*entities.Account, error) {
+	fmt.Println("CPF no Usecase: ", account.CPF)
 	account2, err := c.r.InsertAccount(account)
 	if err != nil {
 		return nil, ErrorAccountAlreadyExists
@@ -26,8 +26,8 @@ func (c AccountUc) Create_account(account entities.AccountInput) (*entities.Acco
 	return account2, nil
 }
 
-func (c AccountUc) List_all_accounts() []entities.Account {
-	accounts := c.r.List_all_accounts()
+func (c AccountUc) ListAllAccounts() []entities.Account {
+	accounts := c.r.ListAllAccounts()
 	return accounts
 
 }

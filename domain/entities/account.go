@@ -9,21 +9,21 @@ import (
 )
 
 type Account struct {
-	Id         string  `json: "account_id"`
-	Nome       string  `json: "nome"`
-	Cpf        string  `json: "cpf"`
-	Secret     string  `json: "secret"`
-	Balance    float64 `json: "balance"`
-	Created_at string  `json: "created_at"`
+	ID        string
+	Nome      string
+	CPF       string
+	Secret    string
+	Balance   float64
+	CreatedAt string
 }
 
 type AccountInput struct {
-	Nome   string `json: "nome"`
-	Cpf    string `json: "cpf"`
-	Secret string `json: "secret"`
+	Nome   string
+	CPF    string
+	Secret string
 }
 
-func GenerateId() string {
+func GenerateID() string {
 	return uuid.NewV4().String()
 }
 
@@ -35,16 +35,16 @@ func EncryptSecret(pass string) (string, error) {
 	return string(secret), nil
 
 }
-func NewAccount(nome, cpf, secret string) Account {
+func NewAccount(nome, CPF, secret string) Account {
 	secret, err := EncryptSecret(secret)
 	if err != nil {
 		log.Fatal(err)
 	}
 	return Account{
-		Id:         GenerateId(),
-		Nome:       nome,
-		Cpf:        cpf,
-		Secret:     secret,
-		Created_at: time.Now().Format(time.RFC822),
+		ID:        GenerateID(),
+		Nome:      nome,
+		CPF:       CPF,
+		Secret:    secret,
+		CreatedAt: time.Now().Format(time.RFC822),
 	}
 }
