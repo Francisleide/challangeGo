@@ -29,7 +29,6 @@ func Authorize(next http.Handler) http.Handler {
 			}
 		}
 		
-		fmt.Println("Token: ", x)
 
 		accountID := usecase.Authorize(x)
 

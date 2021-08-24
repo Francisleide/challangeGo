@@ -1,16 +1,29 @@
-package autenticationoperations
-/*
+package account
+
 import (
 	"encoding/json"
-	"fmt"
 	"log"
 	"net/http"
 
+	"github.com/francisleide/ChallangeGo/domain/account"
 	"github.com/francisleide/ChallangeGo/gateways/http/middlware"
+	"github.com/gorilla/mux"
 )
+
+type HandlerWithdraw struct {
+	account account.UseCase
+}
 
 type Withdraw struct {
 	Amount float64 `json: "amount"`
+}
+
+func ToWithdraw(serv *mux.Router, usecase account.UseCase) *HandlerWithdraw {
+	h := &HandlerWithdraw{
+		account: usecase,
+	}
+	serv.HandleFunc("/withdraw", h.Withdraw).Methods("Post")
+	return h
 }
 
 // ShowAccount godoc
@@ -21,11 +34,10 @@ type Withdraw struct {
 // @Produce  json
 // @Header 201 {string} Token "x-request-id"
 // @Router /withdraw [post]
-func (h Handler) Withdraw(w http.ResponseWriter, r *http.Request) {
+func (h HandlerWithdraw) Withdraw(w http.ResponseWriter, r *http.Request) {
 	var withdraw Withdraw
 
 	accountID, _ := middlware.GetAccountID(r.Context())
-	fmt.Println(accountID)
 
 	decoder := json.NewDecoder(r.Body)
 	decoder.DisallowUnknownFields()
@@ -33,10 +45,10 @@ func (h Handler) Withdraw(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		log.Fatal(err)
 	}
-	ok := h.autentic.WithDraw(accountID, withdraw.Amount)
+	//mudar para account
+	ok := h.account.WithDraw(accountID, withdraw.Amount)
 	if !ok {
 		log.Panic("Saldo insuficiente!")
 	}
 
 }
-*/
