@@ -7,7 +7,6 @@ import (
 
 	"github.com/francisleide/ChallangeGo/docs"
 	ac "github.com/francisleide/ChallangeGo/domain/account/usecase"
-	autentic "github.com/francisleide/ChallangeGo/domain/autenticOperations/usecase"
 	au "github.com/francisleide/ChallangeGo/domain/auth/usecase"
 	tr "github.com/francisleide/ChallangeGo/domain/transfer/usecase"
 	"github.com/francisleide/ChallangeGo/gateways/db/repository"
@@ -69,21 +68,20 @@ func main() {
 	db := connect(config.MysqlConfig)
 
 	err := mysqldb.RunMigrations(config.MysqlConfig.URL())
-	if(err == nil){
+	if err == nil {
 		fmt.Println("Migrations ok!")
 	}
 	if err != nil {
 		log.Fatal("Error in db migrations! ", err)
 	}
 	defer db.Close()
-	
 
 	r := repository.NewRepository(db)
 	auc := ac.NewAccountUc(*r)
 	tuc := tr.NewTransfer(*r)
 	a := au.NewAuth(*r)
-	aut := autentic.NewAutentic(*r)
-	x := gateways.NewApi(auc, tuc, aut, a)
+	//aut := autentic.NewAutentic(*r)
+	x := gateways.NewApi(auc, tuc, a)
 	docs.SwaggerInfo.Host = "localhost:8080"
 	x.Run("0.0.0.0", "8080")
 }

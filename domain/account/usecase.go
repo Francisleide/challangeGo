@@ -7,6 +7,8 @@ import (
 type UseCase interface {
 	CreateAccount(account entities.AccountInput) (*entities.Account, error)
 	ListAllAccounts() []entities.Account
+	Deposite(CPF string, amount float64)
+	WithDraw(CPF string, amount float64) bool
 }
 
 type Repository interface {

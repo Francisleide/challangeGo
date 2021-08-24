@@ -21,6 +21,8 @@ func Accounts(serv *mux.Router, usecase account.UseCase) *Handler {
 
 	serv.HandleFunc("/accounts", h.CreateAccount).Methods("Post")
 	serv.HandleFunc("/accounts", h.ListAllAccounts).Methods("Get")
+	//serv.HandleFunc("/withdraw", h.Withdraw).Methods("Post")
+	//serv.HandleFunc("/deposite", h.Deposite).Methods("Post")
 
 	return h
 }
@@ -36,7 +38,7 @@ func Accounts(serv *mux.Router, usecase account.UseCase) *Handler {
 func (h Handler) CreateAccount(w http.ResponseWriter, r *http.Request) {
 	var acc entities.AccountInput
 	decoder := json.NewDecoder(r.Body)
-	decoder.DisallowUnknownFields()
+	//decoder.DisallowUnknownFields()
 	err := decoder.Decode(&acc)
 	fmt.Println("CPF na rota: ", acc.CPF)
 	if err != nil {

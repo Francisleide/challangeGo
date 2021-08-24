@@ -1,5 +1,5 @@
 package autenticationoperations
-
+/*
 import (
 	autenticoperations "github.com/francisleide/ChallangeGo/domain/autenticOperations"
 	"github.com/gorilla/mux"
@@ -18,3 +18,4 @@ func AutenticationOperations(serv *mux.Router, usecase autenticoperations.UseCas
 
 	return h
 }
+*/
