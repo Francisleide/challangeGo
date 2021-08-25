@@ -5,8 +5,8 @@ import (
 	"log"
 	"net/http"
 
-	"github.com/francisleide/ChallangeGo/domain/account"
-	"github.com/francisleide/ChallangeGo/gateways/http/middlware"
+	"github.com/francisleide/ChallengeGo/domain/account"
+	middleware "github.com/francisleide/ChallengeGo/gateways/http/middleware"
 	"github.com/gorilla/mux"
 )
 
@@ -32,21 +32,20 @@ func ToWithdraw(serv *mux.Router, usecase account.UseCase) *HandlerWithdraw {
 // @Param Body body Withdraw true "Body"
 // @Accept  json
 // @Produce  json
-// @Header 201 {string} Token "x-request-id"
+// @Header 201 {string} Token "request-id"
 // @Router /withdraw [post]
 func (h HandlerWithdraw) Withdraw(w http.ResponseWriter, r *http.Request) {
 	var withdraw Withdraw
 
-	accountID, _ := middlware.GetAccountID(r.Context())
+	accountID, _ := middleware.GetAccountID(r.Context())
 
 	decoder := json.NewDecoder(r.Body)
-	decoder.DisallowUnknownFields()
 	err := decoder.Decode(&withdraw)
 	if err != nil {
 		log.Fatal(err)
 	}
 	//mudar para account
-	ok := h.account.WithDraw(accountID, withdraw.Amount)
+	ok := h.account.Withdraw(accountID, withdraw.Amount)
 	if !ok {
 		log.Panic("Saldo insuficiente!")
 	}

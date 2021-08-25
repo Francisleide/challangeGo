@@ -47,19 +47,11 @@ func ReadConfigFromEnv() *Config {
 }
 
 func (mysql MysqlConfig) DSN() string {
-	fmt.Printf("%s:%s@tcp(%s)/%s?multiStatements=%s",
-		mysql.User,
-		mysql.Password,
-		mysql.Host,
-		//mysql.Port,
-		mysql.DatabaseName,
-		mysql.MultiStatements)
 	return fmt.Sprintf(
 		"%s:%s@tcp(%s)/%s?multiStatements=%s",
 		mysql.User,
 		mysql.Password,
 		mysql.Host,
-		//mysql.Port,
 		mysql.DatabaseName,
 		mysql.MultiStatements,
 	)

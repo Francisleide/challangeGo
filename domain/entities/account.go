@@ -4,13 +4,13 @@ import (
 	"log"
 	"time"
 
-	uuid "github.com/satori/uuid.go"
+	UUID "github.com/satori/uuid.go"
 	"golang.org/x/crypto/bcrypt"
 )
 
 type Account struct {
 	ID        string
-	Nome      string
+	Name      string
 	CPF       string
 	Secret    string
 	Balance   float64
@@ -18,13 +18,13 @@ type Account struct {
 }
 
 type AccountInput struct {
-	Nome   string
+	Name   string
 	CPF    string
 	Secret string
 }
 
 func GenerateID() string {
-	return uuid.NewV4().String()
+	return UUID.NewV4().String()
 }
 
 func EncryptSecret(pass string) (string, error) {
@@ -35,14 +35,14 @@ func EncryptSecret(pass string) (string, error) {
 	return string(secret), nil
 
 }
-func NewAccount(nome, CPF, secret string) Account {
+func NewAccount(name, CPF, secret string) Account {
 	secret, err := EncryptSecret(secret)
 	if err != nil {
 		log.Fatal(err)
 	}
 	return Account{
 		ID:        GenerateID(),
-		Nome:      nome,
+		Name:      name,
 		CPF:       CPF,
 		Secret:    secret,
 		CreatedAt: time.Now().Format(time.RFC822),

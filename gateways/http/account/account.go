@@ -5,8 +5,8 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com/francisleide/ChallangeGo/domain/account"
-	"github.com/francisleide/ChallangeGo/domain/entities"
+	"github.com/francisleide/ChallengeGo/domain/account"
+	"github.com/francisleide/ChallengeGo/domain/entities"
 	"github.com/gorilla/mux"
 )
 
@@ -21,8 +21,6 @@ func Accounts(serv *mux.Router, usecase account.UseCase) *Handler {
 
 	serv.HandleFunc("/accounts", h.CreateAccount).Methods("Post")
 	serv.HandleFunc("/accounts", h.ListAllAccounts).Methods("Get")
-	//serv.HandleFunc("/withdraw", h.Withdraw).Methods("Post")
-	//serv.HandleFunc("/deposite", h.Deposite).Methods("Post")
 
 	return h
 }
@@ -33,19 +31,17 @@ func Accounts(serv *mux.Router, usecase account.UseCase) *Handler {
 // @Param Body body entities.AccountInput true "Body"
 // @Accept  json
 // @Produce  json
-// @Header 201 {string} Token "x-request-id"
+// @Header 201 {string} Token "request-id"
 // @Router /accounts [post]
 func (h Handler) CreateAccount(w http.ResponseWriter, r *http.Request) {
 	var acc entities.AccountInput
 	decoder := json.NewDecoder(r.Body)
-	//decoder.DisallowUnknownFields()
 	err := decoder.Decode(&acc)
-	fmt.Println("CPF na rota: ", acc.CPF)
 	if err != nil {
 		//implenmentar erro aqui
 	}
 	h.account.CreateAccount(entities.AccountInput{
-		Nome:   acc.Nome,
+		Name:   acc.Name,
 		CPF:    acc.CPF,
 		Secret: acc.Secret,
 	})

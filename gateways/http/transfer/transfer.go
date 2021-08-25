@@ -2,12 +2,11 @@ package transfer
 
 import (
 	"encoding/json"
-	"fmt"
 	"log"
 	"net/http"
 
-	"github.com/francisleide/ChallangeGo/domain/transfer"
-	"github.com/francisleide/ChallangeGo/gateways/http/middlware"
+	"github.com/francisleide/ChallengeGo/domain/transfer"
+	"github.com/francisleide/ChallengeGo/gateways/http/middleware"
 	"github.com/gorilla/mux"
 )
 
@@ -32,25 +31,23 @@ func Transfer(serv *mux.Router, usecase transfer.UseCase) *Handler {
 // @Param Authorization header string true "Bearer Authorization Token"
 // @Accept  json
 // @Produce  json
-// @Header 201 {string} Token "x-request-id"
+// @Header 201 {string} Token "request-id"
 // @Router /transfer [post]
 func (h Handler) CreateTransfer(w http.ResponseWriter, r *http.Request) {
 	var tr transfer.TransferInput
-	accountID, ok := middlware.GetAccountID(r.Context())
+	accountID, ok := middleware.GetAccountID(r.Context())
 	if !ok || accountID == "" {
 		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(r.Response.StatusCode)
 		return
 	}
 	decoder := json.NewDecoder(r.Body)
-	decoder.DisallowUnknownFields()
 	err := decoder.Decode(&tr)
 	if err != nil {
-		log.Fatal("Erro na hora de pegar elementos do body: ", err)
+		log.Fatal(err)
 	}
-	_, erro := h.transfer.CreateTransfer(accountID, tr.CPFDestino, tr.Amount)
-	if erro != nil {
-		fmt.Println("Erro! Saldo insuficiente")
+	_, error := h.transfer.CreateTransfer(accountID, tr.DestinationCPF, tr.Amount)
+	if error != nil {
 		w.WriteHeader(r.Response.StatusCode)
 		return
 	}

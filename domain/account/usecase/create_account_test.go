@@ -4,8 +4,8 @@ import (
 	"errors"
 	"testing"
 
-	"github.com/francisleide/ChallangeGo/domain/account/usecase"
-	"github.com/francisleide/ChallangeGo/domain/entities"
+	"github.com/francisleide/ChallengeGo/domain/account/usecase"
+	"github.com/francisleide/ChallengeGo/domain/entities"
 )
 
 type repoMock struct {
@@ -27,7 +27,7 @@ func (r *repoMock) UpdateBalance(account entities.Account) {
 }
 func (r *repoMock) InsertAccount(accountInput entities.AccountInput) (*entities.Account, error) {
 	if accountInput.CPF == "12345678911" {
-		return nil, errors.New("Conta já existente")
+		return nil, errors.New("the account already exists")
 	}
 	return &r.Account, nil
 }
@@ -36,34 +36,34 @@ func TestCreateAccount(t *testing.T) {
 
 	var account entities.Account
 	account.CPF = "12345678910"
-	t.Run("Cpf não existe no banco e a conta é criada", func(t *testing.T) {
+	t.Run("CPF does not exist in the bank and the account is created", func(t *testing.T) {
 		r := repoMock{}
 		r.Account = account
 		a := usecase.NewAccountUc(&r)
 		var accountInput entities.AccountInput
 		accountInput.CPF = "12345678910"
-		accountInput.Nome = "Teste"
+		accountInput.Name = "Test"
 		accountInput.Secret = "111"
-		accountRecived, err := a.CreateAccount(accountInput)
+		accountReceived, err := a.CreateAccount(accountInput)
 		if err != nil {
-			t.Errorf("Erros: %s", err)
+			t.Errorf("Error: %s", err)
 		}
-		if accountRecived.CPF != "12345678910" {
-			t.Errorf("Esperado %s e recebido %s", accountInput.CPF, accountRecived.CPF)
+		if accountReceived.CPF != "12345678910" {
+			t.Errorf("Expected %s and was received  %s", accountInput.CPF, accountReceived.CPF)
 		}
 
 	})
 
-	t.Run("cpf existe no banco e a conta não é criada", func(t *testing.T) {
+	t.Run("CPF exists in the bank and the account is not created", func(t *testing.T) {
 		r := repoMock{}
 		a := usecase.NewAccountUc(&r)
 		var accountInput entities.AccountInput
 		accountInput.CPF = "12345678911"
-		accountInput.Nome = "Teste"
+		accountInput.Name = "Test"
 		accountInput.Secret = "111"
 		_, err := a.CreateAccount(accountInput)
 		if err == nil {
-			t.Error("Já existia uma conta com o mesmo cpf e a conta foi criada", err)
+			t.Error("An account already existed with the same cpf and the account was created", err)
 		}
 
 	})

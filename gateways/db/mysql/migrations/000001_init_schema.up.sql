@@ -1,6 +1,6 @@
 CREATE TABLE IF NOT EXISTS `account` (
   `id` varchar(100) NOT NULL,
-  `nome` varchar(45) DEFAULT NULL,
+  `name` varchar(45) DEFAULT NULL,
   `cpf` varchar(45) DEFAULT NULL,
   `secret` varchar(100) DEFAULT NULL,
   `balance` float DEFAULT NULL,

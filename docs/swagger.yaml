@@ -1,11 +1,10 @@
-basePath: /
 definitions:
-  autenticationoperations.Deposite:
+  account.DepositInput:
     properties:
       amount:
         type: number
     type: object
-  autenticationoperations.Withdraw:
+  account.Withdraw:
     properties:
       amount:
         type: number
@@ -23,11 +22,11 @@ definitions:
         type: number
       cpf:
         type: string
-      created_at:
+      createdAt:
         type: string
       id:
         type: string
-      nome:
+      name:
         type: string
       secret:
         type: string
@@ -36,7 +35,7 @@ definitions:
     properties:
       cpf:
         type: string
-      nome:
+      name:
         type: string
       secret:
         type: string
@@ -45,14 +44,11 @@ definitions:
     properties:
       amount:
         type: number
-      cpf_destino:
+      destinationCPF:
         type: string
     type: object
 info:
   contact: {}
-  description: Documentation for Challenge-Go API
-  title: Swagger Challenge API
-  version: "2.0"
 paths:
   /accounts:
     get:
@@ -104,21 +100,21 @@ paths:
       produces:
       - application/json
       summary: Get a Auth
-  /deposite:
+  /deposit:
     post:
       consumes:
       - application/json
-      description: Make a deposite from an authentic account
+      description: Make a deposit from an authentic account
       parameters:
       - description: Body
         in: body
         name: Body
         required: true
         schema:
-          $ref: '#/definitions/autenticationoperations.Deposite'
+          $ref: '#/definitions/account.DepositInput'
       produces:
       - application/json
-      summary: Make a deposite
+      summary: Make a deposit
   /transfer:
     post:
       consumes:
@@ -151,7 +147,7 @@ paths:
         name: Body
         required: true
         schema:
-          $ref: '#/definitions/autenticationoperations.Withdraw'
+          $ref: '#/definitions/account.Withdraw'
       produces:
       - application/json
       summary: Make a Withdraw
