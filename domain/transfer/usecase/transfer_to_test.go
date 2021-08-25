@@ -3,16 +3,16 @@ package usecase_test
 import (
 	"testing"
 
-	"github.com/francisleide/ChallangeGo/domain/entities"
-	"github.com/francisleide/ChallangeGo/domain/transfer/usecase"
+	"github.com/francisleide/ChallengeGo/domain/entities"
+	"github.com/francisleide/ChallengeGo/domain/transfer/usecase"
 )
 
 type repoMock struct {
 	Transfer entities.Transfer
-	Account entities.Account
+	Account  entities.Account
 }
 
-func (r *repoMock) InsertTransfer(account_origem, account_destino entities.Account, amount float64) (*entities.Transfer, error) {
+func (r *repoMock) InsertTransfer(originAccount, destineAccount entities.Account, amount float64) (*entities.Transfer, error) {
 	newAccount := &r.Account
 	newAccount.Balance -= amount
 	return &r.Transfer, nil
@@ -25,30 +25,28 @@ func (r *repoMock) FindOne(cpf string) entities.Account {
 }
 
 func Test_Create_transfer(t *testing.T) {
-	//Caso 1: O emissário tem saldo na conta e a transferência ocorre
-	//Caso 2: O emissário não tem saldo na conta e a transferência não ocorre
 	var account entities.Account
 	account.Balance = 100
 	account.CPF = "231"
-	
+
 	var tt entities.Transfer
-	tt.AccountDestinationID = "123"
-	tt.AccountOriginID = account.CPF
+	tt.DestineAccountID = "123"
+	tt.OriginAccountID = account.CPF
 	tt.Amount = 10.0
-	t.Run("O emissário tem saldo na conta e a transferência ocorre", func(t *testing.T) {
+	t.Run("The emissary has a balance in the account and the transfer runs.", func(t *testing.T) {
 		r := repoMock{
 			Transfer: tt,
 			Account:  account,
 		}
 
-		transfer:=usecase.NewTransfer(&r)
-		_, err:=transfer.CreateTransfer(tt.AccountOriginID, tt.AccountDestinationID, tt.Amount)
-		balanceEsperado:= 90.0
-		if r.Account.Balance != balanceEsperado{
-			t.Errorf("Balance esperado na conta : %.2f, Balance recebido: %.2f", balanceEsperado, r.Account.Balance)
+		transfer := usecase.NewTransferUC(&r)
+		_, err := transfer.CreateTransfer(tt.OriginAccountID, tt.DestineAccountID, tt.Amount)
+		expectedBalance := 90.0
+		if r.Account.Balance != expectedBalance {
+			t.Errorf("Expected balance: %.2f, recived balance: %.2f", expectedBalance, r.Account.Balance)
 		}
-		if err != nil{
-			t.Errorf("A operação deveria ocorrer sem erros, mas foi capturado: %s", err)
+		if err != nil {
+			t.Errorf("The operation should go without error, but it was captured: %s", err)
 		}
 	})
 }

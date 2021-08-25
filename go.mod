@@ -1,4 +1,4 @@
-module github.com/francisleide/ChallangeGo
+module github.com/francisleide/ChallengeGo
 
 go 1.16
 

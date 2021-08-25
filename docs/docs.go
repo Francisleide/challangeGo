@@ -99,16 +99,16 @@ var doc = `{
                 ]
             }
         },
-        "/deposite": {
+        "/deposit": {
             "post": {
-                "description": "Make a deposite from an authentic account",
+                "description": "Make a deposit from an authentic account",
                 "consumes": [
                     "application/json"
                 ],
                 "produces": [
                     "application/json"
                 ],
-                "summary": "Make a deposite",
+                "summary": "Make a deposit",
                 "parameters": [
                     {
                         "description": "Body",
@@ -116,7 +116,7 @@ var doc = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/autenticationoperations.Deposite"
+                            "$ref": "#/definitions/account.DepositInput"
                         }
                     }
                 ]
@@ -169,7 +169,7 @@ var doc = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/autenticationoperations.Withdraw"
+                            "$ref": "#/definitions/account.Withdraw"
                         }
                     }
                 ]
@@ -177,7 +177,7 @@ var doc = `{
         }
     },
     "definitions": {
-        "autenticationoperations.Deposite": {
+        "account.DepositInput": {
             "type": "object",
             "properties": {
                 "amount": {
@@ -185,7 +185,7 @@ var doc = `{
                 }
             }
         },
-        "autenticationoperations.Withdraw": {
+        "account.Withdraw": {
             "type": "object",
             "properties": {
                 "amount": {
@@ -213,13 +213,13 @@ var doc = `{
                 "cpf": {
                     "type": "string"
                 },
-                "created_at": {
+                "createdAt": {
                     "type": "string"
                 },
                 "id": {
                     "type": "string"
                 },
-                "nome": {
+                "name": {
                     "type": "string"
                 },
                 "secret": {
@@ -233,7 +233,7 @@ var doc = `{
                 "cpf": {
                     "type": "string"
                 },
-                "nome": {
+                "name": {
                     "type": "string"
                 },
                 "secret": {
@@ -247,7 +247,7 @@ var doc = `{
                 "amount": {
                     "type": "number"
                 },
-                "cpf_destino": {
+                "destinationCPF": {
                     "type": "string"
                 }
             }
@@ -266,12 +266,12 @@ type swaggerInfo struct {
 
 // SwaggerInfo holds exported Swagger Info so clients can modify it
 var SwaggerInfo = swaggerInfo{
-	Version:     "2.0",
+	Version:     "",
 	Host:        "",
-	BasePath:    "/",
+	BasePath:    "",
 	Schemes:     []string{},
-	Title:       "Swagger Challenge API",
-	Description: "Documentation for Challenge-Go API",
+	Title:       "",
+	Description: "",
 }
 
 type s struct{}

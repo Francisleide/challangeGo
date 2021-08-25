@@ -1,12 +1,12 @@
 package usecase
 
-import "github.com/francisleide/ChallangeGo/domain/entities"
+import "github.com/francisleide/ChallengeGo/domain/entities"
 
-func (c AccountUc) WithDraw(CPF string, ammount float64) bool {
+func (c AccountUc) Withdraw(CPF string, amount float64) bool {
 	var account entities.Account
 	account = c.r.FindOne(CPF)
-	if account.Balance > ammount {
-		account.Balance -= ammount
+	if account.Balance > amount {
+		account.Balance -= amount
 		c.r.UpdateBalance(account)
 		return true
 	}

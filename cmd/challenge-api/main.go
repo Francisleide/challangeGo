@@ -5,17 +5,17 @@ import (
 	"fmt"
 	"log"
 
-	"github.com/francisleide/ChallangeGo/docs"
-	ac "github.com/francisleide/ChallangeGo/domain/account/usecase"
-	au "github.com/francisleide/ChallangeGo/domain/auth/usecase"
-	tr "github.com/francisleide/ChallangeGo/domain/transfer/usecase"
-	"github.com/francisleide/ChallangeGo/gateways/db/repository"
-	gateways "github.com/francisleide/ChallangeGo/gateways/http"
+	"github.com/francisleide/ChallengeGo/docs"
+	account "github.com/francisleide/ChallengeGo/domain/account/usecase"
+	authentication "github.com/francisleide/ChallengeGo/domain/auth/usecase"
+	transfer "github.com/francisleide/ChallengeGo/domain/transfer/usecase"
+	"github.com/francisleide/ChallengeGo/gateways/db/repository"
+	gateways "github.com/francisleide/ChallengeGo/gateways/http"
 
 	_ "github.com/go-sql-driver/mysql"
 
-	"github.com/francisleide/ChallangeGo/app"
-	mysqldb "github.com/francisleide/ChallangeGo/gateways/db/mysql"
+	"github.com/francisleide/ChallengeGo/app"
+	mysqldb "github.com/francisleide/ChallengeGo/gateways/db/mysql"
 	_ "github.com/golang-migrate/migrate/v4/source/file"
 )
 
@@ -26,27 +26,11 @@ func checkError(err error) {
 }
 
 func connect(mysql app.MysqlConfig) *sql.DB {
-	//var connectionString = fmt.Sprintf("%s:%s@tcp(%s:3306)/%s?allowNativePasswords=true", user, password, host, database)
-	//var connectionString = fmt.Sprint("root:123456@tcp(localhost:3306)/challengego?multiStatements=true")
-
-	// Initialize connection object.
-
 	db, err := sql.Open("mysql", mysql.DSN())
 
 	if err != nil {
-		log.Fatal("O erro está aqui: ", err)
+		log.Fatal("Error: ", err)
 	}
-	/*driver, errm := mysql.WithInstance(db, &mysql.Config{})
-	fmt.Println(errm)
-	m, err := migrate.NewWithDatabaseInstance(
-		"file://../../francisleide/ChallangeGo/gateways/db/mysql",
-		"mysql",
-		driver,
-	)
-	fmt.Println(err)
-
-	m.Steps(2)
-	checkError(err) */
 
 	err = db.Ping()
 	checkError(err)
@@ -77,11 +61,10 @@ func main() {
 	defer db.Close()
 
 	r := repository.NewRepository(db)
-	auc := ac.NewAccountUc(*r)
-	tuc := tr.NewTransfer(*r)
-	a := au.NewAuth(*r)
-	//aut := autentic.NewAutentic(*r)
-	x := gateways.NewApi(auc, tuc, a)
+	accountUsecase := account.NewAccountUc(*r)
+	transferUseCase := transfer.NewTransferUC(*r)
+	authenticationUsecase := authentication.NewAuthenticationUC(*r)
+	api := gateways.NewApi(accountUsecase, transferUseCase, authenticationUsecase)
 	docs.SwaggerInfo.Host = "localhost:8080"
-	x.Run("0.0.0.0", "8080")
+	api.Run("0.0.0.0", "8080")
 }

@@ -5,7 +5,7 @@ import (
 	"log"
 	"net/http"
 
-	"github.com/francisleide/ChallangeGo/domain/entities"
+	"github.com/francisleide/ChallengeGo/domain/entities"
 )
 
 // ShowAccount godoc
@@ -20,7 +20,7 @@ import (
 // @Router /accounts [GET]
 func (h Handler) ListAllAccounts(w http.ResponseWriter, r *http.Request) {
 	var accounts []entities.Account
-	accounts = h.account.ListAllAccounts()
+	accounts = h.account.ListAll()
 	w.Header().Set("Content-Type", "application/json")
 	err := json.NewEncoder(w).Encode(accounts)
 	if err != nil {

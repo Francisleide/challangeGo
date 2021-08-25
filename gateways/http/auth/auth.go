@@ -5,7 +5,7 @@ import (
 	"log"
 	"net/http"
 
-	"github.com/francisleide/ChallangeGo/domain/auth"
+	"github.com/francisleide/ChallengeGo/domain/auth"
 	"github.com/gorilla/mux"
 )
 
@@ -30,7 +30,7 @@ func Auth(serv *mux.Router, usecase auth.UseCase) *Handler {
 
 // ShowAccount godoc
 // @Summary Get a Auth
-// @Description It takes a token to authenticate yorself to the application
+// @Description It takes a token to authenticate yourself to the application
 // @Param Body body Login true "Body"
 // @Accept  json
 // @Produce  json
@@ -38,7 +38,6 @@ func Auth(serv *mux.Router, usecase auth.UseCase) *Handler {
 func (h Handler) Authorization(w http.ResponseWriter, r *http.Request) {
 	var login Login
 	decoder := json.NewDecoder(r.Body)
-	decoder.DisallowUnknownFields()
 	err := decoder.Decode(&login)
 	if err != nil {
 		log.Fatal(err)

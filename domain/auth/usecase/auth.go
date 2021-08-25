@@ -1,15 +1,14 @@
 package usecase
 
 import (
-	"fmt"
 	"log"
 	"os"
 	"reflect"
 	"time"
 
 	"github.com/dgrijalva/jwt-go"
-	"github.com/francisleide/ChallangeGo/domain/entities"
-	"github.com/francisleide/ChallangeGo/gateways/db/repository"
+	"github.com/francisleide/ChallengeGo/domain/entities"
+	"github.com/francisleide/ChallengeGo/gateways/db/repository"
 	"golang.org/x/crypto/bcrypt"
 )
 
@@ -27,7 +26,7 @@ type AuthUc struct {
 	r repository.Repository
 }
 
-func NewAuth(repo repository.Repository) AuthUc {
+func NewAuthenticationUC(repo repository.Repository) AuthUc {
 	return AuthUc{
 		r: repo,
 	}
@@ -39,14 +38,11 @@ func (a AuthUc) Login(CPF, secret string) bool {
 	account.Secret = secret
 	acc := a.r.FindOne(account.CPF)
 	if reflect.DeepEqual(acc, entities.Account{}) {
-		fmt.Printf("Usuário/senha incorreto")
 		return false
 	}
-	fmt.Println("Senha cript: ", acc.Secret)
-	fmt.Println("Senha não cript: ", secret)
+
 	err := bcrypt.CompareHashAndPassword([]byte(acc.Secret), []byte(secret))
 	if err != nil {
-		fmt.Println("Usuário/senha incorreto")
 		return false
 	}
 	return true
@@ -56,7 +52,7 @@ func (a AuthUc) Login(CPF, secret string) bool {
 func (a AuthUc) CreateToken(CPF string, secret string) (string, error) {
 	b := a.Login(CPF, secret)
 	if !b {
-		log.Fatal("Erro na autenticação")
+		log.Fatal("Authentication Error")
 	}
 	os.Setenv("ACCESS_SECRET", "asdhjkasjheee")
 
@@ -67,7 +63,7 @@ func (a AuthUc) CreateToken(CPF string, secret string) (string, error) {
 	})
 	tokenString, err := token.SignedString([]byte(os.Getenv("ACCESS_SECRET")))
 	if err != nil {
-		log.Fatal("Erro ao gerar token")
+		log.Fatal("Generate token error")
 		return "", err
 	}
 
@@ -75,14 +71,12 @@ func (a AuthUc) CreateToken(CPF string, secret string) (string, error) {
 }
 
 func Authorize(token *jwt.Token) interface{} {
-	fmt.Println("Token no authorize: ", token)
-	
-	var accessUuID string
+	var accessUUID string
 	claims, ok := token.Claims.(jwt.MapClaims)
 	if ok {
-		accessUuID, _ = claims["user"].(string)
+		accessUUID, _ = claims["user"].(string)
 
 	}
-	return accessUuID
+	return accessUUID
 
 }
