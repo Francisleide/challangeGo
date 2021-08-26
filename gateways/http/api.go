@@ -8,9 +8,9 @@ import (
 	// gin-swagger middleware
 	// swagger embed files
 	"github.com/francisleide/ChallengeGo/domain/account/usecase"
-	acc "github.com/francisleide/ChallengeGo/domain/account/usecase"
-	a "github.com/francisleide/ChallengeGo/domain/auth/usecase"
-	tr "github.com/francisleide/ChallengeGo/domain/transfer/usecase"
+	accountUsecase "github.com/francisleide/ChallengeGo/domain/account/usecase"
+	authorizationUsecase "github.com/francisleide/ChallengeGo/domain/auth/usecase"
+	transferUsecase "github.com/francisleide/ChallengeGo/domain/transfer/usecase"
 	"github.com/francisleide/ChallengeGo/gateways/http/account"
 	"github.com/francisleide/ChallengeGo/gateways/http/auth"
 	middleware "github.com/francisleide/ChallengeGo/gateways/http/middleware"
@@ -20,12 +20,12 @@ import (
 )
 
 type Api struct {
-	account  acc.AccountUc
-	transfer tr.TransferUc
-	auth     a.AuthUc
+	account  accountUsecase.AccountUc
+	transfer transferUsecase.TransferUc
+	auth     authorizationUsecase.AuthUc
 }
 
-func NewApi(accountUC usecase.AccountUc, transferUC tr.TransferUc, authorization a.AuthUc) *Api {
+func NewApi(accountUC usecase.AccountUc, transferUC transferUsecase.TransferUc, authorization authorizationUsecase.AuthUc) *Api {
 	return &Api{
 		account:  accountUC,
 		transfer: transferUC,

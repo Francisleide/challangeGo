@@ -9,25 +9,18 @@ import (
 	"github.com/francisleide/ChallengeGo/domain/entities"
 )
 
-var (
-	ID        string
-	name      string
-	CPF       string
-	secret    string
-	balance   float64
-	createdAt string
-)
-var accounts []entities.Account
+
 
 func (r Repository) ListAllAccounts() []entities.Account {
-
+	var accounts []entities.Account
+	
 	rows, err := r.Db.Query("SELECT id, name, cpf, secret,balance, created_at from account;")
 	defer rows.Close()
 	checkError(err)
 	fmt.Println("Reading data:")
 	for rows.Next() {
-		err = rows.Scan(&ID, &name, &CPF, &secret, &balance, &createdAt)
-		account := entities.Account{ID, name, CPF, secret, balance, createdAt}
+		var account entities.Account
+		err = rows.Scan(&account.ID, &account.Name, &account.CPF, &account.Secret, &account.Balance, &account.CreatedAt)
 		accounts = append(accounts, account)
 
 	}
@@ -40,13 +33,14 @@ func (r Repository) ListAllAccounts() []entities.Account {
 func (r Repository) FindOne(CPF string) entities.Account {
 
 	var accounts []entities.Account
+
 	var sql string
 	sql = "SELECT id, name, cpf, secret,balance, created_at from account where cpf=?"
 	rows, err := r.Db.Query(sql, CPF)
 	checkError(err)
 	for rows.Next() {
-		err := rows.Scan(&ID, &name, &CPF, &secret, &balance, &createdAt)
-		account := entities.Account{ID, name, CPF, secret, balance, createdAt}
+		var account entities.Account
+		err = rows.Scan(&account.ID, &account.Name,  &account.CPF,  &account.Secret,  &account.Balance,  &account.CreatedAt)
 		accounts = append(accounts, account)
 		checkError(err)
 	}
@@ -57,7 +51,7 @@ func (r Repository) FindOne(CPF string) entities.Account {
 
 }
 
-///retornar erro (tratar)
+
 func (r Repository) UpdateBalance(account entities.Account) {
 
 	rows, err := r.Db.Exec("UPDATE account SET balance = ? WHERE id = ?", account.Balance, account.ID)
@@ -73,7 +67,7 @@ func (r Repository) InsertAccount(accountInput entities.AccountInput) (*entities
 
 	account_exist := r.FindOne(accountInput.CPF)
 	if !reflect.DeepEqual(account_exist, entities.Account{}) {
-		return nil, errors.New("The CPF already exists.")
+		return nil, errors.New("the CPF already exists.")
 	}
 	_, err := r.Db.Query("insert into  account (id, name, cpf, secret,balance, created_at) values (?,?,?,?,?,? )",
 		account.ID, account.Name, account.CPF, account.Secret, account.Balance, account.CreatedAt)

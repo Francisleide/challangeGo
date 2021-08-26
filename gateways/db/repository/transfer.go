@@ -39,7 +39,7 @@ func (r Repository) InsertTransfer(accountOrigin, accountDestine entities.Accoun
 	t := transfer.NewTransferInput(accountOrigin.ID, accountDestine.ID, amount)
 	fmt.Printf(t.ID)
 	_, err := r.Db.Query("insert into  transfer (id, account_origin_id, account_destination_id,amount,created_at) values (?,?,?,?,?)",
-		t.ID, t.OriginAccountID, t.DestineAccountID, t.Amount, t.CreatedAt)
+		t.ID, t.OriginAccountID, t.DestinationAccountID, t.Amount, t.CreatedAt)
 
 	if err != nil {
 		checkError(err)
