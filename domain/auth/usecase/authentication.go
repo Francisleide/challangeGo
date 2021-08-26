@@ -22,17 +22,17 @@ type Claims struct {
 	jwt.StandardClaims
 }
 
-type AuthUc struct {
+type AuthenticationUc struct {
 	r repository.Repository
 }
 
-func NewAuthenticationUC(repo repository.Repository) AuthUc {
-	return AuthUc{
+func NewAuthenticationUC(repo repository.Repository) AuthenticationUc {
+	return AuthenticationUc{
 		r: repo,
 	}
 }
 
-func (a AuthUc) Login(CPF, secret string) bool {
+func (a AuthenticationUc) Login(CPF, secret string) bool {
 	var account entities.Account
 	account.CPF = CPF
 	account.Secret = secret
@@ -49,10 +49,10 @@ func (a AuthUc) Login(CPF, secret string) bool {
 
 }
 
-func (a AuthUc) CreateToken(CPF string, secret string) (string, error) {
+func (a AuthenticationUc) CreateToken(CPF string, secret string) (string, error) {
 	b := a.Login(CPF, secret)
 	if !b {
-		log.Fatal("authentication Error")
+		log.Fatal("authentication error")
 	}
 	os.Setenv("ACCESS_SECRET", "asdhjkasjheee")
 

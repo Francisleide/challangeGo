@@ -22,10 +22,10 @@ import (
 type Api struct {
 	account  accountUsecase.AccountUc
 	transfer transferUsecase.TransferUc
-	auth     authorizationUsecase.AuthUc
+	auth     authorizationUsecase.AuthenticationUc
 }
 
-func NewApi(accountUC usecase.AccountUc, transferUC transferUsecase.TransferUc, authorization authorizationUsecase.AuthUc) *Api {
+func NewApi(accountUC usecase.AccountUc, transferUC transferUsecase.TransferUc, authorization authorizationUsecase.AuthenticationUc) *Api {
 	return &Api{
 		account:  accountUC,
 		transfer: transferUC,
