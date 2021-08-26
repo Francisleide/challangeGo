@@ -10,16 +10,12 @@ import (
 	"github.com/gorilla/mux"
 )
 
-type HandlerWithdraw struct {
-	account account.UseCase
-}
-
 type Withdraw struct {
 	Amount float64 `json: "amount"`
 }
 
-func ToWithdraw(serv *mux.Router, usecase account.UseCase) *HandlerWithdraw {
-	h := &HandlerWithdraw{
+func ToWithdraw(serv *mux.Router, usecase account.UseCase) *Handler {
+	h := &Handler{
 		account: usecase,
 	}
 	serv.HandleFunc("/withdraw", h.Withdraw).Methods("Post")
@@ -34,7 +30,7 @@ func ToWithdraw(serv *mux.Router, usecase account.UseCase) *HandlerWithdraw {
 // @Produce  json
 // @Header 201 {string} Token "request-id"
 // @Router /withdraw [post]
-func (h HandlerWithdraw) Withdraw(w http.ResponseWriter, r *http.Request) {
+func (h Handler) Withdraw(w http.ResponseWriter, r *http.Request) {
 	var withdraw Withdraw
 
 	accountID, _ := middleware.GetAccountID(r.Context())

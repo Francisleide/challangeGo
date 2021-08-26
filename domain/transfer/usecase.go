@@ -24,7 +24,7 @@ func NewTransferInput(accountOriginID, accountDestinationID string, amount float
 	return entities.Transfer{
 		ID:               entities.GenerateID(),
 		OriginAccountID:  accountOriginID,
-		DestineAccountID: accountDestinationID,
+		DestinationAccountID: accountDestinationID,
 		Amount:           amount,
 		CreatedAt:        time.Now().Format(time.RFC822),
 	}

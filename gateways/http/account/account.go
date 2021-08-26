@@ -2,7 +2,6 @@ package account
 
 import (
 	"encoding/json"
-	"fmt"
 	"net/http"
 
 	"github.com/francisleide/ChallengeGo/domain/account"

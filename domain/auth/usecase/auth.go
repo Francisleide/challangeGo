@@ -52,7 +52,7 @@ func (a AuthUc) Login(CPF, secret string) bool {
 func (a AuthUc) CreateToken(CPF string, secret string) (string, error) {
 	b := a.Login(CPF, secret)
 	if !b {
-		log.Fatal("Authentication Error")
+		log.Fatal("authentication Error")
 	}
 	os.Setenv("ACCESS_SECRET", "asdhjkasjheee")
 
@@ -63,14 +63,14 @@ func (a AuthUc) CreateToken(CPF string, secret string) (string, error) {
 	})
 	tokenString, err := token.SignedString([]byte(os.Getenv("ACCESS_SECRET")))
 	if err != nil {
-		log.Fatal("Generate token error")
+		log.Fatal("generate token error")
 		return "", err
 	}
 
 	return tokenString, nil
 }
 
-func Authorize(token *jwt.Token) interface{} {
+func Authentication(token *jwt.Token) interface{} {
 	var accessUUID string
 	claims, ok := token.Claims.(jwt.MapClaims)
 	if ok {

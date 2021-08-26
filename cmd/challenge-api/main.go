@@ -29,7 +29,7 @@ func connect(mysql app.MysqlConfig) *sql.DB {
 	db, err := sql.Open("mysql", mysql.DSN())
 
 	if err != nil {
-		log.Fatal("Error: ", err)
+		log.Fatal("error: ", err)
 	}
 
 	err = db.Ping()

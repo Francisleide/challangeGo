@@ -29,7 +29,7 @@ func Authorize(next http.Handler) http.Handler {
 			}
 		}
 
-		accountID := usecase.Authorize(x)
+		accountID := usecase.Authentication(x)
 
 		ctx := context.WithValue(r.Context(), contextID, accountID)
 		next.ServeHTTP(w, r.WithContext(ctx))

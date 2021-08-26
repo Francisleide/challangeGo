@@ -4,7 +4,7 @@ import (
 	"log"
 	"time"
 
-	UUID "github.com/satori/uuid.go"
+	"github.com/satori/uuid.go"
 	"golang.org/x/crypto/bcrypt"
 )
 
@@ -24,7 +24,7 @@ type AccountInput struct {
 }
 
 func GenerateID() string {
-	return UUID.NewV4().String()
+	return uuid.NewV4().String()
 }
 
 func EncryptSecret(pass string) (string, error) {

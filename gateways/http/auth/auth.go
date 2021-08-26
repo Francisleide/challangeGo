@@ -23,7 +23,7 @@ func Auth(serv *mux.Router, usecase auth.UseCase) *Handler {
 		auth: usecase,
 	}
 
-	serv.HandleFunc("/auth", h.Authorization).Methods("Post")
+	serv.HandleFunc("/login", h.Authentication).Methods("Post")
 
 	return h
 }
@@ -34,8 +34,8 @@ func Auth(serv *mux.Router, usecase auth.UseCase) *Handler {
 // @Param Body body Login true "Body"
 // @Accept  json
 // @Produce  json
-// @Router /auth [post]
-func (h Handler) Authorization(w http.ResponseWriter, r *http.Request) {
+// @Router /login [post]
+func (h Handler) Authentication(w http.ResponseWriter, r *http.Request) {
 	var login Login
 	decoder := json.NewDecoder(r.Body)
 	err := decoder.Decode(&login)

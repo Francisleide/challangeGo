@@ -30,7 +30,7 @@ func Test_Create_transfer(t *testing.T) {
 	account.CPF = "231"
 
 	var tt entities.Transfer
-	tt.DestineAccountID = "123"
+	tt.DestinationAccountID = "123"
 	tt.OriginAccountID = account.CPF
 	tt.Amount = 10.0
 	t.Run("The emissary has a balance in the account and the transfer runs.", func(t *testing.T) {
@@ -40,7 +40,7 @@ func Test_Create_transfer(t *testing.T) {
 		}
 
 		transfer := usecase.NewTransferUC(&r)
-		_, err := transfer.CreateTransfer(tt.OriginAccountID, tt.DestineAccountID, tt.Amount)
+		_, err := transfer.CreateTransfer(tt.OriginAccountID, tt.DestinationAccountID, tt.Amount)
 		expectedBalance := 90.0
 		if r.Account.Balance != expectedBalance {
 			t.Errorf("Expected balance: %.2f, recived balance: %.2f", expectedBalance, r.Account.Balance)
