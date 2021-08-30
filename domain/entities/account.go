@@ -1,8 +1,10 @@
 package entities
 
 import (
-	"log"
+	"errors"
+	"strconv"
 	"time"
+	"unicode/utf8"
 
 	"github.com/satori/uuid.go"
 	"golang.org/x/crypto/bcrypt"
@@ -23,10 +25,6 @@ type AccountInput struct {
 	Secret string
 }
 
-func GenerateID() string {
-	return uuid.NewV4().String()
-}
-
 func EncryptSecret(pass string) (string, error) {
 	secret, err := bcrypt.GenerateFromPassword([]byte(pass), bcrypt.DefaultCost)
 	if err != nil {
@@ -35,16 +33,91 @@ func EncryptSecret(pass string) (string, error) {
 	return string(secret), nil
 
 }
-func NewAccount(name, CPF, secret string) Account {
+
+func CPFValidation(CPF string) bool {
+	if len(CPF) == 11 {
+		runes := []rune(CPF)
+		firstBuf := make([]byte, 1)
+		_ = utf8.EncodeRune(firstBuf, runes[9])
+		firstDigit, _ := strconv.Atoi(string(firstBuf))
+		secondBuf := make([]byte, 1)
+		_ = utf8.EncodeRune(secondBuf, runes[10])
+		secondDigit, _ := strconv.Atoi(string(secondBuf))
+		totalFirst := 0
+		value := 10
+		for i := 0; i < 9; i++ {
+			buf := make([]byte, 1)
+			_ = utf8.EncodeRune(buf, runes[i])
+			digit, _ := strconv.Atoi(string(buf))
+			totalFirst += value * digit
+			value--
+		}
+		result := (totalFirst * 10) % 11
+		if result == int(firstDigit) {
+			totalSecond := 0
+			value = 11
+			for i := 0; i < 10; i++ {
+				buf := make([]byte, 1)
+				_ = utf8.EncodeRune(buf, runes[i])
+				digit2, _ := strconv.Atoi(string(buf))
+				totalSecond += value * digit2
+				value--
+			}
+			result2 := (totalSecond * 10) % 11
+			if result2 == secondDigit {
+				return true
+			}
+		}
+
+	}
+	return false
+}
+
+func SecretValidation(secret string) bool {
+	numbers := 0
+	if len(secret) > 4 {
+		for _, char := range secret {
+			for _, number := range "1234567890" {
+				if char == number {
+					numbers++
+				}
+			}
+		}
+	}
+	if numbers > 0 && numbers < len(secret) {
+		return true
+	}
+	return false
+}
+
+func NameValidation(name string) bool {
+	return len(name) != 0
+}
+
+func NewAccount(name, CPF, secret string) (Account, error) {
+	if !SecretValidation(secret) {
+		//TODO: add a sentinel
+		return Account{}, errors.New("invalid secret")
+	}
+
+	if !NameValidation(name) {
+		//TODO: add a sentinel
+		return Account{}, errors.New("the name cannot be null")
+	}
+	if !CPFValidation(CPF) {
+		//TODO: add a sentinel
+		return Account{}, errors.New("invalid cpf")
+	}
+
 	secret, err := EncryptSecret(secret)
 	if err != nil {
-		log.Fatal(err)
+		return Account{}, nil
 	}
 	return Account{
-		ID:        GenerateID(),
+		ID:        uuid.NewV4().String(),
 		Name:      name,
 		CPF:       CPF,
 		Secret:    secret,
 		CreatedAt: time.Now().Format(time.RFC822),
-	}
+	}, nil
 }

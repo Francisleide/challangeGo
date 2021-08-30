@@ -33,17 +33,25 @@ func Accounts(serv *mux.Router, usecase account.UseCase) *Handler {
 // @Header 201 {string} Token "request-id"
 // @Router /accounts [post]
 func (h Handler) CreateAccount(w http.ResponseWriter, r *http.Request) {
-	var acc entities.AccountInput
+	var accountInput entities.AccountInput
 	decoder := json.NewDecoder(r.Body)
-	err := decoder.Decode(&acc)
+	err := decoder.Decode(&accountInput)
 	if err != nil {
-		//implenmentar erro aqui
+		w.WriteHeader(http.StatusBadRequest)
 	}
-	h.account.CreateAccount(entities.AccountInput{
-		Name:   acc.Name,
-		CPF:    acc.CPF,
-		Secret: acc.Secret,
-	})
-	w.Header().Set("Content-Type", "application/json")
 
+	account, err := h.account.CreateAccount(entities.AccountInput{
+		Name:   accountInput.Name,
+		CPF:    accountInput.CPF,
+		Secret: accountInput.Secret,
+	})
+	if err != nil {
+		w.WriteHeader(http.StatusBadRequest)
+		return
+	}
+	w.Header().Set("Content-Type", "application/json")
+	err = json.NewEncoder(w).Encode(account)
+	if err != nil {
+		w.WriteHeader(http.StatusBadRequest)
+	}
 }
