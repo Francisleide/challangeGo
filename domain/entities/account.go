@@ -53,6 +53,9 @@ func CPFValidation(CPF string) bool {
 			value--
 		}
 		result := (totalFirst * 10) % 11
+		if result == 10 {
+			result = 0
+		}
 		if result == int(firstDigit) {
 			totalSecond := 0
 			value = 11
@@ -64,6 +67,9 @@ func CPFValidation(CPF string) bool {
 				value--
 			}
 			result2 := (totalSecond * 10) % 11
+			if result2 == 10 {
+				result2 = 0
+			}
 			if result2 == secondDigit {
 				return true
 			}
