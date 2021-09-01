@@ -1,10 +1,7 @@
 package repository
 
 import (
-	"fmt"
-
 	"github.com/francisleide/ChallengeGo/domain/entities"
-	"github.com/francisleide/ChallengeGo/domain/transfer"
 )
 
 var (
@@ -18,7 +15,7 @@ var transfers []entities.Transfer
 
 func (r Repository) ListAllTransfers() []entities.Transfer {
 
-	rows, err := r.Db.Query("SELECT id, account_origin_id, account_destination_id, amount,transfer_created_at, from transfer;")
+	rows, err := r.Db.Query("select id, account_origin_id, account_destination_id, amount,transfer_created_at, from transfer;")
 	defer rows.Close()
 	checkError(err)
 	for rows.Next() {
@@ -32,19 +29,19 @@ func (r Repository) ListAllTransfers() []entities.Transfer {
 	return transfers
 }
 
-func (r Repository) InsertTransfer(accountOrigin, accountDestine entities.Account, amount float64) (*entities.Transfer, error) {
-	r.UpdateBalance(accountOrigin)
-	r.UpdateBalance(accountDestine)
+func (r Repository) InsertTransfer(transfer entities.Transfer) (entities.Transfer, error) {
+	//r.UpdateBalance(accountOrigin) chamar isso no UC
+	//r.UpdateBalance(accountDestine) chamar isso no UC
 
-	t := transfer.NewTransferInput(accountOrigin.ID, accountDestine.ID, amount)
-	fmt.Printf(t.ID)
+	//t := transfer.NewTransferInput(accountOrigin.ID, accountDestine.ID, amount)
 	_, err := r.Db.Query("insert into  transfer (id, account_origin_id, account_destination_id,amount,created_at) values (?,?,?,?,?)",
-		t.ID, t.OriginAccountID, t.DestinationAccountID, t.Amount, t.CreatedAt)
+		transfer.ID, transfer.OriginAccountID, transfer.DestinationAccountID, transfer.Amount, transfer.CreatedAt)
 
 	if err != nil {
 		checkError(err)
-		return nil, err
+		return entities.Transfer{}, err
 	}
-	return &t, nil
+	return transfer, nil
 
 }
+

@@ -12,16 +12,22 @@ type repoMock struct {
 	Account  entities.Account
 }
 
-func (r *repoMock) InsertTransfer(originAccount, destineAccount entities.Account, amount float64) (*entities.Transfer, error) {
-	newAccount := &r.Account
-	newAccount.Balance -= amount
-	return &r.Transfer, nil
+func (r *repoMock) FindByID(accountID string) (entities.Account, bool) {
+	return entities.Account{}, true
 }
-func (r *repoMock) FindOne(cpf string) entities.Account {
+func (r *repoMock) InsertTransfer(transfer entities.Transfer) (entities.Transfer, error) {
+	newAccount := &r.Account
+	newAccount.Balance -= transfer.Amount
+	return r.Transfer, nil
+}
+func (r *repoMock) FindOne(cpf string) (entities.Account, bool) {
 	var account entities.Account
 	account.Balance = 100
 	account.CPF = "231"
-	return account
+	return account, true
+}
+func (r *repoMock) UpdateBalance(account entities.Account) bool {
+	return true
 }
 
 func Test_Create_transfer(t *testing.T) {
@@ -43,7 +49,7 @@ func Test_Create_transfer(t *testing.T) {
 		_, err := transfer.CreateTransfer(tt.OriginAccountID, tt.DestinationAccountID, tt.Amount)
 		expectedBalance := 90.0
 		if r.Account.Balance != expectedBalance {
-			t.Errorf("Expected balance: %.2f, recived balance: %.2f", expectedBalance, r.Account.Balance)
+			t.Errorf("Expected balance: %.2f, received balance: %.2f", expectedBalance, r.Account.Balance)
 		}
 		if err != nil {
 			t.Errorf("The operation should go without error, but it was captured: %s", err)

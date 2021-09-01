@@ -2,9 +2,11 @@ package transfer
 
 import (
 	"encoding/json"
+	"fmt"
 	"log"
 	"net/http"
 
+	"github.com/francisleide/ChallengeGo/domain/entities"
 	"github.com/francisleide/ChallengeGo/domain/transfer"
 	"github.com/francisleide/ChallengeGo/gateways/http/middleware"
 	"github.com/gorilla/mux"
@@ -34,7 +36,7 @@ func Transfer(serv *mux.Router, usecase transfer.UseCase) *Handler {
 // @Header 201 {string} Token "request-id"
 // @Router /transfer [post]
 func (h Handler) CreateTransfer(w http.ResponseWriter, r *http.Request) {
-	var tr transfer.TransferInput
+	var tr entities.TransferInput
 	accountID, ok := middleware.GetAccountID(r.Context())
 	if !ok || accountID == "" {
 		w.Header().Set("Content-Type", "application/json")
@@ -46,7 +48,8 @@ func (h Handler) CreateTransfer(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		log.Fatal(err)
 	}
-	_, error := h.transfer.CreateTransfer(accountID, tr.DestinationCPF, tr.Amount)
+	_, error := h.transfer.CreateTransfer(accountID, tr.DestinationAccountID, tr.Amount)
+	fmt.Printf("Valor do amount na rota: %f\n", tr.Amount)
 	if error != nil {
 		w.WriteHeader(r.Response.StatusCode)
 		return
