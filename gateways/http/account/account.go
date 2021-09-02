@@ -20,6 +20,7 @@ func Accounts(serv *mux.Router, usecase account.UseCase) *Handler {
 
 	serv.HandleFunc("/accounts", h.CreateAccount).Methods("Post")
 	serv.HandleFunc("/accounts", h.ListAllAccounts).Methods("Get")
+	serv.HandleFunc("/accounts/{id}/balance", h.GetBalance).Methods(("Get"))
 
 	return h
 }

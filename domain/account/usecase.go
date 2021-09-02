@@ -9,6 +9,7 @@ type UseCase interface {
 	ListAll() []entities.Account
 	Deposit(CPF string, amount float64) error
 	Withdraw(CPF string, amount float64) bool
+	GetBalance(accountID string) (entities.Account, error)
 }
 
 type Repository interface {
@@ -16,4 +17,5 @@ type Repository interface {
 	UpdateBalance(account entities.Account) bool
 	InsertAccount(entities.Account) error
 	ListAllAccounts() []entities.Account
+	FindByID(accountID string) (entities.Account, bool)
 }

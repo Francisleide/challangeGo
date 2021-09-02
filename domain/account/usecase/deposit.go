@@ -1,16 +1,16 @@
 package usecase
 
-import "github.com/francisleide/ChallengeGo/domain/entities"
+import "errors"
 
+func (c AccountUc) Deposit(CPF string, amount float64) error {
 
-
-func (c AccountUc) Deposit(CPF string, amount float64) {
-	var account entities.Account
-	if amount > 0 {
-		account = c.r.FindOne(CPF)
-		account.Balance += amount
-		c.r.UpdateBalance(account)
-
+	account, ok := c.r.FindOne(CPF)
+	if !ok {
+		//TODO add a new sentinel
+		return errors.New("the account does not exist")
 	}
+	account.Balance += amount
+	c.r.UpdateBalance(account)
+	return nil
 
 }

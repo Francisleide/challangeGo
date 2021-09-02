@@ -1,4 +1,9 @@
 definitions:
+  account.AccountBalance:
+    properties:
+      balance:
+        type: number
+    type: object
   account.DepositInput:
     properties:
       amount:
@@ -40,12 +45,25 @@ definitions:
       secret:
         type: string
     type: object
-  transfer.TransferInput:
+  entities.Transfer:
     properties:
+      accountDestinationID:
+        type: string
+      accountOriginID:
+        type: string
       amount:
         type: number
-      destinationCPF:
+      createdAt:
         type: string
+      id:
+        type: string
+    type: object
+  entities.TransferInput:
+    properties:
+      accountDestinationID:
+        type: string
+      amount:
+        type: number
     type: object
 info:
   contact: {}
@@ -85,21 +103,25 @@ paths:
       produces:
       - application/json
       summary: Create an account
-  /auth:
-    post:
+  /accounts/{id}/balance:
+    get:
       consumes:
       - application/json
-      description: It takes a token to authenticate yorself to the application
-      parameters:
-      - description: Body
-        in: body
-        name: Body
-        required: true
-        schema:
-          $ref: '#/definitions/auth.Login'
+      description: show the balance of a specific account
       produces:
       - application/json
-      summary: Get a Auth
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/account.AccountBalance'
+        "400":
+          description: Failed to decode
+        "404":
+          description: Account not found
+        "500":
+          description: Unexpected internal server error
+      summary: account balance
   /deposit:
     post:
       consumes:
@@ -115,6 +137,21 @@ paths:
       produces:
       - application/json
       summary: Make a deposit
+  /login:
+    post:
+      consumes:
+      - application/json
+      description: It takes a token to authenticate yourself to the application
+      parameters:
+      - description: Body
+        in: body
+        name: Body
+        required: true
+        schema:
+          $ref: '#/definitions/auth.Login'
+      produces:
+      - application/json
+      summary: Get a Auth
   /transfer:
     post:
       consumes:
@@ -127,7 +164,9 @@ paths:
         name: Body
         required: true
         schema:
-          $ref: '#/definitions/transfer.TransferInput'
+          items:
+            $ref: '#/definitions/entities.Transfer'
+          type: array
       - description: Bearer Authorization Token
         in: header
         name: Authorization

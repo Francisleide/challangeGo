@@ -4,8 +4,6 @@ import (
 	"encoding/json"
 	"log"
 	"net/http"
-
-	"github.com/francisleide/ChallengeGo/domain/entities"
 )
 
 // ShowAccount godoc
@@ -19,8 +17,7 @@ import (
 // @Failure 500 "Unexpected internal server error"
 // @Router /accounts [GET]
 func (h Handler) ListAllAccounts(w http.ResponseWriter, r *http.Request) {
-	var accounts []entities.Account
-	accounts = h.account.ListAll()
+	accounts := h.account.ListAll()
 	w.Header().Set("Content-Type", "application/json")
 	err := json.NewEncoder(w).Encode(accounts)
 	if err != nil {

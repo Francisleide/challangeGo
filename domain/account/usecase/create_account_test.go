@@ -16,20 +16,25 @@ func (r *repoMock) ListAllAccounts() []entities.Account {
 	return nil
 }
 
-func (r *repoMock) FindOne(CPF string) entities.Account {
+func (r *repoMock) FindOne(CPF string) (entities.Account, bool) {
 	return entities.Account{
 		Balance: 100.0,
 		CPF:     "12345679210",
-	}
+	}, true
 }
-func (r *repoMock) UpdateBalance(account entities.Account) {
+
+func (r *repoMock) FindByID(accountID string) (entities.Account, bool) {
+	return entities.Account{}, false
+}
+func (r *repoMock) UpdateBalance(account entities.Account) bool {
 	r.Account = account
+	return true
 }
-func (r *repoMock) InsertAccount(accountInput entities.AccountInput) (*entities.Account, error) {
-	if accountInput.CPF == "12345678911" {
-		return nil, errors.New("the account already exists")
+func (r *repoMock) InsertAccount(account entities.Account) error {
+	if account.CPF == "12345678911" {
+		return errors.New("the account already exists")
 	}
-	return &r.Account, nil
+	return nil
 }
 
 func TestCreateAccount(t *testing.T) {
