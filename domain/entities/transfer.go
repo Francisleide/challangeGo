@@ -9,14 +9,14 @@ import (
 
 type Transfer struct {
 	ID                   string
-	OriginAccountID      string
-	DestinationAccountID string
+	AccountOriginID      string
+	AccountDestinationID string
 	Amount               float64
 	CreatedAt            string
 }
 
 type TransferInput struct {
-	DestinationAccountID string
+	AccountDestinationID string
 	Amount               float64
 }
 
@@ -32,8 +32,8 @@ func NewTransfer(accountOriginID, accountDestinationID string, amount float64) (
 	}
 	return Transfer{
 		ID:                   uuid.NewV4().String(),
-		OriginAccountID:      accountOriginID,
-		DestinationAccountID: accountDestinationID,
+		AccountOriginID:      accountOriginID,
+		AccountDestinationID: accountDestinationID,
 		Amount:               amount,
 		CreatedAt:            time.Now().Format(time.RFC822),
 	}, nil

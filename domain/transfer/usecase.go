@@ -6,6 +6,7 @@ import (
 
 type UseCase interface {
 	CreateTransfer(origin, destine string, amount float64) (entities.Transfer, error)
+	ListUserTransfers(CPF string) ([]entities.Transfer, error)
 }
 
 type Repository interface {
@@ -13,4 +14,5 @@ type Repository interface {
 	FindOne(CPF string) (entities.Account, bool)
 	UpdateBalance(account entities.Account) bool
 	FindByID(accountID string) (entities.Account, bool)
+	ListUserTransfers(CPF string) ([]entities.Transfer, error)
 }

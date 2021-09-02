@@ -2,7 +2,6 @@ package transfer
 
 import (
 	"encoding/json"
-	"fmt"
 	"log"
 	"net/http"
 
@@ -21,7 +20,8 @@ func Transfer(serv *mux.Router, usecase transfer.UseCase) *Handler {
 		transfer: usecase,
 	}
 
-	serv.HandleFunc("/transfer", h.CreateTransfer).Methods("Post")
+	serv.HandleFunc("/transfers", h.CreateTransfer).Methods("Post")
+	serv.HandleFunc("/transfers", h.ListUserTransfers).Methods("Get")
 
 	return h
 }
@@ -48,12 +48,31 @@ func (h Handler) CreateTransfer(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		log.Fatal(err)
 	}
-	_, error := h.transfer.CreateTransfer(accountID, tr.DestinationAccountID, tr.Amount)
-	fmt.Printf("Valor do amount na rota: %f\n", tr.Amount)
+	_, error := h.transfer.CreateTransfer(accountID, tr.AccountDestinationID, tr.Amount)
 	if error != nil {
 		w.WriteHeader(r.Response.StatusCode)
 		return
 	}
 
 	w.Header().Set("Content-Type", "application/json")
+}
+
+func (h Handler) ListUserTransfers(w http.ResponseWriter, r *http.Request) {
+	accountCPF, ok := middleware.GetAccountID(r.Context())
+	if !ok || accountCPF == "" {
+		w.WriteHeader(http.StatusBadRequest)
+		return
+	}
+
+	transfers, err := h.transfer.ListUserTransfers(accountCPF)
+	if err != nil {
+		w.WriteHeader(http.StatusBadRequest)
+		return
+	}
+	w.Header().Set("Content-Type", "application/json")
+	err = json.NewEncoder(w).Encode(transfers)
+	if err != nil {
+		w.WriteHeader(http.StatusBadRequest)
+	}
+
 }

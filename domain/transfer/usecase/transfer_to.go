@@ -18,11 +18,7 @@ func NewTransferUC(repo transfer.Repository) TransferUc {
 }
 
 func (t TransferUc) CreateTransfer(accountOriginID, accountDestinationID string, amount float64) (entities.Transfer, error) {
-	account, ok := t.r.FindOne(accountOriginID)
-	if !ok {
-		return entities.Transfer{}, errors.New("account not found")
-	}
-	accountOrigin, okOrigin := t.r.FindByID(account.ID)
+	accountOrigin, okOrigin := t.r.FindOne(accountOriginID)
 	if !okOrigin {
 		//TODO: add a sentinel
 		return entities.Transfer{}, errors.New("origin account not found")
@@ -34,10 +30,7 @@ func (t TransferUc) CreateTransfer(accountOriginID, accountDestinationID string,
 	}
 
 	if accountOrigin.Balance >= amount {
-		//chamar update
-		//chamar o update da outra conta
-		//create_transfer do entities
-		transfer, err := entities.NewTransfer(accountOriginID, accountDestinationID, amount)
+		transfer, err := entities.NewTransfer(accountOrigin.ID, accountDestinationID, amount)
 		if err != nil {
 			//TODO: add a sentinel
 			return entities.Transfer{}, errors.New("invalid transfer")
@@ -57,4 +50,17 @@ func (t TransferUc) CreateTransfer(accountOriginID, accountDestinationID string,
 		return entities.Transfer{}, errors.New("insufficient funds")
 	}
 
+}
+
+func (t TransferUc) ListUserTransfers(CPF string) ([]entities.Transfer, error) {
+	transfer, ok := t.r.FindOne(CPF)
+	if !ok {
+		//TODO: add a sentinel
+		return []entities.Transfer{}, errors.New("account not found")
+	}
+	transfers, err := t.r.ListUserTransfers(transfer.ID)
+	if err != nil {
+		return []entities.Transfer{}, err
+	}
+	return transfers, nil
 }

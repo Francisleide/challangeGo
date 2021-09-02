@@ -13,7 +13,7 @@ type UseCase interface {
 
 type Repository interface {
 	FindOne(CPF string) (entities.Account, bool)
-	UpdateBalance(account entities.Account)
+	UpdateBalance(account entities.Account) bool
 	InsertAccount(entities.Account) error
 	ListAllAccounts() []entities.Account
 }

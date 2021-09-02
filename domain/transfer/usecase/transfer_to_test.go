@@ -12,6 +12,9 @@ type repoMock struct {
 	Account  entities.Account
 }
 
+func (r *repoMock) ListUserTransfers(accountID string) ([]entities.Transfer, error) {
+	return []entities.Transfer{}, nil
+}
 func (r *repoMock) FindByID(accountID string) (entities.Account, bool) {
 	return entities.Account{}, true
 }
@@ -36,8 +39,8 @@ func Test_Create_transfer(t *testing.T) {
 	account.CPF = "231"
 
 	var tt entities.Transfer
-	tt.DestinationAccountID = "123"
-	tt.OriginAccountID = account.CPF
+	tt.AccountDestinationID = "123"
+	tt.AccountOriginID = account.CPF
 	tt.Amount = 10.0
 	t.Run("The emissary has a balance in the account and the transfer runs.", func(t *testing.T) {
 		r := repoMock{
@@ -46,7 +49,7 @@ func Test_Create_transfer(t *testing.T) {
 		}
 
 		transfer := usecase.NewTransferUC(&r)
-		_, err := transfer.CreateTransfer(tt.OriginAccountID, tt.DestinationAccountID, tt.Amount)
+		_, err := transfer.CreateTransfer(tt.AccountOriginID, tt.AccountDestinationID, tt.Amount)
 		expectedBalance := 90.0
 		if r.Account.Balance != expectedBalance {
 			t.Errorf("Expected balance: %.2f, received balance: %.2f", expectedBalance, r.Account.Balance)

@@ -4,38 +4,13 @@ import (
 	"github.com/francisleide/ChallengeGo/domain/entities"
 )
 
-var (
-	transferID           string
-	accountOriginID      string
-	accountDestinationID string
-	amount               float64
-	transferCreatedAt    string
-)
-var transfers []entities.Transfer
-
-func (r Repository) ListAllTransfers() []entities.Transfer {
-
-	rows, err := r.Db.Query("select id, account_origin_id, account_destination_id, amount,transfer_created_at, from transfer;")
-	defer rows.Close()
-	checkError(err)
-	for rows.Next() {
-		err = rows.Scan(&transferID, &accountOriginID, &accountDestinationID, &amount, &transferCreatedAt)
-		tranfer := entities.Transfer{transferID, accountOriginID, accountDestinationID, amount, transferCreatedAt}
-		transfers = append(transfers, tranfer)
-
-	}
-	checkError(err)
-	err = rows.Err()
-	return transfers
-}
-
 func (r Repository) InsertTransfer(transfer entities.Transfer) (entities.Transfer, error) {
 	//r.UpdateBalance(accountOrigin) chamar isso no UC
 	//r.UpdateBalance(accountDestine) chamar isso no UC
 
 	//t := transfer.NewTransferInput(accountOrigin.ID, accountDestine.ID, amount)
 	_, err := r.Db.Query("insert into  transfer (id, account_origin_id, account_destination_id,amount,created_at) values (?,?,?,?,?)",
-		transfer.ID, transfer.OriginAccountID, transfer.DestinationAccountID, transfer.Amount, transfer.CreatedAt)
+		transfer.ID, transfer.AccountOriginID, transfer.AccountDestinationID, transfer.Amount, transfer.CreatedAt)
 
 	if err != nil {
 		checkError(err)
@@ -45,3 +20,20 @@ func (r Repository) InsertTransfer(transfer entities.Transfer) (entities.Transfe
 
 }
 
+func (r Repository) ListUserTransfers(accountID string) ([]entities.Transfer, error) {
+	var transfers []entities.Transfer
+	rows, err := r.Db.Query("select * from transfer where account_origin_id=?", accountID)
+	if err != nil {
+		return []entities.Transfer{}, err
+	}
+	for rows.Next() {
+		var transfer entities.Transfer
+		err = rows.Scan(&transfer.ID, &transfer.AccountOriginID, &transfer.AccountDestinationID, &transfer.Amount, &transfer.CreatedAt)
+		transfers = append(transfers, transfer)
+	}
+	if err != nil {
+		return []entities.Transfer{}, err
+	}
+	return transfers, nil
+
+}

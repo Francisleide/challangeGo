@@ -3,11 +3,9 @@ package usecase
 import (
 	"log"
 	"os"
-	"reflect"
 	"time"
 
 	"github.com/dgrijalva/jwt-go"
-	"github.com/francisleide/ChallengeGo/domain/entities"
 	"github.com/francisleide/ChallengeGo/gateways/db/repository"
 	"golang.org/x/crypto/bcrypt"
 )
@@ -33,15 +31,12 @@ func NewAuthenticationUC(repo repository.Repository) AuthenticationUc {
 }
 
 func (a AuthenticationUc) Login(CPF, secret string) bool {
-	var account entities.Account
-	account.CPF = CPF
-	account.Secret = secret
-	acc := a.r.FindOne(account.CPF)
-	if reflect.DeepEqual(acc, entities.Account{}) {
+	account, ok := a.r.FindOne(CPF)
+	if !ok {
 		return false
 	}
 
-	err := bcrypt.CompareHashAndPassword([]byte(acc.Secret), []byte(secret))
+	err := bcrypt.CompareHashAndPassword([]byte(account.Secret), []byte(secret))
 	if err != nil {
 		return false
 	}
