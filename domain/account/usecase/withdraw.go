@@ -8,7 +8,7 @@ func (c AccountUc) Withdraw(CPF string, amount float64) bool {
 	}
 	if account.Balance > amount {
 		account.Balance -= amount
-		c.r.UpdateBalance(account)
+		c.r.UpdateBalance(account.ID, account.Balance)
 		return true
 	}
 	return false

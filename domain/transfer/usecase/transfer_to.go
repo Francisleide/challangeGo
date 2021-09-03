@@ -37,9 +37,9 @@ func (t TransferUc) CreateTransfer(accountOriginID, accountDestinationID string,
 		}
 		accountOrigin.Balance -= amount
 		accountDestination.Balance += amount
-		t.r.UpdateBalance(accountOrigin)
-		t.r.UpdateBalance(accountDestination)
-
+		t.r.UpdateBalance(accountOrigin.ID, accountOrigin.Balance)
+		t.r.UpdateBalance(accountDestination.ID, accountDestination.Balance)
+		
 		tr, err := t.r.InsertTransfer(transfer)
 		if err != nil {
 			return entities.Transfer{}, err

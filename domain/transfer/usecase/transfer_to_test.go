@@ -29,7 +29,7 @@ func (r *repoMock) FindOne(cpf string) (entities.Account, error) {
 	account.CPF = "231"
 	return account, nil
 }
-func (r *repoMock) UpdateBalance(account entities.Account) error {
+func (r *repoMock) UpdateBalance(ID string, balance float64) error {
 	return nil
 }
 

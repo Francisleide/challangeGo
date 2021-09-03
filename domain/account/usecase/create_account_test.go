@@ -26,8 +26,7 @@ func (r *repoMock) FindOne(CPF string) (entities.Account, error) {
 func (r *repoMock) FindByID(accountID string) (entities.Account, error) {
 	return entities.Account{}, nil
 }
-func (r *repoMock) UpdateBalance(account entities.Account) error {
-	r.Account = account
+func (r *repoMock) UpdateBalance(ID string, balance float64) error {
 	return nil
 }
 func (r *repoMock) InsertAccount(account entities.Account) error {

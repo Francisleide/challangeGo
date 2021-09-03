@@ -10,7 +10,7 @@ func (c AccountUc) Deposit(CPF string, amount float64) error {
 		return errors.New("the account does not exist")
 	}
 	account.Balance += amount
-	c.r.UpdateBalance(account)
+	c.r.UpdateBalance(account.ID, account.Balance)
 	return nil
 
 }

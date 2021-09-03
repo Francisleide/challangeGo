@@ -14,7 +14,7 @@ type UseCase interface {
 
 type Repository interface {
 	FindOne(CPF string) (entities.Account, error)
-	UpdateBalance(account entities.Account) error
+	UpdateBalance(ID string, balance float64) error
 	InsertAccount(entities.Account) error
 	ListAllAccounts() []entities.Account
 	FindByID(accountID string) (entities.Account, error)

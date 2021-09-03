@@ -46,9 +46,9 @@ func (r Repository) FindOne(CPF string) (entities.Account, error) {
 
 }
 
-func (r Repository) UpdateBalance(account entities.Account) error {
+func (r Repository) UpdateBalance(ID string, balance float64) error {
 
-	rows, err := r.Db.Exec("UPDATE account SET balance = ? WHERE id = ?", account.Balance, account.ID)
+	rows, err := r.Db.Exec("UPDATE account SET balance = ? WHERE id = ?", balance,ID)
 	checkError(err)
 	rowCount, err := rows.RowsAffected()
 	if err != nil || rowCount < 1 {
