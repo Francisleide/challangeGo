@@ -34,7 +34,7 @@ func EncryptSecret(pass string) (string, error) {
 
 }
 
-func CPFValidation(CPF string) bool {
+func ValidateCPF(CPF string) bool {
 	if len(CPF) == 11 {
 		runes := []rune(CPF)
 		firstBuf := make([]byte, 1)
@@ -79,7 +79,7 @@ func CPFValidation(CPF string) bool {
 	return false
 }
 
-func SecretValidation(secret string) bool {
+func ValidateSecret(secret string) bool {
 	numbers := 0
 	if len(secret) > 4 {
 		for _, char := range secret {
@@ -96,21 +96,21 @@ func SecretValidation(secret string) bool {
 	return false
 }
 
-func NameValidation(name string) bool {
+func ValidateName(name string) bool {
 	return len(name) != 0
 }
 
 func NewAccount(name, CPF, secret string) (Account, error) {
-	if !SecretValidation(secret) {
+	if !ValidateSecret(secret) {
 		//TODO: add a sentinel
 		return Account{}, errors.New("invalid secret")
 	}
 
-	if !NameValidation(name) {
+	if !ValidateName(name) {
 		//TODO: add a sentinel
 		return Account{}, errors.New("the name cannot be null")
 	}
-	if !CPFValidation(CPF) {
+	if !ValidateCPF(CPF) {
 		//TODO: add a sentinel
 		return Account{}, errors.New("invalid cpf")
 	}

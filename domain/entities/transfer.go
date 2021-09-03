@@ -20,13 +20,13 @@ type TransferInput struct {
 	Amount               float64
 }
 
-func AmountValidation(amount float64) bool {
+func ValidateAmount(amount float64) bool {
 	return amount > 0
 
 }
 
 func NewTransfer(accountOriginID, accountDestinationID string, amount float64) (Transfer, error) {
-	if !AmountValidation(amount) {
+	if !ValidateAmount(amount) {
 		//TODO: add a sentinel
 		return Transfer{}, errors.New("invalid amount")
 	}
