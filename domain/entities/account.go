@@ -124,6 +124,6 @@ func NewAccount(name, CPF, secret string) (Account, error) {
 		Name:      name,
 		CPF:       CPF,
 		Secret:    secret,
-		CreatedAt: time.Now().Format(time.RFC822),
+		CreatedAt: time.Now().UTC().String(),
 	}, nil
 }

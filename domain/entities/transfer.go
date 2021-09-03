@@ -35,7 +35,7 @@ func NewTransfer(accountOriginID, accountDestinationID string, amount float64) (
 		AccountOriginID:      accountOriginID,
 		AccountDestinationID: accountDestinationID,
 		Amount:               amount,
-		CreatedAt:            time.Now().Format(time.RFC822),
+		CreatedAt:            time.Now().UTC().String(),
 	}, nil
 
 }
