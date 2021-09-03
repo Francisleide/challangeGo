@@ -23,9 +23,9 @@ type AccountBalance struct {
 // @Router /accounts/{id}/balance [GET]
 func (h Handler) GetBalance(w http.ResponseWriter, r *http.Request) {
 	accountID := mux.Vars(r)["id"]
-	account, err := h.account.GetBalance(accountID)
+	balance, err := h.account.GetBalance(accountID)
 	var accountBalance AccountBalance
-	accountBalance.Balance = account.Balance
+	accountBalance.Balance = balance
 	if err != nil {
 		w.WriteHeader(http.StatusBadRequest)
 		return
