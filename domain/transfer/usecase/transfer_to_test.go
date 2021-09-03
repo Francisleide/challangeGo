@@ -15,22 +15,22 @@ type repoMock struct {
 func (r *repoMock) ListUserTransfers(accountID string) ([]entities.Transfer, error) {
 	return []entities.Transfer{}, nil
 }
-func (r *repoMock) FindByID(accountID string) (entities.Account, bool) {
-	return entities.Account{}, true
+func (r *repoMock) FindByID(accountID string) (entities.Account, error) {
+	return entities.Account{}, nil
 }
 func (r *repoMock) InsertTransfer(transfer entities.Transfer) (entities.Transfer, error) {
 	newAccount := &r.Account
 	newAccount.Balance -= transfer.Amount
 	return r.Transfer, nil
 }
-func (r *repoMock) FindOne(cpf string) (entities.Account, bool) {
+func (r *repoMock) FindOne(cpf string) (entities.Account, error) {
 	var account entities.Account
 	account.Balance = 100
 	account.CPF = "231"
-	return account, true
+	return account, nil
 }
-func (r *repoMock) UpdateBalance(account entities.Account) bool {
-	return true
+func (r *repoMock) UpdateBalance(account entities.Account) error {
+	return nil
 }
 
 func Test_Create_transfer(t *testing.T) {

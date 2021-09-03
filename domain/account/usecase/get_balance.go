@@ -5,8 +5,8 @@ import (
 )
 
 func (c AccountUc) GetBalance(accountID string) (float64, error) {
-	account, ok := c.r.FindByID(accountID)
-	if !ok {
+	account, error := c.r.FindByID(accountID)
+	if error != nil {
 		//TODO: add a sentinel
 		return 0, errors.New("account not found")
 	}

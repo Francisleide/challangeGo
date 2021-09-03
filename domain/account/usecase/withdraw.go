@@ -2,8 +2,8 @@ package usecase
 
 func (c AccountUc) Withdraw(CPF string, amount float64) bool {
 
-	account, ok := c.r.FindOne(CPF)
-	if !ok {
+	account, err := c.r.FindOne(CPF)
+	if err != nil {
 		return false
 	}
 	if account.Balance > amount {

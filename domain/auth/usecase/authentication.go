@@ -31,12 +31,12 @@ func NewAuthenticationUC(repo repository.Repository) AuthenticationUc {
 }
 
 func (a AuthenticationUc) Login(CPF, secret string) bool {
-	account, ok := a.r.FindOne(CPF)
-	if !ok {
+	account, err := a.r.FindOne(CPF)
+	if err != nil {
 		return false
 	}
 
-	err := bcrypt.CompareHashAndPassword([]byte(account.Secret), []byte(secret))
+	err = bcrypt.CompareHashAndPassword([]byte(account.Secret), []byte(secret))
 	if err != nil {
 		return false
 	}

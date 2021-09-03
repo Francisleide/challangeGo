@@ -11,8 +11,8 @@ type UseCase interface {
 
 type Repository interface {
 	InsertTransfer(transfer entities.Transfer) (entities.Transfer, error)
-	FindOne(CPF string) (entities.Account, bool)
-	UpdateBalance(account entities.Account) bool
-	FindByID(accountID string) (entities.Account, bool)
+	FindOne(CPF string) (entities.Account, error)
+	UpdateBalance(account entities.Account) error
+	FindByID(accountID string) (entities.Account, error)
 	ListUserTransfers(CPF string) ([]entities.Transfer, error)
 }

@@ -26,7 +26,7 @@ func (r Repository) ListAllAccounts() []entities.Account {
 	return accounts
 }
 
-func (r Repository) FindOne(CPF string) (entities.Account, bool) {
+func (r Repository) FindOne(CPF string) (entities.Account, error) {
 
 	var accounts []entities.Account
 
@@ -40,21 +40,21 @@ func (r Repository) FindOne(CPF string) (entities.Account, bool) {
 		checkError(err)
 	}
 	if len(accounts) == 0 {
-		return entities.Account{}, false
+		return entities.Account{}, err
 	}
-	return accounts[0], true
+	return accounts[0], nil
 
 }
 
-func (r Repository) UpdateBalance(account entities.Account) bool {
+func (r Repository) UpdateBalance(account entities.Account) error {
 
 	rows, err := r.Db.Exec("UPDATE account SET balance = ? WHERE id = ?", account.Balance, account.ID)
 	checkError(err)
 	rowCount, err := rows.RowsAffected()
 	if err != nil || rowCount < 1 {
-		return false
+		return err
 	}
-	return true
+	return nil
 
 }
 
@@ -71,12 +71,12 @@ func (r Repository) InsertAccount(account entities.Account) error {
 
 }
 
-func (r Repository) FindByID(accountID string) (entities.Account, bool) {
+func (r Repository) FindByID(accountID string) (entities.Account, error) {
 	var accounts []entities.Account
 	rows, err := r.Db.Query("select * from account where id=?", accountID)
 	if err != nil {
 		checkError(err)
-		return entities.Account{}, false
+		return entities.Account{}, err
 	}
 	for rows.Next() {
 		var account entities.Account
@@ -85,9 +85,9 @@ func (r Repository) FindByID(accountID string) (entities.Account, bool) {
 		checkError(err)
 	}
 	if len(accounts) == 0 {
-		return entities.Account{}, false
+		return entities.Account{}, err
 	}
-	return accounts[0], true
+	return accounts[0], nil
 
 }
 

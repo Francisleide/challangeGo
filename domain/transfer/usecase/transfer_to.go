@@ -18,13 +18,13 @@ func NewTransferUC(repo transfer.Repository) TransferUc {
 }
 
 func (t TransferUc) CreateTransfer(accountOriginID, accountDestinationID string, amount float64) (entities.Transfer, error) {
-	accountOrigin, okOrigin := t.r.FindOne(accountOriginID)
-	if !okOrigin {
+	accountOrigin, errFind := t.r.FindOne(accountOriginID)
+	if errFind != nil {
 		//TODO: add a sentinel
 		return entities.Transfer{}, errors.New("origin account not found")
 	}
-	accountDestination, okDestine := t.r.FindByID(accountDestinationID)
-	if !okDestine {
+	accountDestination, errFindID := t.r.FindByID(accountDestinationID)
+	if errFindID != nil {
 		//TODO: add a sentinel
 		return entities.Transfer{}, errors.New("origin destine not found")
 	}
@@ -53,8 +53,8 @@ func (t TransferUc) CreateTransfer(accountOriginID, accountDestinationID string,
 }
 
 func (t TransferUc) ListUserTransfers(CPF string) ([]entities.Transfer, error) {
-	transfer, ok := t.r.FindOne(CPF)
-	if !ok {
+	transfer, error := t.r.FindOne(CPF)
+	if error != nil {
 		//TODO: add a sentinel
 		return []entities.Transfer{}, errors.New("account not found")
 	}

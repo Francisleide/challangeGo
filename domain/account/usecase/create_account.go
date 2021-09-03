@@ -2,6 +2,7 @@ package usecase
 
 import (
 	"errors"
+	"fmt"
 
 	"github.com/francisleide/ChallengeGo/domain/account"
 	"github.com/francisleide/ChallengeGo/domain/entities"
@@ -24,9 +25,10 @@ func (c AccountUc) CreateAccount(accountInput entities.AccountInput) (entities.A
 		return entities.Account{}, err
 	}
 
-	_, ok := c.r.FindOne(newAccount.CPF)
-	if ok {
+	_, errFind := c.r.FindOne(newAccount.CPF)
+	if errFind != nil {
 		//TODO: add a sentinel
+		fmt.Println(errFind)
 		return entities.Account{}, errors.New("the account already exists")
 	}
 	errInsert := c.r.InsertAccount(newAccount)

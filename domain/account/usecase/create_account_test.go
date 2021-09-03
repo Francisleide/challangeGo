@@ -16,19 +16,19 @@ func (r *repoMock) ListAllAccounts() []entities.Account {
 	return nil
 }
 
-func (r *repoMock) FindOne(CPF string) (entities.Account, bool) {
+func (r *repoMock) FindOne(CPF string) (entities.Account, error) {
 	return entities.Account{
 		Balance: 100.0,
 		CPF:     "12345679210",
-	}, true
+	}, nil
 }
 
-func (r *repoMock) FindByID(accountID string) (entities.Account, bool) {
-	return entities.Account{}, false
+func (r *repoMock) FindByID(accountID string) (entities.Account, error) {
+	return entities.Account{}, nil
 }
-func (r *repoMock) UpdateBalance(account entities.Account) bool {
+func (r *repoMock) UpdateBalance(account entities.Account) error {
 	r.Account = account
-	return true
+	return nil
 }
 func (r *repoMock) InsertAccount(account entities.Account) error {
 	if account.CPF == "12345678911" {
