@@ -15,10 +15,6 @@ type Transfer struct {
 	CreatedAt            string
 }
 
-type TransferInput struct {
-	AccountDestinationID string
-	Amount               float64
-}
 
 func ValidateAmount(amount float64) bool {
 	return amount > 0

@@ -31,9 +31,9 @@ func (c AccountUc) CreateAccount(accountInput entities.AccountInput) (entities.A
 		fmt.Println(errFind)
 		return entities.Account{}, errors.New("the account already exists")
 	}
-	errInsert := c.r.InsertAccount(newAccount)
-	if errInsert != nil {
-		return entities.Account{}, errInsert
+	err = c.r.InsertAccount(newAccount)
+	if err != nil {
+		return entities.Account{}, err
 	}
 
 	return newAccount, nil

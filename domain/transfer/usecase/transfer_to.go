@@ -17,29 +17,21 @@ func NewTransferUC(repo transfer.Repository) TransferUc {
 	}
 }
 
-func (t TransferUc) CreateTransfer(accountOriginID, accountDestinationID string, amount float64) (entities.Transfer, error) {
-	accountOrigin, errFind := t.r.FindOne(accountOriginID)
-	if errFind != nil {
-		//TODO: add a sentinel
-		return entities.Transfer{}, errors.New("origin account not found")
-	}
-	accountDestination, errFindID := t.r.FindByID(accountDestinationID)
-	if errFindID != nil {
-		//TODO: add a sentinel
-		return entities.Transfer{}, errors.New("origin destine not found")
-	}
-
+//conta de origem entities.Account
+//conta de destino entities.Account
+func (t TransferUc) CreateTransfer(accountOrigin, accountDestination entities.Account, amount float64) (entities.Transfer, error) {
 	if accountOrigin.Balance >= amount {
-		transfer, err := entities.NewTransfer(accountOrigin.ID, accountDestinationID, amount)
+		transfer, err := entities.NewTransfer(accountOrigin.ID, accountDestination.ID, amount)
 		if err != nil {
 			//TODO: add a sentinel
 			return entities.Transfer{}, errors.New("invalid transfer")
 		}
-		accountOrigin.Balance -= amount
-		accountDestination.Balance += amount
-		t.r.UpdateBalance(accountOrigin.ID, accountOrigin.Balance)
-		t.r.UpdateBalance(accountDestination.ID, accountDestination.Balance)
-		
+		//accountOrigin.Balance -= amount
+		//accountDestination.Balance += amount
+		//ja foi feito no handler
+		//t.r.UpdateBalance(accountOrigin.ID, accountOrigin.Balance)
+		//t.r.UpdateBalance(accountDestination.ID, accountDestination.Balance)
+
 		tr, err := t.r.InsertTransfer(transfer)
 		if err != nil {
 			return entities.Transfer{}, err

@@ -1,15 +1,21 @@
 package usecase
 
-func (c AccountUc) Withdraw(CPF string, amount float64) bool {
+import "errors"
+
+func (c AccountUc) Withdraw(CPF string, amount float64) error {
 
 	account, err := c.r.FindOne(CPF)
 	if err != nil {
-		return false
+		return err
 	}
-	if account.Balance > amount {
-		account.Balance -= amount
-		c.r.UpdateBalance(account.ID, account.Balance)
-		return true
+	if account.Balance < amount {
+		//TODO: add a sentinel
+		return errors.New("insufficient balance")
 	}
-	return false
+	account.Balance -= amount
+	err = c.r.UpdateBalance(account.ID, account.Balance)
+	if err != nil {
+		return err
+	}
+	return nil
 }
