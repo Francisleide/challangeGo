@@ -12,6 +12,11 @@ import (
 type Handler struct {
 	account account.UseCase
 }
+type AccountInput struct {
+	Name   string `json: "name"`
+	CPF    string `json: "cpf"`
+	Secret string `json: "secret"`
+}
 
 func Accounts(serv *mux.Router, usecase account.UseCase) *Handler {
 	h := &Handler{
@@ -34,7 +39,7 @@ func Accounts(serv *mux.Router, usecase account.UseCase) *Handler {
 // @Header 201 {string} Token "request-id"
 // @Router /accounts [post]
 func (h Handler) CreateAccount(w http.ResponseWriter, r *http.Request) {
-	var accountInput entities.AccountInput
+	var accountInput AccountInput
 	decoder := json.NewDecoder(r.Body)
 	err := decoder.Decode(&accountInput)
 	if err != nil {
