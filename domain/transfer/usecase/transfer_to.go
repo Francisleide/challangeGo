@@ -17,8 +17,6 @@ func NewTransferUC(repo transfer.Repository) TransferUc {
 	}
 }
 
-//conta de origem entities.Account
-//conta de destino entities.Account
 func (t TransferUc) CreateTransfer(accountOrigin, accountDestination entities.Account, amount float64) (entities.Transfer, error) {
 	if accountOrigin.Balance >= amount {
 		transfer, err := entities.NewTransfer(accountOrigin.ID, accountDestination.ID, amount)

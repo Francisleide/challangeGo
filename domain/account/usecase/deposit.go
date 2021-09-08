@@ -20,7 +20,6 @@ func (c AccountUc) Deposit(CPF string, amount float64) error {
 		fmt.Println(err)
 		return err
 	}
-	fmt.Printf("conta de destino a ser atualizada no UC %s", account.ID)
 	return nil
 
 }
