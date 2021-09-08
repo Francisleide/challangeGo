@@ -109,15 +109,20 @@ func (h Handler) ListUserTransfers(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusBadRequest)
 		return
 	}
-
-	transfers, err := h.transfer.ListUserTransfers(accountCPF)
+	account, err := h.account.GetAccountByCPF(accountCPF)
 	if err != nil {
 		w.WriteHeader(http.StatusBadRequest)
 		return
 	}
+
+	transfers, errList := h.transfer.ListUserTransfers(account.ID)
+	if errList != nil {
+		w.WriteHeader(http.StatusBadRequest)
+		return
+	}
 	w.Header().Set("Content-Type", "application/json")
-	err = json.NewEncoder(w).Encode(transfers)
-	if err != nil {
+	errList = json.NewEncoder(w).Encode(transfers)
+	if errList != nil {
 		w.WriteHeader(http.StatusBadRequest)
 	}
 

@@ -44,13 +44,13 @@ func (t TransferUc) CreateTransfer(accountOrigin, accountDestination entities.Ac
 
 }
 
-func (t TransferUc) ListUserTransfers(CPF string) ([]entities.Transfer, error) {
-	transfer, error := t.r.FindOne(CPF)
-	if error != nil {
+func (t TransferUc) ListUserTransfers(accountID string) ([]entities.Transfer, error) {
+	//transfer, error := t.r.FindOne(CPF)
+/*	if error != nil {
 		//TODO: add a sentinel
 		return []entities.Transfer{}, errors.New("account not found")
-	}
-	transfers, err := t.r.ListUserTransfers(transfer.ID)
+	}*/
+	transfers, err := t.r.ListUserTransfers(accountID)
 	if err != nil {
 		return []entities.Transfer{}, err
 	}
