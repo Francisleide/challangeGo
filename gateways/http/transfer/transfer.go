@@ -35,12 +35,12 @@ func Transfer(serv *mux.Router, usecase transfer.UseCase, accountUC account.UseC
 // ShowAccount godoc
 // @Summary Make a transfer
 // @Description Transfer between accounts. The account that will make the transfer must be authenticated with a token.
-// @Param Body body entities.TransferInput true "Body"
+// @Param Body body TransferInput true "Body"
 // @Param Authorization header string true "Bearer Authorization Token"
 // @Accept  json
 // @Produce  json
 // @Header 201 {string} Token "request-id"
-// @Router /transfer [post]
+// @Router /transfers [post]
 func (h Handler) CreateTransfer(w http.ResponseWriter, r *http.Request) {
 	var tr TransferInput
 	accountID, ok := middleware.GetAccountID(r.Context())
@@ -95,14 +95,14 @@ func (h Handler) CreateTransfer(w http.ResponseWriter, r *http.Request) {
 }
 
 // ShowAccount godoc
-// @Summary Make a transfer
+// @Summary List transfers from a user
 // @Description Transfer between accounts. The account that will make the transfer must be authenticated with a token.
 // @Param Body body []entities.Transfer true "Body"
 // @Param Authorization header string true "Bearer Authorization Token"
 // @Accept  json
 // @Produce  json
 // @Header 201 {string} Token "request-id"
-// @Router /transfer [post]
+// @Router /transfers [get]
 func (h Handler) ListUserTransfers(w http.ResponseWriter, r *http.Request) {
 	accountCPF, ok := middleware.GetAccountID(r.Context())
 	if !ok || accountCPF == "" {

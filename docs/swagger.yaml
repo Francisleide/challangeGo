@@ -58,7 +58,7 @@ definitions:
       id:
         type: string
     type: object
-  entities.TransferInput:
+  transfer.TransferInput:
     properties:
       accountDestinationID:
         type: string
@@ -152,8 +152,8 @@ paths:
       produces:
       - application/json
       summary: Get a Auth
-  /transfer:
-    post:
+  /transfers:
+    get:
       consumes:
       - application/json
       description: Transfer between accounts. The account that will make the transfer
@@ -167,6 +167,26 @@ paths:
           items:
             $ref: '#/definitions/entities.Transfer'
           type: array
+      - description: Bearer Authorization Token
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      produces:
+      - application/json
+      summary: List transfers from a user
+    post:
+      consumes:
+      - application/json
+      description: Transfer between accounts. The account that will make the transfer
+        must be authenticated with a token.
+      parameters:
+      - description: Body
+        in: body
+        name: Body
+        required: true
+        schema:
+          $ref: '#/definitions/transfer.TransferInput'
       - description: Bearer Authorization Token
         in: header
         name: Authorization

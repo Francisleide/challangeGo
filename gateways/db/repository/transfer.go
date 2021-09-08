@@ -5,10 +5,7 @@ import (
 )
 
 func (r Repository) InsertTransfer(transfer entities.Transfer) (entities.Transfer, error) {
-	//r.UpdateBalance(accountOrigin) chamar isso no UC
-	//r.UpdateBalance(accountDestine) chamar isso no UC
 
-	//t := transfer.NewTransferInput(accountOrigin.ID, accountDestine.ID, amount)
 	_, err := r.Db.Query("insert into  transfer (id, account_origin_id, account_destination_id,amount,created_at) values (?,?,?,?,?)",
 		transfer.ID, transfer.AccountOriginID, transfer.AccountDestinationID, transfer.Amount, transfer.CreatedAt)
 

@@ -151,7 +151,38 @@ var doc = `{
                 ]
             }
         },
-        "/transfer": {
+        "/transfers": {
+            "get": {
+                "description": "Transfer between accounts. The account that will make the transfer must be authenticated with a token.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "List transfers from a user",
+                "parameters": [
+                    {
+                        "description": "Body",
+                        "name": "Body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/entities.Transfer"
+                            }
+                        }
+                    },
+                    {
+                        "type": "string",
+                        "description": "Bearer Authorization Token",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    }
+                ]
+            },
             "post": {
                 "description": "Transfer between accounts. The account that will make the transfer must be authenticated with a token.",
                 "consumes": [
@@ -168,10 +199,7 @@ var doc = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "type": "array",
-                            "items": {
-                                "$ref": "#/definitions/entities.Transfer"
-                            }
+                            "$ref": "#/definitions/transfer.TransferInput"
                         }
                     },
                     {
@@ -301,7 +329,7 @@ var doc = `{
                 }
             }
         },
-        "entities.TransferInput": {
+        "transfer.TransferInput": {
             "type": "object",
             "properties": {
                 "accountDestinationID": {

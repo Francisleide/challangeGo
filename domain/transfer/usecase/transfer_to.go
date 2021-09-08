@@ -26,11 +26,6 @@ func (t TransferUc) CreateTransfer(accountOrigin, accountDestination entities.Ac
 			//TODO: add a sentinel
 			return entities.Transfer{}, errors.New("invalid transfer")
 		}
-		//accountOrigin.Balance -= amount
-		//accountDestination.Balance += amount
-		//ja foi feito no handler
-		//t.r.UpdateBalance(accountOrigin.ID, accountOrigin.Balance)
-		//t.r.UpdateBalance(accountDestination.ID, accountDestination.Balance)
 
 		tr, err := t.r.InsertTransfer(transfer)
 		if err != nil {
@@ -45,11 +40,7 @@ func (t TransferUc) CreateTransfer(accountOrigin, accountDestination entities.Ac
 }
 
 func (t TransferUc) ListUserTransfers(accountID string) ([]entities.Transfer, error) {
-	//transfer, error := t.r.FindOne(CPF)
-/*	if error != nil {
-		//TODO: add a sentinel
-		return []entities.Transfer{}, errors.New("account not found")
-	}*/
+
 	transfers, err := t.r.ListUserTransfers(accountID)
 	if err != nil {
 		return []entities.Transfer{}, err
