@@ -32,7 +32,7 @@ func (r *repoMock) UpdateBalance(ID string, balance float64) error {
 	return nil
 }
 
-func Test_Create_transfer(t *testing.T) {
+func TestCreateTransfer(t *testing.T) {
 	var account entities.Account
 	account.Balance = 100
 	account.CPF = "231"
