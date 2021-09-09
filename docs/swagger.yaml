@@ -1,8 +1,30 @@
 definitions:
+  account.Account:
+    properties:
+      balance:
+        type: number
+      cpf:
+        type: string
+      createdAt:
+        type: string
+      id:
+        type: string
+      name:
+        type: string
+    type: object
   account.AccountBalance:
     properties:
       balance:
         type: number
+    type: object
+  account.AccountInput:
+    properties:
+      cpf:
+        type: string
+      name:
+        type: string
+      secret:
+        type: string
     type: object
   account.DepositInput:
     properties:
@@ -21,31 +43,7 @@ definitions:
       secret:
         type: string
     type: object
-  entities.Account:
-    properties:
-      balance:
-        type: number
-      cpf:
-        type: string
-      createdAt:
-        type: string
-      id:
-        type: string
-      name:
-        type: string
-      secret:
-        type: string
-    type: object
-  entities.AccountInput:
-    properties:
-      cpf:
-        type: string
-      name:
-        type: string
-      secret:
-        type: string
-    type: object
-  entities.Transfer:
+  transfer.Transfer:
     properties:
       accountDestinationID:
         type: string
@@ -57,13 +55,6 @@ definitions:
         type: string
       id:
         type: string
-    type: object
-  transfer.TransferInput:
-    properties:
-      accountDestinationID:
-        type: string
-      amount:
-        type: number
     type: object
 info:
   contact: {}
@@ -80,12 +71,10 @@ paths:
           description: OK
           schema:
             items:
-              $ref: '#/definitions/entities.Account'
+              $ref: '#/definitions/account.Account'
             type: array
         "400":
           description: Failed to decode
-        "404":
-          description: Accounts not found
         "500":
           description: Unexpected internal server error
       summary: Get accounts
@@ -99,15 +88,26 @@ paths:
         name: Body
         required: true
         schema:
-          $ref: '#/definitions/entities.AccountInput'
+          $ref: '#/definitions/account.AccountInput'
       produces:
       - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/account.Account'
+        "400":
+          description: Failed to decode
+        "409":
+          description: Account already exists
+        "500":
+          description: Unexpected internal server error
       summary: Create an account
   /accounts/{id}/balance:
     get:
       consumes:
       - application/json
-      description: show the balance of a specific account
+      description: Show the balance of a specific account
       produces:
       - application/json
       responses:
@@ -126,7 +126,7 @@ paths:
     post:
       consumes:
       - application/json
-      description: Make a deposit from an authentic account
+      description: Make a deposit from an authenticated user
       parameters:
       - description: Body
         in: body
@@ -134,14 +134,27 @@ paths:
         required: true
         schema:
           $ref: '#/definitions/account.DepositInput'
+      - description: Bearer Authorization Token
+        in: header
+        name: Authorization
+        required: true
+        type: string
       produces:
       - application/json
+      responses:
+        "400":
+          description: Failed to decode
+        "401":
+          description: Unauthorized
+        "500":
+          description: Unexpected internal server error
       summary: Make a deposit
   /login:
     post:
       consumes:
       - application/json
-      description: It takes a token to authenticate yourself to the application
+      description: Takes the CPF and password of a user, if they are correct, a token
+        is generated
       parameters:
       - description: Body
         in: body
@@ -151,22 +164,18 @@ paths:
           $ref: '#/definitions/auth.Login'
       produces:
       - application/json
-      summary: Get a Auth
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+      summary: Login
   /transfers:
     get:
       consumes:
       - application/json
-      description: Transfer between accounts. The account that will make the transfer
-        must be authenticated with a token.
+      description: Lists all transfers made by an authenticated user
       parameters:
-      - description: Body
-        in: body
-        name: Body
-        required: true
-        schema:
-          items:
-            $ref: '#/definitions/entities.Transfer'
-          type: array
       - description: Bearer Authorization Token
         in: header
         name: Authorization
@@ -174,6 +183,19 @@ paths:
         type: string
       produces:
       - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/transfer.Transfer'
+            type: array
+        "400":
+          description: Failed to decode
+        "401":
+          description: Unauthorized
+        "500":
+          description: Unexpected internal server error
       summary: List transfers from a user
     post:
       consumes:
@@ -181,12 +203,6 @@ paths:
       description: Transfer between accounts. The account that will make the transfer
         must be authenticated with a token.
       parameters:
-      - description: Body
-        in: body
-        name: Body
-        required: true
-        schema:
-          $ref: '#/definitions/transfer.TransferInput'
       - description: Bearer Authorization Token
         in: header
         name: Authorization
@@ -194,6 +210,17 @@ paths:
         type: string
       produces:
       - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/transfer.Transfer'
+        "400":
+          description: Failed to decode
+        "401":
+          description: Unauthorized
+        "500":
+          description: Unexpected internal server error
       summary: Make a transfer
   /withdraw:
     post:
@@ -207,7 +234,19 @@ paths:
         required: true
         schema:
           $ref: '#/definitions/account.Withdraw'
+      - description: Bearer Authorization Token
+        in: header
+        name: Authorization
+        required: true
+        type: string
       produces:
       - application/json
+      responses:
+        "400":
+          description: Failed to decode
+        "401":
+          description: Unauthorized
+        "500":
+          description: Unexpected internal server error
       summary: Make a Withdraw
 swagger: "2.0"

@@ -39,7 +39,7 @@ func (api Api) Run(host string, port string) {
 	authenticatedRoute := r.PathPrefix("").Subrouter()
 	unauthenticatedRoute := r.PathPrefix("").Subrouter()
 	account.Accounts(unauthenticatedRoute, api.account)
-	transfer.Transfer(authenticatedRoute, api.transfer, api.account)
+	transfer.NewTransfer(authenticatedRoute, api.transfer, api.account)
 	account.ToDeposit(authenticatedRoute, api.account)
 	account.ToWithdraw(authenticatedRoute, api.account)
 	auth.Auth(r, api.auth)
