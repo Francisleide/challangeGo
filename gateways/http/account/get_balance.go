@@ -13,13 +13,14 @@ type AccountBalance struct {
 
 // ShowAccount godoc
 // @Summary account balance
-// @Description show the balance of a specific account
+// @Description Show the balance of a specific account
 ///@Accept  json
 // @Produce  json
 // @Success 200 {object} AccountBalance
 // @Failure 400 "Failed to decode"
 // @Failure 404 "Account not found"
 // @Failure 500 "Unexpected internal server error"
+// @Header 201 {object} AccountBalance
 // @Router /accounts/{id}/balance [GET]
 func (h Handler) GetBalance(w http.ResponseWriter, r *http.Request) {
 	accountID := mux.Vars(r)["id"]

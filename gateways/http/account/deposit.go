@@ -26,11 +26,14 @@ func ToDeposit(serv *mux.Router, usecase account.UseCase) *Handler {
 
 // ShowAccount godoc
 // @Summary Make a deposit
-// @Description Make a deposit from an authentic account
+// @Description Make a deposit from an authenticated user
 // @Param Body body DepositInput true "Body"
 // @Accept  json
 // @Produce  json
-// @Header 201 {string} Token "request-id"
+// @Failure 400 "Failed to decode"
+// @Failure 401 "Unauthorized"
+// @Failure 500 "Unexpected internal server error"
+// @Param Authorization header string true "Bearer Authorization Token"
 // @Router /deposit [post]
 func (h Handler) Deposit(w http.ResponseWriter, r *http.Request) {
 	var deposit DepositInput
