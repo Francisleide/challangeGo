@@ -76,27 +76,33 @@ var doc = `{
                 ]
             }
         },
-        "/auth": {
-            "post": {
-                "description": "It takes a token to authenticate yorself to the application",
+        "/accounts/{id}/balance": {
+            "get": {
+                "description": "show the balance of a specific account",
                 "consumes": [
                     "application/json"
                 ],
                 "produces": [
                     "application/json"
                 ],
-                "summary": "Get a Auth",
-                "parameters": [
-                    {
-                        "description": "Body",
-                        "name": "Body",
-                        "in": "body",
-                        "required": true,
+                "summary": "account balance",
+                "responses": {
+                    "200": {
+                        "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/auth.Login"
+                            "$ref": "#/definitions/account.AccountBalance"
                         }
+                    },
+                    "400": {
+                        "description": "Failed to decode"
+                    },
+                    "404": {
+                        "description": "Account not found"
+                    },
+                    "500": {
+                        "description": "Unexpected internal server error"
                     }
-                ]
+                }
             }
         },
         "/deposit": {
@@ -122,7 +128,61 @@ var doc = `{
                 ]
             }
         },
-        "/transfer": {
+        "/login": {
+            "post": {
+                "description": "It takes a token to authenticate yourself to the application",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "Get a Auth",
+                "parameters": [
+                    {
+                        "description": "Body",
+                        "name": "Body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/auth.Login"
+                        }
+                    }
+                ]
+            }
+        },
+        "/transfers": {
+            "get": {
+                "description": "Transfer between accounts. The account that will make the transfer must be authenticated with a token.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "List transfers from a user",
+                "parameters": [
+                    {
+                        "description": "Body",
+                        "name": "Body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/entities.Transfer"
+                            }
+                        }
+                    },
+                    {
+                        "type": "string",
+                        "description": "Bearer Authorization Token",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    }
+                ]
+            },
             "post": {
                 "description": "Transfer between accounts. The account that will make the transfer must be authenticated with a token.",
                 "consumes": [
@@ -177,6 +237,14 @@ var doc = `{
         }
     },
     "definitions": {
+        "account.AccountBalance": {
+            "type": "object",
+            "properties": {
+                "balance": {
+                    "type": "number"
+                }
+            }
+        },
         "account.DepositInput": {
             "type": "object",
             "properties": {
@@ -241,14 +309,34 @@ var doc = `{
                 }
             }
         },
-        "transfer.TransferInput": {
+        "entities.Transfer": {
             "type": "object",
             "properties": {
+                "accountDestinationID": {
+                    "type": "string"
+                },
+                "accountOriginID": {
+                    "type": "string"
+                },
                 "amount": {
                     "type": "number"
                 },
-                "destinationCPF": {
+                "createdAt": {
                     "type": "string"
+                },
+                "id": {
+                    "type": "string"
+                }
+            }
+        },
+        "transfer.TransferInput": {
+            "type": "object",
+            "properties": {
+                "accountDestinationID": {
+                    "type": "string"
+                },
+                "amount": {
+                    "type": "number"
                 }
             }
         }

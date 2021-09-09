@@ -1,50 +1,36 @@
 package repository
 
 import (
-	"fmt"
-
 	"github.com/francisleide/ChallengeGo/domain/entities"
-	"github.com/francisleide/ChallengeGo/domain/transfer"
 )
 
-var (
-	transferID           string
-	accountOriginID      string
-	accountDestinationID string
-	amount               float64
-	transferCreatedAt    string
-)
-var transfers []entities.Transfer
+func (r Repository) InsertTransfer(transfer entities.Transfer) (entities.Transfer, error) {
 
-func (r Repository) ListAllTransfers() []entities.Transfer {
-
-	rows, err := r.Db.Query("SELECT id, account_origin_id, account_destination_id, amount,transfer_created_at, from transfer;")
-	defer rows.Close()
-	checkError(err)
-	for rows.Next() {
-		err = rows.Scan(&transferID, &accountOriginID, &accountDestinationID, &amount, &transferCreatedAt)
-		tranfer := entities.Transfer{transferID, accountOriginID, accountDestinationID, amount, transferCreatedAt}
-		transfers = append(transfers, tranfer)
-
-	}
-	checkError(err)
-	err = rows.Err()
-	return transfers
-}
-
-func (r Repository) InsertTransfer(accountOrigin, accountDestine entities.Account, amount float64) (*entities.Transfer, error) {
-	r.UpdateBalance(accountOrigin)
-	r.UpdateBalance(accountDestine)
-
-	t := transfer.NewTransferInput(accountOrigin.ID, accountDestine.ID, amount)
-	fmt.Printf(t.ID)
 	_, err := r.Db.Query("insert into  transfer (id, account_origin_id, account_destination_id,amount,created_at) values (?,?,?,?,?)",
-		t.ID, t.OriginAccountID, t.DestinationAccountID, t.Amount, t.CreatedAt)
+		transfer.ID, transfer.AccountOriginID, transfer.AccountDestinationID, transfer.Amount, transfer.CreatedAt)
 
 	if err != nil {
 		checkError(err)
-		return nil, err
+		return entities.Transfer{}, err
 	}
-	return &t, nil
+	return transfer, nil
+
+}
+
+func (r Repository) ListUserTransfers(accountID string) ([]entities.Transfer, error) {
+	var transfers []entities.Transfer
+	rows, err := r.Db.Query("select * from transfer where account_origin_id=?", accountID)
+	if err != nil {
+		return []entities.Transfer{}, err
+	}
+	for rows.Next() {
+		var transfer entities.Transfer
+		err = rows.Scan(&transfer.ID, &transfer.AccountOriginID, &transfer.AccountDestinationID, &transfer.Amount, &transfer.CreatedAt)
+		transfers = append(transfers, transfer)
+	}
+	if err != nil {
+		return []entities.Transfer{}, err
+	}
+	return transfers, nil
 
 }

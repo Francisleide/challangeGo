@@ -17,22 +17,31 @@ func NewTransferUC(repo transfer.Repository) TransferUc {
 	}
 }
 
-//
-func (t TransferUc) CreateTransfer(origin, destine string, amount float64) (*entities.Transfer, error) {
-	var originAccount entities.Account
-	var destineAccount entities.Account
-	originAccount = t.r.FindOne(origin)
-	destineAccount = t.r.FindOne(destine)
-	if originAccount.Balance >= amount {
-		var tr *entities.Transfer
-		originAccount.Balance -= amount
-		destineAccount.Balance += amount
-		tr, err := t.r.InsertTransfer(originAccount, destineAccount, amount)
+func (t TransferUc) CreateTransfer(accountOrigin, accountDestination entities.Account, amount float64) (entities.Transfer, error) {
+	if accountOrigin.Balance >= amount {
+		transfer, err := entities.NewTransfer(accountOrigin.ID, accountDestination.ID, amount)
 		if err != nil {
-			return nil, err
+			//TODO: add a sentinel
+			return entities.Transfer{}, errors.New("invalid transfer")
+		}
+
+		tr, err := t.r.InsertTransfer(transfer)
+		if err != nil {
+			return entities.Transfer{}, err
 		}
 		return tr, nil
 	} else {
-		return nil, errors.New("Insufficient funds")
+		//TODO add a sentinel
+		return entities.Transfer{}, errors.New("insufficient funds")
 	}
+
+}
+
+func (t TransferUc) ListUserTransfers(accountID string) ([]entities.Transfer, error) {
+
+	transfers, err := t.r.ListUserTransfers(accountID)
+	if err != nil {
+		return []entities.Transfer{}, err
+	}
+	return transfers, nil
 }

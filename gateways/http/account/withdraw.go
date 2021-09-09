@@ -2,7 +2,6 @@ package account
 
 import (
 	"encoding/json"
-	"log"
 	"net/http"
 
 	"github.com/francisleide/ChallengeGo/domain/account"
@@ -38,12 +37,14 @@ func (h Handler) Withdraw(w http.ResponseWriter, r *http.Request) {
 	decoder := json.NewDecoder(r.Body)
 	err := decoder.Decode(&withdraw)
 	if err != nil {
-		log.Fatal(err)
+		w.WriteHeader(r.Response.StatusCode)
+		return
 	}
 	//mudar para account
-	ok := h.account.Withdraw(accountID, withdraw.Amount)
-	if !ok {
-		log.Panic("Saldo insuficiente!")
+	err = h.account.Withdraw(accountID, withdraw.Amount)
+	if err != nil {
+		w.WriteHeader(r.Response.StatusCode)
+		return
 	}
 
 }

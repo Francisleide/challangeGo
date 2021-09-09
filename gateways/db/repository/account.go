@@ -1,19 +1,15 @@
 package repository
 
 import (
-	"errors"
 	"fmt"
 	"log"
-	"reflect"
 
 	"github.com/francisleide/ChallengeGo/domain/entities"
 )
 
-
-
 func (r Repository) ListAllAccounts() []entities.Account {
 	var accounts []entities.Account
-	
+
 	rows, err := r.Db.Query("SELECT id, name, cpf, secret,balance, created_at from account;")
 	defer rows.Close()
 	checkError(err)
@@ -30,53 +26,67 @@ func (r Repository) ListAllAccounts() []entities.Account {
 	return accounts
 }
 
-func (r Repository) FindOne(CPF string) entities.Account {
+func (r Repository) FindOne(CPF string) (entities.Account, error) {
 
 	var accounts []entities.Account
 
-	var sql string
-	sql = "SELECT id, name, cpf, secret,balance, created_at from account where cpf=?"
+	sql := "SELECT id, name, cpf, secret,balance, created_at from account where cpf=?"
 	rows, err := r.Db.Query(sql, CPF)
 	checkError(err)
 	for rows.Next() {
 		var account entities.Account
-		err = rows.Scan(&account.ID, &account.Name,  &account.CPF,  &account.Secret,  &account.Balance,  &account.CreatedAt)
+		err = rows.Scan(&account.ID, &account.Name, &account.CPF, &account.Secret, &account.Balance, &account.CreatedAt)
 		accounts = append(accounts, account)
 		checkError(err)
 	}
 	if len(accounts) == 0 {
-		return entities.Account{}
+		return entities.Account{}, err
 	}
-	return accounts[0]
+	return accounts[0], nil
 
 }
 
-
-func (r Repository) UpdateBalance(account entities.Account) {
-
-	rows, err := r.Db.Exec("UPDATE account SET balance = ? WHERE id = ?", account.Balance, account.ID)
+func (r Repository) UpdateBalance(ID string, balance float64) error {
+	rows, err := r.Db.Exec("UPDATE account SET balance = ? WHERE id = ?", balance, ID)
 	checkError(err)
 	rowCount, err := rows.RowsAffected()
-	fmt.Println(rowCount)
+	if err != nil || rowCount < 1 {
+		return err
+	}
+	return nil
 
 }
 
-func (r Repository) InsertAccount(accountInput entities.AccountInput) (*entities.Account, error) {
-	var account entities.Account
-	account = entities.NewAccount(accountInput.Name, accountInput.CPF, accountInput.Secret)
+func (r Repository) InsertAccount(account entities.Account) error {
 
-	account_exist := r.FindOne(accountInput.CPF)
-	if !reflect.DeepEqual(account_exist, entities.Account{}) {
-		return nil, errors.New("the CPF already exists.")
-	}
 	_, err := r.Db.Query("insert into  account (id, name, cpf, secret,balance, created_at) values (?,?,?,?,?,? )",
 		account.ID, account.Name, account.CPF, account.Secret, account.Balance, account.CreatedAt)
 
 	if err != nil {
 		checkError(err)
-		return nil, err
+		return err
 	}
-	return &account, nil
+	return nil
+
+}
+
+func (r Repository) FindByID(accountID string) (entities.Account, error) {
+	var accounts []entities.Account
+	rows, err := r.Db.Query("select * from account where id=?", accountID)
+	if err != nil {
+		checkError(err)
+		return entities.Account{}, err
+	}
+	for rows.Next() {
+		var account entities.Account
+		err = rows.Scan(&account.ID, &account.Name, &account.CPF, &account.Secret, &account.Balance, &account.CreatedAt)
+		accounts = append(accounts, account)
+		checkError(err)
+	}
+	if len(accounts) == 0 {
+		return entities.Account{}, err
+	}
+	return accounts[0], nil
 
 }
 

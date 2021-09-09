@@ -1,14 +1,21 @@
 package usecase
 
-import "github.com/francisleide/ChallengeGo/domain/entities"
+import "errors"
 
-func (c AccountUc) Withdraw(CPF string, amount float64) bool {
-	var account entities.Account
-	account = c.r.FindOne(CPF)
-	if account.Balance > amount {
-		account.Balance -= amount
-		c.r.UpdateBalance(account)
-		return true
+func (c AccountUc) Withdraw(CPF string, amount float64) error {
+
+	account, err := c.r.FindOne(CPF)
+	if err != nil {
+		return err
 	}
-	return false
+	if account.Balance < amount {
+		//TODO: add a sentinel
+		return errors.New("insufficient balance")
+	}
+	account.Balance -= amount
+	err = c.r.UpdateBalance(account.ID, account.Balance)
+	if err != nil {
+		return err
+	}
+	return nil
 }
