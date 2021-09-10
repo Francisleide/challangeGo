@@ -42,12 +42,6 @@ var doc = `{
                                 "$ref": "#/definitions/account.Account"
                             }
                         }
-                    },
-                    "400": {
-                        "description": "Failed to decode"
-                    },
-                    "500": {
-                        "description": "Unexpected internal server error"
                     }
                 }
             },
@@ -77,15 +71,6 @@ var doc = `{
                         "schema": {
                             "$ref": "#/definitions/account.Account"
                         }
-                    },
-                    "400": {
-                        "description": "Failed to decode"
-                    },
-                    "409": {
-                        "description": "Account already exists"
-                    },
-                    "500": {
-                        "description": "Unexpected internal server error"
                     }
                 }
             }
@@ -148,14 +133,8 @@ var doc = `{
                     }
                 ],
                 "responses": {
-                    "400": {
-                        "description": "Failed to decode"
-                    },
-                    "401": {
-                        "description": "Unauthorized"
-                    },
-                    "500": {
-                        "description": "Unexpected internal server error"
+                    "200": {
+                        "description": ""
                     }
                 }
             }
@@ -219,15 +198,6 @@ var doc = `{
                                 "$ref": "#/definitions/transfer.Transfer"
                             }
                         }
-                    },
-                    "400": {
-                        "description": "Failed to decode"
-                    },
-                    "401": {
-                        "description": "Unauthorized"
-                    },
-                    "500": {
-                        "description": "Unexpected internal server error"
                     }
                 }
             },
@@ -251,19 +221,7 @@ var doc = `{
                 ],
                 "responses": {
                     "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/transfer.Transfer"
-                        }
-                    },
-                    "400": {
-                        "description": "Failed to decode"
-                    },
-                    "401": {
-                        "description": "Unauthorized"
-                    },
-                    "500": {
-                        "description": "Unexpected internal server error"
+                        "description": ""
                     }
                 }
             }
@@ -295,18 +253,7 @@ var doc = `{
                         "in": "header",
                         "required": true
                     }
-                ],
-                "responses": {
-                    "400": {
-                        "description": "Failed to decode"
-                    },
-                    "401": {
-                        "description": "Unauthorized"
-                    },
-                    "500": {
-                        "description": "Unexpected internal server error"
-                    }
-                }
+                ]
             }
         }
     },

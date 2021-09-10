@@ -73,10 +73,6 @@ paths:
             items:
               $ref: '#/definitions/account.Account'
             type: array
-        "400":
-          description: Failed to decode
-        "500":
-          description: Unexpected internal server error
       summary: Get accounts
     post:
       consumes:
@@ -96,12 +92,6 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/account.Account'
-        "400":
-          description: Failed to decode
-        "409":
-          description: Account already exists
-        "500":
-          description: Unexpected internal server error
       summary: Create an account
   /accounts/{id}/balance:
     get:
@@ -142,12 +132,8 @@ paths:
       produces:
       - application/json
       responses:
-        "400":
-          description: Failed to decode
-        "401":
-          description: Unauthorized
-        "500":
-          description: Unexpected internal server error
+        "200":
+          description: ""
       summary: Make a deposit
   /login:
     post:
@@ -190,12 +176,6 @@ paths:
             items:
               $ref: '#/definitions/transfer.Transfer'
             type: array
-        "400":
-          description: Failed to decode
-        "401":
-          description: Unauthorized
-        "500":
-          description: Unexpected internal server error
       summary: List transfers from a user
     post:
       consumes:
@@ -212,15 +192,7 @@ paths:
       - application/json
       responses:
         "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/transfer.Transfer'
-        "400":
-          description: Failed to decode
-        "401":
-          description: Unauthorized
-        "500":
-          description: Unexpected internal server error
+          description: ""
       summary: Make a transfer
   /withdraw:
     post:
@@ -241,12 +213,5 @@ paths:
         type: string
       produces:
       - application/json
-      responses:
-        "400":
-          description: Failed to decode
-        "401":
-          description: Unauthorized
-        "500":
-          description: Unexpected internal server error
       summary: Make a Withdraw
 swagger: "2.0"
