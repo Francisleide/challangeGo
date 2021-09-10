@@ -126,7 +126,7 @@ var doc = `{
                     },
                     {
                         "type": "string",
-                        "description": "Bearer Authorization Token",
+                        "description": "Bearer",
                         "name": "Authorization",
                         "in": "header",
                         "required": true
@@ -183,7 +183,7 @@ var doc = `{
                 "parameters": [
                     {
                         "type": "string",
-                        "description": "Bearer Authorization Token",
+                        "description": "Bearer",
                         "name": "Authorization",
                         "in": "header",
                         "required": true
@@ -213,7 +213,7 @@ var doc = `{
                 "parameters": [
                     {
                         "type": "string",
-                        "description": "Bearer Authorization Token",
+                        "description": "Bearer",
                         "name": "Authorization",
                         "in": "header",
                         "required": true
@@ -248,7 +248,7 @@ var doc = `{
                     },
                     {
                         "type": "string",
-                        "description": "Bearer Authorization Token",
+                        "description": "Bearer",
                         "name": "Authorization",
                         "in": "header",
                         "required": true

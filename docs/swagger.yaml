@@ -124,7 +124,7 @@ paths:
         required: true
         schema:
           $ref: '#/definitions/account.DepositInput'
-      - description: Bearer Authorization Token
+      - description: Bearer
         in: header
         name: Authorization
         required: true
@@ -162,7 +162,7 @@ paths:
       - application/json
       description: Lists all transfers made by an authenticated user
       parameters:
-      - description: Bearer Authorization Token
+      - description: Bearer
         in: header
         name: Authorization
         required: true
@@ -183,7 +183,7 @@ paths:
       description: Transfer between accounts. The account that will make the transfer
         must be authenticated with a token.
       parameters:
-      - description: Bearer Authorization Token
+      - description: Bearer
         in: header
         name: Authorization
         required: true
@@ -206,7 +206,7 @@ paths:
         required: true
         schema:
           $ref: '#/definitions/account.Withdraw'
-      - description: Bearer Authorization Token
+      - description: Bearer
         in: header
         name: Authorization
         required: true

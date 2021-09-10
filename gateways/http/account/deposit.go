@@ -30,8 +30,8 @@ func ToDeposit(serv *mux.Router, usecase account.UseCase) *Handler {
 // @Param Body body DepositInput true "Body"
 // @Accept  json
 // @Produce  json
-// @Success 200 
-// @Param Authorization header string true "Bearer Authorization Token"
+// @Success 200
+// @Param Authorization header string true "Bearer"
 // @Router /deposit [post]
 func (h Handler) Deposit(w http.ResponseWriter, r *http.Request) {
 	var deposit DepositInput
