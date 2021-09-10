@@ -28,9 +28,6 @@ func ToWithdraw(serv *mux.Router, usecase account.UseCase) *Handler {
 // @Accept  json
 // @Produce  json
 // @Header 201 {object} Withdraw
-// @Failure 400 "Failed to decode"
-// @Failure 401 "Unauthorized"
-// @Failure 500 "Unexpected internal server error"
 // @Param Authorization header string true "Bearer Authorization Token"
 // @Router /withdraw [post]
 func (h Handler) Withdraw(w http.ResponseWriter, r *http.Request) {

@@ -20,8 +20,6 @@ type Account struct {
 // @Accept  json
 // @Produce  json
 // @Success 200 {object} []Account
-// @Failure 400 "Failed to decode"
-// @Failure 500 "Unexpected internal server error"
 // @Router /accounts [GET]
 func (h Handler) ListAllAccounts(w http.ResponseWriter, r *http.Request) {
 	accounts := h.account.ListAll()

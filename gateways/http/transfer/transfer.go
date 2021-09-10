@@ -45,10 +45,7 @@ func NewTransfer(serv *mux.Router, usecase transfer.UseCase, accountUC account.U
 // @Param Authorization header string true "Bearer Authorization Token"
 // @Accept  json
 // @Produce  json
-// @Success 200 {object} Transfer
-// @Failure 400 "Failed to decode"
-// @Failure 401 "Unauthorized"
-// @Failure 500 "Unexpected internal server error"
+// @Success 200
 // @Router /transfers [post]
 func (h Handler) CreateTransfer(w http.ResponseWriter, r *http.Request) {
 	var tr TransferInput
@@ -110,9 +107,6 @@ func (h Handler) CreateTransfer(w http.ResponseWriter, r *http.Request) {
 // @Accept  json
 // @Produce  json
 // @Success 200 {object} []Transfer
-// @Failure 400 "Failed to decode"
-// @Failure 401 "Unauthorized"
-// @Failure 500 "Unexpected internal server error"
 // @Router /transfers [get]
 func (h Handler) ListUserTransfers(w http.ResponseWriter, r *http.Request) {
 	accountCPF, ok := middleware.GetAccountID(r.Context())
