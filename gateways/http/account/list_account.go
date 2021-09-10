@@ -7,11 +7,11 @@ import (
 )
 
 type Account struct {
-	ID        string
-	Name      string
-	CPF       string
-	Balance   float64
-	CreatedAt string
+	ID        string  `json: "id"`
+	Name      string  `json: "name"`
+	CPF       string  `json: "cpf"`
+	Balance   float64 `json: "balance"`
+	CreatedAt string  `json: "createdat"`
 }
 
 // ShowAccount godoc
