@@ -39,7 +39,7 @@ func NewTransfer(serv *mux.Router, usecase transfer.UseCase, accountUC account.U
 	return h
 }
 
-// ShowAccount godoc
+// CreateTransfer godoc
 // @Summary Make a transfer
 // @Description Transfer between accounts. The account that will make the transfer must be authenticated with a token.
 // @Param Authorization header string true "Bearer"
@@ -100,7 +100,7 @@ func (h Handler) CreateTransfer(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 }
 
-// ShowAccount godoc
+// ListUserTransfers godoc
 // @Summary List transfers from a user
 // @Description Lists all transfers made by an authenticated user
 // @Param Authorization header string true "Bearer"

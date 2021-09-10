@@ -30,7 +30,7 @@ func Accounts(serv *mux.Router, usecase account.UseCase) *Handler {
 	return h
 }
 
-// ShowAccount godoc
+// CreateAccount godoc
 // @Summary Create an account
 // @Description Create an account with the basic information
 // @Param Body body AccountInput true "Body"

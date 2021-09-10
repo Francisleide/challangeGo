@@ -21,7 +21,7 @@ func ToWithdraw(serv *mux.Router, usecase account.UseCase) *Handler {
 	return h
 }
 
-// ShowAccount godoc
+// Withdraw godoc
 // @Summary Make a Withdraw
 // @Description Make a Withdraw from an authentic account
 // @Param Body body Withdraw true "Body"

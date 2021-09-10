@@ -28,7 +28,7 @@ func Auth(serv *mux.Router, usecase auth.UseCase) *Handler {
 	return h
 }
 
-// ShowAccount godoc
+// Authentication godoc
 // @Summary Login
 // @Description Takes the CPF and password of a user, if they are correct, a token is generated
 // @Param Body body Login true "Body"

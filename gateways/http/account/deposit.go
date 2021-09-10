@@ -24,7 +24,7 @@ func ToDeposit(serv *mux.Router, usecase account.UseCase) *Handler {
 	return h
 }
 
-// ShowAccount godoc
+// Deposit godoc
 // @Summary Make a deposit
 // @Description Make a deposit from an authenticated user
 // @Param Body body DepositInput true "Body"

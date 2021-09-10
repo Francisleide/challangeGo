@@ -14,7 +14,7 @@ type Account struct {
 	CreatedAt string  `json: "createdat"`
 }
 
-// ShowAccount godoc
+// ListAllAcounts godoc
 // @Summary Get accounts
 // @Description List all accounts
 // @Accept  json
