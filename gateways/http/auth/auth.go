@@ -34,7 +34,7 @@ func Auth(serv *mux.Router, usecase auth.UseCase) *Handler {
 // @Param Body body Login true "Body"
 // @Accept  json
 // @Produce  json
-// @Success 200 {object} string
+// @Success 200 {string} string	"ok"
 // @Router /login [post]
 func (h Handler) Authentication(w http.ResponseWriter, r *http.Request) {
 	var login Login

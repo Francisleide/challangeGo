@@ -152,7 +152,7 @@ paths:
       - application/json
       responses:
         "200":
-          description: OK
+          description: ok
           schema:
             type: string
       summary: Login

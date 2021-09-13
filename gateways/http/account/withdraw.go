@@ -27,7 +27,6 @@ func ToWithdraw(serv *mux.Router, usecase account.UseCase) *Handler {
 // @Param Body body Withdraw true "Body"
 // @Accept  json
 // @Produce  json
-// @Header 201 {object} Withdraw
 // @Param Authorization header string true "Bearer"
 // @Router /withdraw [post]
 func (h Handler) Withdraw(w http.ResponseWriter, r *http.Request) {
