@@ -19,8 +19,15 @@ type TransferInput struct {
 	AccountDestinationID string  `json: "accountdestinationid"`
 	Amount               float64 `json: "amount"`
 }
+type Transfer struct {
+	ID                   string
+	AccountOriginID      string
+	AccountDestinationID string
+	Amount               float64
+	CreatedAt            string
+}
 
-func Transfer(serv *mux.Router, usecase transfer.UseCase, accountUC account.UseCase) *Handler {
+func NewTransfer(serv *mux.Router, usecase transfer.UseCase, accountUC account.UseCase) *Handler {
 	h := &Handler{
 		transfer: usecase,
 		account:  accountUC,
@@ -32,14 +39,13 @@ func Transfer(serv *mux.Router, usecase transfer.UseCase, accountUC account.UseC
 	return h
 }
 
-// ShowAccount godoc
+// CreateTransfer godoc
 // @Summary Make a transfer
 // @Description Transfer between accounts. The account that will make the transfer must be authenticated with a token.
-// @Param Body body TransferInput true "Body"
-// @Param Authorization header string true "Bearer Authorization Token"
+// @Param Authorization header string true "Bearer"
 // @Accept  json
 // @Produce  json
-// @Header 201 {string} Token "request-id"
+// @Success 200
 // @Router /transfers [post]
 func (h Handler) CreateTransfer(w http.ResponseWriter, r *http.Request) {
 	var tr TransferInput
@@ -94,14 +100,13 @@ func (h Handler) CreateTransfer(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 }
 
-// ShowAccount godoc
+// ListUserTransfers godoc
 // @Summary List transfers from a user
-// @Description Transfer between accounts. The account that will make the transfer must be authenticated with a token.
-// @Param Body body []entities.Transfer true "Body"
-// @Param Authorization header string true "Bearer Authorization Token"
+// @Description Lists all transfers made by an authenticated user
+// @Param Authorization header string true "Bearer"
 // @Accept  json
 // @Produce  json
-// @Header 201 {string} Token "request-id"
+// @Success 200 {object} []Transfer
 // @Router /transfers [get]
 func (h Handler) ListUserTransfers(w http.ResponseWriter, r *http.Request) {
 	accountCPF, ok := middleware.GetAccountID(r.Context())

@@ -28,12 +28,13 @@ func Auth(serv *mux.Router, usecase auth.UseCase) *Handler {
 	return h
 }
 
-// ShowAccount godoc
-// @Summary Get a Auth
-// @Description It takes a token to authenticate yourself to the application
+// Authentication godoc
+// @Summary Login
+// @Description Takes the CPF and password of a user, if they are correct, a token is generated
 // @Param Body body Login true "Body"
 // @Accept  json
 // @Produce  json
+// @Success 200 {string} string	"ok"
 // @Router /login [post]
 func (h Handler) Authentication(w http.ResponseWriter, r *http.Request) {
 	var login Login

@@ -30,13 +30,13 @@ func Accounts(serv *mux.Router, usecase account.UseCase) *Handler {
 	return h
 }
 
-// ShowAccount godoc
+// CreateAccount godoc
 // @Summary Create an account
 // @Description Create an account with the basic information
-// @Param Body body entities.AccountInput true "Body"
+// @Param Body body AccountInput true "Body"
 // @Accept  json
 // @Produce  json
-// @Header 201 {string} Token "request-id"
+// @Success 200 {object} Account
 // @Router /accounts [post]
 func (h Handler) CreateAccount(w http.ResponseWriter, r *http.Request) {
 	var accountInput AccountInput

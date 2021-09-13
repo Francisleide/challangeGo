@@ -11,9 +11,9 @@ type AccountBalance struct {
 	Balance float64 `json:"balance"`
 }
 
-// ShowAccount godoc
+// GetBalance godoc
 // @Summary account balance
-// @Description show the balance of a specific account
+// @Description Show the balance of a specific account
 ///@Accept  json
 // @Produce  json
 // @Success 200 {object} AccountBalance

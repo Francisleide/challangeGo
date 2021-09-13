@@ -21,13 +21,13 @@ func ToWithdraw(serv *mux.Router, usecase account.UseCase) *Handler {
 	return h
 }
 
-// ShowAccount godoc
+// Withdraw godoc
 // @Summary Make a Withdraw
 // @Description Make a Withdraw from an authentic account
 // @Param Body body Withdraw true "Body"
 // @Accept  json
 // @Produce  json
-// @Header 201 {string} Token "request-id"
+// @Param Authorization header string true "Bearer"
 // @Router /withdraw [post]
 func (h Handler) Withdraw(w http.ResponseWriter, r *http.Request) {
 	var withdraw Withdraw
@@ -40,7 +40,6 @@ func (h Handler) Withdraw(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(r.Response.StatusCode)
 		return
 	}
-	//mudar para account
 	err = h.account.Withdraw(accountID, withdraw.Amount)
 	if err != nil {
 		w.WriteHeader(r.Response.StatusCode)

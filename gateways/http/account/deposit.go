@@ -24,13 +24,14 @@ func ToDeposit(serv *mux.Router, usecase account.UseCase) *Handler {
 	return h
 }
 
-// ShowAccount godoc
+// Deposit godoc
 // @Summary Make a deposit
-// @Description Make a deposit from an authentic account
+// @Description Make a deposit from an authenticated user
 // @Param Body body DepositInput true "Body"
 // @Accept  json
 // @Produce  json
-// @Header 201 {string} Token "request-id"
+// @Success 200
+// @Param Authorization header string true "Bearer"
 // @Router /deposit [post]
 func (h Handler) Deposit(w http.ResponseWriter, r *http.Request) {
 	var deposit DepositInput
