@@ -17,7 +17,7 @@ require (
 	github.com/ilyakaznacheev/cleanenv v1.2.5
 	github.com/mailru/easyjson v0.7.7 // indirect
 	github.com/satori/uuid.go v1.2.0
-	github.com/sirupsen/logrus v1.8.1 // indirect
+	github.com/sirupsen/logrus v1.8.1
 	github.com/stretchr/testify v1.7.0 // indirect
 	github.com/swaggo/http-swagger v1.0.0
 	github.com/swaggo/swag v1.7.0
@@ -26,5 +26,6 @@ require (
 	golang.org/x/sys v0.0.0-20210630005230-0f9fa26af87c // indirect
 	google.golang.org/genproto v0.0.0-20210726143408-b02e89920bf0 // indirect
 	gopkg.in/check.v1 v1.0.0-20201130134442-10cb98267c6c // indirect
+	gopkg.in/yaml.v3 v3.0.0-20210107192922-496545a6307b // indirect
 	olympos.io/encoding/edn v0.0.0-20201019073823-d3554ca0b0a3 // indirect
 )

@@ -5,15 +5,18 @@ import (
 
 	"github.com/francisleide/ChallengeGo/domain/entities"
 	"github.com/francisleide/ChallengeGo/domain/transfer"
+	"github.com/sirupsen/logrus"
 )
 
 type TransferUc struct {
-	r transfer.Repository
+	r   transfer.Repository
+	log *logrus.Entry
 }
 
-func NewTransferUC(repo transfer.Repository) TransferUc {
+func NewTransferUC(repo transfer.Repository, log logrus.Entry) TransferUc {
 	return TransferUc{
-		r: repo,
+		r:   repo,
+		log: &log,
 	}
 }
 
@@ -27,6 +30,7 @@ func (t TransferUc) CreateTransfer(accountOrigin, accountDestination entities.Ac
 
 		tr, err := t.r.InsertTransfer(transfer)
 		if err != nil {
+			t.log.WithError(err).Error("unable to save transfer")
 			return entities.Transfer{}, err
 		}
 		return tr, nil

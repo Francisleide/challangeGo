@@ -1,11 +1,18 @@
 package usecase
 
-import "github.com/francisleide/ChallengeGo/domain/entities"
+import (
+	"errors"
+
+	"github.com/francisleide/ChallengeGo/domain/entities"
+)
 
 func (c AccountUc) GetAccountByID(ID string) (entities.Account, error) {
 	account, err := c.r.FindByID(ID)
 	if err != nil {
 		return entities.Account{}, err
+	}
+	if account == (entities.Account{}) {
+		return entities.Account{}, errors.New("account not found")
 	}
 	return account, nil
 }

@@ -8,7 +8,6 @@ import (
 func (c AccountUc) Deposit(CPF string, amount float64) error {
 
 	account, err := c.r.FindOne(CPF)
-	fmt.Printf("CPF: %s", CPF)
 	if err != nil {
 		fmt.Println("the account does not exist")
 		//TODO add a new sentinel
