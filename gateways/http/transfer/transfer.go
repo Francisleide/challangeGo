@@ -8,11 +8,13 @@ import (
 	"github.com/francisleide/ChallengeGo/domain/transfer"
 	"github.com/francisleide/ChallengeGo/gateways/http/middleware"
 	"github.com/gorilla/mux"
+	"github.com/sirupsen/logrus"
 )
 
 type Handler struct {
 	transfer transfer.UseCase
 	account  account.UseCase
+	log      *logrus.Entry
 }
 
 type TransferInput struct {
@@ -27,10 +29,14 @@ type Transfer struct {
 	CreatedAt            string
 }
 
-func NewTransfer(serv *mux.Router, usecase transfer.UseCase, accountUC account.UseCase) *Handler {
+type JSONFormatter struct {
+}
+
+func NewTransfer(serv *mux.Router, usecase transfer.UseCase, accountUC account.UseCase, log *logrus.Entry) *Handler {
 	h := &Handler{
 		transfer: usecase,
 		account:  accountUC,
+		log:      log,
 	}
 
 	serv.HandleFunc("/transfers", h.CreateTransfer).Methods("Post")
@@ -49,10 +55,16 @@ func NewTransfer(serv *mux.Router, usecase transfer.UseCase, accountUC account.U
 // @Router /transfers [post]
 func (h Handler) CreateTransfer(w http.ResponseWriter, r *http.Request) {
 	var tr TransferInput
-	accountID, ok := middleware.GetAccountID(r.Context())
-	if !ok || accountID == "" {
+	CPF, ok := middleware.GetCPF(r.Context())
+
+	if !ok {
+		h.log.Errorln("incorrect token")
 		w.Header().Set("Content-Type", "application/json")
-		w.WriteHeader(r.Response.StatusCode)
+		return
+	}
+	if CPF == "" {
+		h.log.Errorln("account not found")
+		w.Header().Set("Content-Type", "application/json")
 		return
 	}
 
@@ -60,42 +72,38 @@ func (h Handler) CreateTransfer(w http.ResponseWriter, r *http.Request) {
 	err := decoder.Decode(&tr)
 
 	if err != nil {
-		w.Header().Set("Content-Type", "application/json")
-		w.WriteHeader(r.Response.StatusCode)
+		h.log.WithError(err).Error("problems finding the source cpf")
 		return
 	}
-	accountOrigin, errOrigin := h.account.GetAccountByCPF(accountID)
+	accountOrigin, errOrigin := h.account.GetAccountByCPF(CPF)
 	if errOrigin != nil {
-		w.Header().Set("Content-Type", "application/json")
-		w.WriteHeader(r.Response.StatusCode)
+		h.log.WithError(errOrigin).Error("problems finding the source cpf")
 		return
 	}
 
 	accountDestination, errorDestine := h.account.GetAccountByID(tr.AccountDestinationID)
 	if errorDestine != nil {
-		w.Header().Set("Content-Type", "application/json")
-		w.WriteHeader(r.Response.StatusCode)
+		h.log.WithError(errorDestine).Error("problems finding the destination cpf")
 		return
 	}
-	err = h.account.Withdraw(accountID, tr.Amount)
+	err = h.account.Withdraw(CPF, tr.Amount)
 	if err != nil {
-		w.Header().Set("Content-Type", "application/json")
-		w.WriteHeader(r.Response.StatusCode)
+		h.log.WithError(err).Error("error when making the withdrawal")
 		return
 	}
 
 	err = h.account.Deposit(accountDestination.CPF, tr.Amount)
 	if err != nil {
-		w.Header().Set("Content-Type", "application/json")
-		w.WriteHeader(r.Response.StatusCode)
+		h.log.WithError(err).Error("error when making the deposit")
 		return
 	}
 
-	_, error := h.transfer.CreateTransfer(accountOrigin, accountDestination, tr.Amount)
-	if error != nil {
-		w.WriteHeader(r.Response.StatusCode)
+	_, errCreateTransfer := h.transfer.CreateTransfer(accountOrigin, accountDestination, tr.Amount)
+	if errCreateTransfer != nil {
+		h.log.WithError(errCreateTransfer).Error("error creating transfer")
 		return
 	}
+	h.log.Info("transfer successful")
 
 	w.Header().Set("Content-Type", "application/json")
 }
@@ -109,26 +117,32 @@ func (h Handler) CreateTransfer(w http.ResponseWriter, r *http.Request) {
 // @Success 200 {object} []Transfer
 // @Router /transfers [get]
 func (h Handler) ListUserTransfers(w http.ResponseWriter, r *http.Request) {
-	accountCPF, ok := middleware.GetAccountID(r.Context())
-	if !ok || accountCPF == "" {
-		w.WriteHeader(http.StatusBadRequest)
+	accountCPF, ok := middleware.GetCPF(r.Context())
+	if !ok {
+		h.log.Errorln("incorrect token")
+		return
+	}
+	if accountCPF == "" {
+		h.log.Errorln("account not found")
 		return
 	}
 	account, err := h.account.GetAccountByCPF(accountCPF)
 	if err != nil {
-		w.WriteHeader(http.StatusBadRequest)
+		h.log.WithError(err).Error("problems finding the source cpf")
 		return
 	}
 
 	transfers, errList := h.transfer.ListUserTransfers(account.ID)
 	if errList != nil {
-		w.WriteHeader(http.StatusBadRequest)
+		h.log.WithError(err).Error("problems finding the transfers")
 		return
 	}
 	w.Header().Set("Content-Type", "application/json")
 	errList = json.NewEncoder(w).Encode(transfers)
 	if errList != nil {
+		h.log.WithError(errList).Errorln("failed to perform transfer encode")
 		w.WriteHeader(http.StatusBadRequest)
 	}
+	h.log.Info("transfers listed successfully")
 
 }
