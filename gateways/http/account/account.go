@@ -7,10 +7,12 @@ import (
 	"github.com/francisleide/ChallengeGo/domain/account"
 	"github.com/francisleide/ChallengeGo/domain/entities"
 	"github.com/gorilla/mux"
+	"github.com/sirupsen/logrus"
 )
 
 type Handler struct {
 	account account.UseCase
+	log     *logrus.Entry
 }
 type AccountInput struct {
 	Name   string `json: "name"`
@@ -18,9 +20,10 @@ type AccountInput struct {
 	Secret string `json: "secret"`
 }
 
-func Accounts(serv *mux.Router, usecase account.UseCase) *Handler {
+func Accounts(serv *mux.Router, usecase account.UseCase, log *logrus.Entry) *Handler {
 	h := &Handler{
 		account: usecase,
+		log: log,
 	}
 
 	serv.HandleFunc("/accounts", h.CreateAccount).Methods("Post")

@@ -2,21 +2,22 @@ package account
 
 import (
 	"encoding/json"
-	"log"
 	"net/http"
 
 	"github.com/francisleide/ChallengeGo/domain/account"
 	middleware "github.com/francisleide/ChallengeGo/gateways/http/middleware"
 	"github.com/gorilla/mux"
+	"github.com/sirupsen/logrus"
 )
 
 type DepositInput struct {
 	Amount float64 `json: "amount"`
 }
 
-func ToDeposit(serv *mux.Router, usecase account.UseCase) *Handler {
+func ToDeposit(serv *mux.Router, usecase account.UseCase, log *logrus.Entry) *Handler {
 	h := &Handler{
 		account: usecase,
+		log:     log,
 	}
 
 	serv.HandleFunc("/deposit", h.Deposit).Methods("Post")
@@ -35,20 +36,23 @@ func ToDeposit(serv *mux.Router, usecase account.UseCase) *Handler {
 // @Router /deposit [post]
 func (h Handler) Deposit(w http.ResponseWriter, r *http.Request) {
 	var deposit DepositInput
-	usr, ok := middleware.GetAccountID(r.Context())
+	usr, ok := middleware.GetCPF(r.Context())
 	if !ok {
-		log.Fatal("unauthenticated user")
+		h.log.Errorln("unauthenticated user")
+		return
 	}
 
 	decoder := json.NewDecoder(r.Body)
 	err := decoder.Decode(&deposit)
 	if err != nil {
-		log.Fatal("error ", err)
+		h.log.WithError(err).Errorln("unauthenticated user")
+		return
 	}
-	h.account.Deposit(usr, deposit.Amount)
-
+	err = h.account.Deposit(usr, deposit.Amount)
+ 
 	if err != nil {
-		log.Fatal(err)
+		h.log.WithError(err).Errorln("failed to create deposit")
+		return
 	}
 
 }
