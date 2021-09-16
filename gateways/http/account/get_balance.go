@@ -24,16 +24,16 @@ type AccountBalance struct {
 func (h Handler) GetBalance(w http.ResponseWriter, r *http.Request) {
 	accountID := mux.Vars(r)["id"]
 	balance, err := h.account.GetBalance(accountID)
-	var accountBalance AccountBalance
-	accountBalance.Balance = balance
 	if err != nil {
-		w.WriteHeader(http.StatusBadRequest)
+		h.log.WithError(err).Errorf("failed to find balance")
 		return
 	}
+	var accountBalance AccountBalance
+	accountBalance.Balance = balance
 	w.Header().Set("Content-Type", "application/json")
 	err = json.NewEncoder(w).Encode(accountBalance)
 	if err != nil {
-		w.WriteHeader(http.StatusBadRequest)
+		h.log.WithError(err).Errorf("failed to write json")
 	}
 
 }

@@ -3,21 +3,24 @@ package middleware
 import (
 	"context"
 	"fmt"
-	"log"
 	"net/http"
 	"os"
 	"strings"
 
 	"github.com/dgrijalva/jwt-go"
 	"github.com/francisleide/ChallengeGo/domain/auth/usecase"
+	"github.com/sirupsen/logrus"
 )
 
 type AuthContextKey string
 
 var contextID = AuthContextKey("cpf")
 
-func Authorize(next http.Handler) http.Handler {
+func ValidateToken(next http.Handler) http.Handler {
 	var x *jwt.Token
+
+	log := logrus.New()
+	logEntry := logrus.NewEntry(log)
 	var err error
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		token := r.Header.Get("authorization")
@@ -25,7 +28,8 @@ func Authorize(next http.Handler) http.Handler {
 		if len(strArr) == 2 {
 			x, err = VerifyToken(strArr[1])
 			if err != nil {
-				log.Fatal(err)
+				logEntry.Errorf("invalid token")
+				return
 			}
 		}
 
@@ -50,7 +54,7 @@ func VerifyToken(tokenstr string) (*jwt.Token, error) {
 	return token, nil
 }
 
-func GetAccountID(ctx context.Context) (string, bool) {
+func GetCPF(ctx context.Context) (string, bool) {
 	tokenStr, ok := ctx.Value(contextID).(string)
 
 	return tokenStr, ok

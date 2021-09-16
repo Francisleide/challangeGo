@@ -46,7 +46,8 @@ func (h Handler) CreateAccount(w http.ResponseWriter, r *http.Request) {
 	decoder := json.NewDecoder(r.Body)
 	err := decoder.Decode(&accountInput)
 	if err != nil {
-		w.WriteHeader(http.StatusBadRequest)
+		h.log.WithError(err).Errorln("unable to read json")
+		return
 	}
 
 	account, err := h.account.CreateAccount(entities.AccountInput{
@@ -55,12 +56,13 @@ func (h Handler) CreateAccount(w http.ResponseWriter, r *http.Request) {
 		Secret: accountInput.Secret,
 	})
 	if err != nil {
-		w.WriteHeader(http.StatusBadRequest)
+		h.log.WithError(err).Errorln("failed to create a new account")
 		return
 	}
 	w.Header().Set("Content-Type", "application/json")
 	err = json.NewEncoder(w).Encode(account)
 	if err != nil {
-		w.WriteHeader(http.StatusBadRequest)
+		h.log.WithError(err).Errorln("unable to write json")
+		return
 	}
 }
