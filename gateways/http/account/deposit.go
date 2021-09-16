@@ -38,18 +38,18 @@ func (h Handler) Deposit(w http.ResponseWriter, r *http.Request) {
 	var deposit DepositInput
 	usr, ok := middleware.GetCPF(r.Context())
 	if !ok {
-		h.log.Errorln("unauthenticated user")
+		h.log.Errorln("failed to authenticate user")
 		return
 	}
 
 	decoder := json.NewDecoder(r.Body)
 	err := decoder.Decode(&deposit)
 	if err != nil {
-		h.log.WithError(err).Errorln("unauthenticated user")
+		h.log.WithError(err).Errorln("unable to read json")
 		return
 	}
 	err = h.account.Deposit(usr, deposit.Amount)
- 
+
 	if err != nil {
 		h.log.WithError(err).Errorln("failed to create deposit")
 		return

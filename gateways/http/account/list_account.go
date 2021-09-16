@@ -2,7 +2,6 @@ package account
 
 import (
 	"encoding/json"
-	"log"
 	"net/http"
 )
 
@@ -22,11 +21,14 @@ type Account struct {
 // @Success 200 {object} []Account
 // @Router /accounts [GET]
 func (h Handler) ListAllAccounts(w http.ResponseWriter, r *http.Request) {
-	accounts := h.account.ListAll()
-	w.Header().Set("Content-Type", "application/json")
-	err := json.NewEncoder(w).Encode(accounts)
+	accounts, err := h.account.ListAll()
 	if err != nil {
-		log.Fatal(err)
+		h.log.WithError(err).Errorln("failed to retrieve accounts")
+	}
+	w.Header().Set("Content-Type", "application/json")
+	err = json.NewEncoder(w).Encode(accounts)
+	if err != nil {
+		h.log.WithError(err).Errorln("failed to write json")
 	}
 
 }

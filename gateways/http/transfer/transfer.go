@@ -29,9 +29,6 @@ type Transfer struct {
 	CreatedAt            string
 }
 
-type JSONFormatter struct {
-}
-
 func NewTransfer(serv *mux.Router, usecase transfer.UseCase, accountUC account.UseCase, log *logrus.Entry) *Handler {
 	h := &Handler{
 		transfer: usecase,

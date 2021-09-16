@@ -2,11 +2,11 @@ package auth
 
 import (
 	"encoding/json"
-	"log"
 	"net/http"
 
 	"github.com/francisleide/ChallengeGo/domain/auth"
 	"github.com/gorilla/mux"
+	"github.com/sirupsen/logrus"
 )
 
 type Login struct {
@@ -16,11 +16,13 @@ type Login struct {
 
 type Handler struct {
 	auth auth.UseCase
+	log  *logrus.Entry
 }
 
-func Auth(serv *mux.Router, usecase auth.UseCase) *Handler {
+func Auth(serv *mux.Router, usecase auth.UseCase, log *logrus.Entry) *Handler {
 	h := &Handler{
 		auth: usecase,
+		log:  log,
 	}
 
 	serv.HandleFunc("/login", h.Authentication).Methods("Post")
@@ -41,8 +43,17 @@ func (h Handler) Authentication(w http.ResponseWriter, r *http.Request) {
 	decoder := json.NewDecoder(r.Body)
 	err := decoder.Decode(&login)
 	if err != nil {
-		log.Fatal(err)
+		h.log.WithError(err).Errorln("unable to read json")
+		return
 	}
 	token, err := h.auth.CreateToken(login.CPF, login.Secret)
+	if err != nil {
+		h.log.WithError(err).Errorln("failed to create token")
+		return
+	}
 	err = json.NewEncoder(w).Encode(token)
+	if err != nil {
+		h.log.WithError(err).Errorln("unable to write json")
+		return
+	}
 }
