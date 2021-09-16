@@ -18,6 +18,6 @@ type Repository interface {
 	FindOne(CPF string) (entities.Account, error)
 	UpdateBalance(ID string, balance float64) error
 	InsertAccount(entities.Account) error
-	ListAllAccounts() []entities.Account
+	ListAllAccounts() ([]entities.Account, error)
 	FindByID(accountID string) (entities.Account, error)
 }

@@ -32,7 +32,7 @@ func ToWithdraw(serv *mux.Router, usecase account.UseCase) *Handler {
 func (h Handler) Withdraw(w http.ResponseWriter, r *http.Request) {
 	var withdraw Withdraw
 
-	accountID, _ := middleware.GetAccountID(r.Context())
+	accountID, _ := middleware.GetCPF(r.Context())
 
 	decoder := json.NewDecoder(r.Body)
 	err := decoder.Decode(&withdraw)
