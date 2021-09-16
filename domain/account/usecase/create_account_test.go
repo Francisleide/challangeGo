@@ -6,14 +6,15 @@ import (
 
 	"github.com/francisleide/ChallengeGo/domain/account/usecase"
 	"github.com/francisleide/ChallengeGo/domain/entities"
+	"github.com/sirupsen/logrus"
 )
 
 type repoMock struct {
 	Account entities.Account
 }
 
-func (r *repoMock) ListAllAccounts() []entities.Account {
-	return nil
+func (r *repoMock) ListAllAccounts() ([]entities.Account, error) {
+	return nil, nil
 }
 
 func (r *repoMock) FindOne(CPF string) (entities.Account, error) {
@@ -37,13 +38,13 @@ func (r *repoMock) InsertAccount(account entities.Account) error {
 }
 
 func TestCreateAccount(t *testing.T) {
-
+	log := *logrus.NewEntry(logrus.New())
 	var account entities.Account
 	account.CPF = "12345678910"
 	t.Run("CPF does not exist in the bank and the account is created", func(t *testing.T) {
 		r := repoMock{}
 		r.Account = account
-		a := usecase.NewAccountUc(&r)
+		a := usecase.NewAccountUc(&r, log)
 		var accountInput entities.AccountInput
 		accountInput.CPF = "12345678910"
 		accountInput.Name = "Test"
@@ -60,7 +61,7 @@ func TestCreateAccount(t *testing.T) {
 
 	t.Run("CPF exists in the bank and the account is not created", func(t *testing.T) {
 		r := repoMock{}
-		a := usecase.NewAccountUc(&r)
+		a := usecase.NewAccountUc(&r, log)
 		var accountInput entities.AccountInput
 		accountInput.CPF = "12345678911"
 		accountInput.Name = "Test"
