@@ -36,7 +36,7 @@ func connect(mysql app.MysqlConfig) (*sql.DB, string) {
 
 	err = db.Ping()
 	checkError(err)
-	log := "Successfully created connection to database."
+	log := "successfully created connection to database."
 	return db, log
 }
 
@@ -66,8 +66,8 @@ func main() {
 	}
 	defer db.Close()
 
-	r := repository.NewRepository(db)
-	accountUsecase := account.NewAccountUc(*r)
+	r := repository.NewRepository(db, logEntry)
+	accountUsecase := account.NewAccountUc(*r, *logEntry)
 	transferUseCase := transfer.NewTransferUC(*r, *logEntry)
 	authenticationUsecase := authentication.NewAuthenticationUC(*r)
 	api := gateways.NewApi(accountUsecase, transferUseCase, authenticationUsecase, *logEntry)

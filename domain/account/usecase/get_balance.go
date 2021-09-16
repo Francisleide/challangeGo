@@ -5,10 +5,10 @@ import (
 )
 
 func (c AccountUc) GetBalance(accountID string) (float64, error) {
-	account, error := c.r.FindByID(accountID)
-	if error != nil {
+	account, err := c.r.FindByID(accountID)
+	if err != nil {
 		//TODO: add a sentinel
-		return 0, errors.New("account not found")
+		return 0, errors.New("failed to find balance")
 	}
 	return account.Balance, nil
 }
