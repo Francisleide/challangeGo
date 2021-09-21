@@ -13,10 +13,10 @@ type TransferUc struct {
 	log *logrus.Entry
 }
 
-func NewTransferUC(repo transfer.Repository, log logrus.Entry) TransferUc {
+func NewTransferUC(repo transfer.Repository, log *logrus.Entry) TransferUc {
 	return TransferUc{
 		r:   repo,
-		log: &log,
+		log: log,
 	}
 }
 

@@ -27,12 +27,12 @@ type Api struct {
 	log      *logrus.Entry
 }
 
-func NewApi(accountUC usecase.AccountUc, transferUC transferUsecase.TransferUc, authentication authenticationUsecase.AuthenticationUc, log logrus.Entry) *Api {
+func NewApi(accountUC usecase.AccountUc, transferUC transferUsecase.TransferUc, authentication authenticationUsecase.AuthenticationUc, log *logrus.Entry) *Api {
 	return &Api{
 		account:  accountUC,
 		transfer: transferUC,
 		auth:     authentication,
-		log:      &log,
+		log:      log,
 	}
 }
 
