@@ -13,10 +13,10 @@ type AccountUc struct {
 	log *logrus.Entry
 }
 
-func NewAccountUc(repo account.Repository, log logrus.Entry) AccountUc {
+func NewAccountUc(repo account.Repository, log *logrus.Entry) AccountUc {
 	return AccountUc{
 		r:   repo,
-		log: &log,
+		log: log,
 	}
 }
 

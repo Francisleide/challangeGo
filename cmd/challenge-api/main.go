@@ -2,8 +2,6 @@ package main
 
 import (
 	"database/sql"
-	"fmt"
-	"log"
 	"os"
 
 	"github.com/francisleide/ChallengeGo/docs"
@@ -21,13 +19,13 @@ import (
 	"github.com/sirupsen/logrus"
 )
 
-func checkError(err error) {
+func checkError(err error, log logrus.Entry) {
 	if err != nil {
 		log.Fatal(err)
 	}
 }
 
-func connect(mysql app.MysqlConfig) (*sql.DB, string) {
+func connect(mysql app.MysqlConfig, log logrus.Entry) *sql.DB {
 	db, err := sql.Open("mysql", mysql.DSN())
 
 	if err != nil {
@@ -35,9 +33,8 @@ func connect(mysql app.MysqlConfig) (*sql.DB, string) {
 	}
 
 	err = db.Ping()
-	checkError(err)
-	log := "successfully created connection to database."
-	return db, log
+	checkError(err, log)
+	return db
 }
 
 // @title Swagger Challenge API
@@ -54,23 +51,21 @@ func main() {
 	config := app.ReadConfig(".env")
 	log.SetOutput(os.Stdout)
 
-	db, logdb := connect(config.MysqlConfig)
-	logEntry.Info(logdb)
+	db := connect(config.MysqlConfig, *logEntry)
 
 	err := mysqldb.RunMigrations(config.MysqlConfig.URL())
+	checkError(err, *logEntry)
 	if err == nil {
 		logEntry.Infoln("migrations ok!")
 	}
-	if err != nil {
-		logEntry.Fatal(fmt.Errorf("error in db migrations! %s", err.Error()))
-	}
+
 	defer db.Close()
 
 	r := repository.NewRepository(db, logEntry)
-	accountUsecase := account.NewAccountUc(*r, *logEntry)
-	transferUseCase := transfer.NewTransferUC(*r, *logEntry)
+	accountUsecase := account.NewAccountUc(*r, logEntry)
+	transferUseCase := transfer.NewTransferUC(*r, logEntry)
 	authenticationUsecase := authentication.NewAuthenticationUC(*r)
-	api := gateways.NewApi(accountUsecase, transferUseCase, authenticationUsecase, *logEntry)
+	api := gateways.NewApi(accountUsecase, transferUseCase, authenticationUsecase, logEntry)
 	docs.SwaggerInfo.Host = "localhost:8080"
 	api.Run("0.0.0.0", "8080")
 }
