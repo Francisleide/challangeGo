@@ -10,7 +10,7 @@ func (r Repository) ListAllAccounts() ([]entities.Account, error) {
 	rows, err := r.Db.Query("SELECT id, name, cpf, secret,balance, created_at from account;")
 	defer rows.Close()
 	if err != nil {
-		r.log.WithError(err).Errorln("Failed to perform query on account table")
+		r.log.WithError(err).Errorln("failed to perform query on account table")
 		return []entities.Account{}, err
 	}
 	for rows.Next() {
@@ -60,10 +60,11 @@ func (r Repository) UpdateBalance(ID string, balance float64) error {
 	rows, err := r.Db.Exec("UPDATE account SET balance = ? WHERE id = ?", balance, ID)
 	if err != nil {
 		r.log.WithError(err).Errorln("failed to run update")
+		return err
 	}
 	rowCount, err := rows.RowsAffected()
-	if err != nil || rowCount < 1 {
-		r.log.WithError(err).Errorln("failed to run update")
+	if rowCount < 1 {
+		r.log.WithError(err).Errorln("failed to update registry")
 		return err
 	}
 	r.log.Infof("id %s account balance has been updated", ID)
