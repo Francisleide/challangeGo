@@ -56,12 +56,10 @@ func (h Handler) CreateTransfer(w http.ResponseWriter, r *http.Request) {
 
 	if !ok {
 		h.log.Errorln("incorrect token")
-		w.Header().Set("Content-Type", "application/json")
 		return
 	}
 	if CPF == "" {
 		h.log.Errorln("account not found")
-		w.Header().Set("Content-Type", "application/json")
 		return
 	}
 
@@ -102,7 +100,6 @@ func (h Handler) CreateTransfer(w http.ResponseWriter, r *http.Request) {
 	}
 	h.log.Info("transfer successful")
 
-	w.Header().Set("Content-Type", "application/json")
 }
 
 // ListUserTransfers godoc

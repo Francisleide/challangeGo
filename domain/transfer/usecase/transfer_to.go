@@ -31,7 +31,7 @@ func (t TransferUc) CreateTransfer(accountOrigin, accountDestination entities.Ac
 		tr, err := t.r.InsertTransfer(transfer)
 		if err != nil {
 			t.log.WithError(err).Error("unable to save transfer")
-			return entities.Transfer{}, err
+			return entities.Transfer{}, errors.New("unable to save transfer")
 		}
 		return tr, nil
 	} else {
@@ -45,7 +45,7 @@ func (t TransferUc) ListUserTransfers(accountID string) ([]entities.Transfer, er
 
 	transfers, err := t.r.ListUserTransfers(accountID)
 	if err != nil {
-		return []entities.Transfer{}, err
+		return []entities.Transfer{}, errors.New("unable to save transfer")
 	}
 	return transfers, nil
 }
