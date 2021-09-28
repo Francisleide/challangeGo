@@ -8,9 +8,9 @@ func (c AccountUc) Deposit(CPF string, amount float64) error {
 
 	account, err := c.r.FindOne(CPF)
 	if err != nil {
-		c.log.WithError(err).Errorln("the account does not exist")
+		c.log.WithError(err).Errorln("failed to recover account")
 		//TODO add a new sentinel
-		return errors.New("the account does not exist")
+		return errors.New("failed to recover account")
 	}
 	if amount <= 0 {
 		c.log.WithError(err).Errorln("invalid value")
@@ -21,7 +21,8 @@ func (c AccountUc) Deposit(CPF string, amount float64) error {
 	err = c.r.UpdateBalance(account.ID, account.Balance)
 	if err != nil {
 		c.log.WithError(err).Errorf("failed to update balance")
-		return err
+		//TODO ass a new sentinel
+		return errors.New("failed to update balance")
 	}
 	return nil
 

@@ -10,11 +10,10 @@ func (c AccountUc) GetAccountByID(ID string) (entities.Account, error) {
 	account, err := c.r.FindByID(ID)
 	if err != nil {
 		c.log.WithError(err).Errorln("failed to retrieve the account from repository")
-		return entities.Account{}, err
+		//TODO add a new sentinel
+		return entities.Account{}, errors.New("failed to retrieve the account from repository")
 	}
-	if account == (entities.Account{}) {
-		return entities.Account{}, errors.New("account not found")
-	}
+
 	return account, nil
 }
 func (c AccountUc) GetAccountByCPF(CPF string) (entities.Account, error) {
