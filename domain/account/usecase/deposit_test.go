@@ -28,7 +28,7 @@ func TestDeposit(t *testing.T) {
 		err := accountUC.Deposit("86419560004", 100)
 
 		//assert
-		assert.Nil(t, err)
+		assert.NoError(t, err)
 	})
 	t.Run("the deposit must not be made because the account cannot be found", func(t *testing.T) {
 		//prepare
@@ -43,7 +43,7 @@ func TestDeposit(t *testing.T) {
 		err := accountUC.Deposit("86419560004", 100)
 
 		//assert
-		assert.Equal(t, err.Error(), "failed to recover account")
+		assert.Equal(t, err.Error(), "failed to retrieve account")
 
 	})
 	t.Run("the deposit must not be made because the amount is not valid", func(t *testing.T) {

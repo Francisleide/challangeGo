@@ -8,9 +8,9 @@ func (c AccountUc) Deposit(CPF string, amount float64) error {
 
 	account, err := c.r.FindOne(CPF)
 	if err != nil {
-		c.log.WithError(err).Errorln("failed to recover account")
+		c.log.WithError(err).Errorln("failed to retrieve account")
 		//TODO add a new sentinel
-		return errors.New("failed to recover account")
+		return errors.New("failed to retrieve account")
 	}
 	if amount <= 0 {
 		c.log.WithError(err).Errorln("invalid value")

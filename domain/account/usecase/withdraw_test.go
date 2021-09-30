@@ -27,7 +27,7 @@ func TestWithdraw(t *testing.T) {
 		err := accountUC.Withdraw(account.CPF, 500.0)
 
 		//assert
-		assert.Nil(t, err)
+		assert.NoError(t, err)
 	})
 	t.Run("the withdrawal is not made due to lack of balance", func(t *testing.T) {
 		//prepare
