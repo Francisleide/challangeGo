@@ -12,7 +12,7 @@ import (
 
 func TestWithdraw(t *testing.T) {
 	t.Run("withdraw should take place without errors", func(t *testing.T) {
-		log := logrus.NewEntry(logrus.New())
+		//prepare
 		mockRepo := new(account.MockRepository)
 		account := entities.Account{
 			Name:    "Lorena Morena",
@@ -21,12 +21,16 @@ func TestWithdraw(t *testing.T) {
 		}
 		mockRepo.On("FindOne").Return(account, nil)
 		mockRepo.On("UpdateBalance").Return(nil)
-		accountUC := usecase.NewAccountUc(mockRepo, log)
+		accountUC := usecase.NewAccountUc(mockRepo, nil)
+
+		//test
 		err := accountUC.Withdraw(account.CPF, 500.0)
 
+		//assert
 		assert.Nil(t, err)
 	})
 	t.Run("the withdrawal is not made due to lack of balance", func(t *testing.T) {
+		//prepare
 		log := logrus.NewEntry(logrus.New())
 		mockRepo := new(account.MockRepository)
 		account := entities.Account{
@@ -37,8 +41,12 @@ func TestWithdraw(t *testing.T) {
 		mockRepo.On("FindOne").Return(account, nil)
 		mockRepo.On("UpdateBalance").Return(nil)
 		accountUC := usecase.NewAccountUc(mockRepo, log)
+
+		//test
 		err := accountUC.Withdraw(account.CPF, 3000)
+
+		//assert
 		assert.Equal(t, err.Error(), "insufficient balance")
 	})
-	
+
 }

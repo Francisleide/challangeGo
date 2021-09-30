@@ -12,7 +12,7 @@ import (
 )
 
 func TestGetBalance(t *testing.T) {
-	log := *logrus.NewEntry(logrus.New())
+	//prepare
 	mockRepo := new(account.MockRepository)
 	t.Run("the account is found and the balance must be recovered without errors", func(t *testing.T) {
 		account := entities.Account{
@@ -22,14 +22,18 @@ func TestGetBalance(t *testing.T) {
 			Balance: 200,
 		}
 		mockRepo.On("FindByID").Return(account, nil)
+		accountUC := usecase.NewAccountUc(mockRepo, nil)
 
-		accountUC := usecase.NewAccountUc(mockRepo, &log)
+		//test
 		balanceReceived, err := accountUC.GetBalance(account.ID)
+		
+		//assert
 		assert.Nil(t, err)
 		assert.Equal(t, account.Balance, balanceReceived)
 	})
 	t.Run("the account is not found and the error is displayed.", func(t *testing.T) {
-		log := *logrus.NewEntry(logrus.New())
+		//prepare
+		log := logrus.NewEntry(logrus.New())
 		mockRepo := new(account.MockRepository)
 		account := entities.Account{
 			Name:      "Silvia Silva",
@@ -40,9 +44,12 @@ func TestGetBalance(t *testing.T) {
 			CreatedAt: "",
 		}
 		mockRepo.On("FindByID").Return(entities.Account{}, errors.New(""))
-
-		accountUC := usecase.NewAccountUc(mockRepo, &log)
+		accountUC := usecase.NewAccountUc(mockRepo, log)
+		
+		//test
 		balanceReceived, err := accountUC.GetBalance(account.ID)
+
+		//assert
 		assert.Equal(t, err.Error(), "failed to retrieve the account from repository")
 		assert.Equal(t, balanceReceived, float64(0))
 	})

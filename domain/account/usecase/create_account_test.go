@@ -14,9 +14,9 @@ import (
 
 func TestCreateAccount(t *testing.T) {
 	t.Run("cpf does not exist in the bank and the account is created", func(t *testing.T) {
-		log := logrus.NewEntry(logrus.New())
+		//prepare
 		mockRepo := new(account.MockRepository)
-		accountUC := usecase.NewAccountUc(mockRepo, log)
+		accountUC := usecase.NewAccountUc(mockRepo, nil)
 		accountInput := entities.AccountInput{
 			CPF:    "47708141001",
 			Secret: "abc123",
@@ -24,7 +24,11 @@ func TestCreateAccount(t *testing.T) {
 		}
 		mockRepo.On("FindOne").Return(entities.Account{}, errors.New(""))
 		mockRepo.On("InsertAccount").Return(nil)
+
+		//test
 		accountReceived, err := accountUC.CreateAccount(accountInput)
+
+		//assert
 		compare := bcrypt.CompareHashAndPassword([]byte(accountReceived.Secret), []byte(accountInput.Secret))
 		assert.Nil(t, err)
 		assert.Equal(t, accountInput.CPF, accountReceived.CPF)
@@ -34,6 +38,7 @@ func TestCreateAccount(t *testing.T) {
 	})
 
 	t.Run("cpf exists in the bank and the account is not created", func(t *testing.T) {
+		//prepare
 		log := logrus.NewEntry(logrus.New())
 		mockRepo := new(account.MockRepository)
 		accountUC := usecase.NewAccountUc(mockRepo, log)
@@ -49,15 +54,19 @@ func TestCreateAccount(t *testing.T) {
 		}
 		mockRepo.On("FindOne").Return(account, nil)
 		mockRepo.On("InsertAccount").Return(nil)
+
+		//test
 		accountReceived, err := accountUC.CreateAccount(accountInput)
+
+		//assert
 		assert.Equal(t, err.Error(), "the account already exists")
 		assert.Equal(t, entities.Account{}, accountReceived)
 	})
 	t.Run("the cpf is invalid and the account is not created", func(t *testing.T) {
+		//prepare
 		log := logrus.NewEntry(logrus.New())
 		mockRepo := new(account.MockRepository)
 		accountUC := usecase.NewAccountUc(mockRepo, log)
-		
 		accountInput := entities.AccountInput{
 			CPF:    "12345678901",
 			Name:   "Ronaldo Furtado",
@@ -65,15 +74,20 @@ func TestCreateAccount(t *testing.T) {
 		}
 		mockRepo.On("FindOne").Return(entities.Account{}, errors.New(""))
 		mockRepo.On("InsertAccount").Return(nil)
+
+		//test
 		accountReceived, err := accountUC.CreateAccount(accountInput)
+
+		//assert
 		assert.Equal(t, err.Error(), "invalid cpf")
 		assert.Equal(t, entities.Account{}, accountReceived)
 	})
 	t.Run("the cpf is invalid and the account is not created", func(t *testing.T) {
+		//prepare
 		log := logrus.NewEntry(logrus.New())
 		mockRepo := new(account.MockRepository)
 		accountUC := usecase.NewAccountUc(mockRepo, log)
-		
+
 		accountInput := entities.AccountInput{
 			CPF:    "63597331025",
 			Name:   "Ronaldo Furtado",
@@ -81,15 +95,19 @@ func TestCreateAccount(t *testing.T) {
 		}
 		mockRepo.On("FindOne").Return(entities.Account{}, errors.New(""))
 		mockRepo.On("InsertAccount").Return(nil)
+
+		//test
 		accountReceived, err := accountUC.CreateAccount(accountInput)
+
+		//assert
 		assert.Equal(t, err.Error(), "invalid secret")
 		assert.Equal(t, entities.Account{}, accountReceived)
 	})
 	t.Run("the cpf is invalid and the account is not created", func(t *testing.T) {
+		//prepare
 		log := logrus.NewEntry(logrus.New())
 		mockRepo := new(account.MockRepository)
 		accountUC := usecase.NewAccountUc(mockRepo, log)
-		
 		accountInput := entities.AccountInput{
 			CPF:    "63597331025",
 			Name:   "",
@@ -97,9 +115,11 @@ func TestCreateAccount(t *testing.T) {
 		}
 		mockRepo.On("FindOne").Return(entities.Account{}, errors.New(""))
 		mockRepo.On("InsertAccount").Return(nil)
+
+		//test
 		accountReceived, err := accountUC.CreateAccount(accountInput)
 		assert.Equal(t, err.Error(), "the name cannot be null")
 		assert.Equal(t, entities.Account{}, accountReceived)
 	})
-	
+
 }

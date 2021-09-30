@@ -13,7 +13,7 @@ import (
 
 func TestGetAccountByID(t *testing.T) {
 	t.Run("the account was found via id and no error occurred", func(t *testing.T) {
-		log := logrus.NewEntry(logrus.New())
+		//prepare
 		mockRepo := new(account.MockRepository)
 		account := entities.Account{
 			Name:      "João Paixão",
@@ -23,13 +23,17 @@ func TestGetAccountByID(t *testing.T) {
 			CreatedAt: "",
 		}
 		mockRepo.On("FindByID").Return(account, nil)
-		accountUC := usecase.NewAccountUc(mockRepo, log)
+		accountUC := usecase.NewAccountUc(mockRepo, nil)
 
+		//test
 		accountReceived, err := accountUC.GetAccountByID(account.ID)
+
+		//assert
 		assert.Equal(t, account, accountReceived)
 		assert.Nil(t, err)
 	})
 	t.Run("the id was sent for the account to be found, but there was an error finding it", func(t *testing.T) {
+		//prepare
 		log := logrus.NewEntry(logrus.New())
 		mockRepo := new(account.MockRepository)
 		mockRepo.On("FindByID").Return(entities.Account{}, errors.New(""))
@@ -41,7 +45,11 @@ func TestGetAccountByID(t *testing.T) {
 			Balance:   100,
 			CreatedAt: "",
 		}
+
+		//test
 		accountReceived, err := accountUC.GetAccountByID(account.ID)
+
+		//assert
 		assert.Equal(t, entities.Account{}, accountReceived)
 		assert.Error(t, err, "failed to retrieve the account from repository")
 	})
@@ -50,6 +58,7 @@ func TestGetAccountByID(t *testing.T) {
 
 func TestGetAccountByCPF(t *testing.T) {
 	t.Run("the account was found via cpf and no error occurred", func(t *testing.T) {
+		//prepare
 		log := logrus.NewEntry(logrus.New())
 		mockRepo := new(account.MockRepository)
 		account := entities.Account{
@@ -63,11 +72,15 @@ func TestGetAccountByCPF(t *testing.T) {
 		mockRepo.On("FindOne").Return(account, nil)
 		accountUC := usecase.NewAccountUc(mockRepo, log)
 
+		//test
 		accountReceived, err := accountUC.GetAccountByCPF(account.CPF)
+		
+		//assert
 		assert.Equal(t, account, accountReceived)
 		assert.Nil(t, err)
 	})
 	t.Run("the cpf was sent for the account to be found, but there was an error finding it", func(t *testing.T) {
+		//prepare
 		log := logrus.NewEntry(logrus.New())
 		mockRepo := new(account.MockRepository)
 		mockRepo.On("FindOne").Return(entities.Account{}, errors.New(""))
@@ -80,7 +93,10 @@ func TestGetAccountByCPF(t *testing.T) {
 			Balance:   100,
 			CreatedAt: "",
 		}
+		//test
 		accountReceived, err := accountUC.GetAccountByCPF(account.CPF)
+
+		//assert
 		assert.Equal(t, entities.Account{}, accountReceived)
 		assert.Error(t, err, "failed to retrieve the account from repository")
 	})
