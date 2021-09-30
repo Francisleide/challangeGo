@@ -12,7 +12,7 @@ import (
 )
 
 func TestListAll(t *testing.T) {
-	t.Run("all accounts are recovered without error", func(t *testing.T) {
+	t.Run("all accounts are retrieved without error", func(t *testing.T) {
 		//prepare
 		mockRepo := new(account.MockRepository)
 		accounts := []entities.Account{
@@ -35,7 +35,7 @@ func TestListAll(t *testing.T) {
 		receivedAccounts, err := accountUC.ListAll()
 
 		//assert
-		assert.Nil(t, err)
+		assert.NoError(t, err)
 		assert.Equal(t, accounts, receivedAccounts)
 	})
 	t.Run("accounts are not listed and the error is displayed", func(t *testing.T) {

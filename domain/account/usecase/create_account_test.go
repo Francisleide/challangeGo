@@ -29,11 +29,11 @@ func TestCreateAccount(t *testing.T) {
 		accountReceived, err := accountUC.CreateAccount(accountInput)
 
 		//assert
-		compare := bcrypt.CompareHashAndPassword([]byte(accountReceived.Secret), []byte(accountInput.Secret))
-		assert.Nil(t, err)
+		assert.NoError(t, err)
 		assert.Equal(t, accountInput.CPF, accountReceived.CPF)
 		assert.Equal(t, accountInput.Name, accountReceived.Name)
-		assert.Nil(t, compare)
+		err = bcrypt.CompareHashAndPassword([]byte(accountReceived.Secret), []byte(accountInput.Secret))
+		assert.NoError(t, err)
 
 	})
 
@@ -48,9 +48,9 @@ func TestCreateAccount(t *testing.T) {
 			Secret: "abc123",
 		}
 		accountInput := entities.AccountInput{
-			CPF:    "47708141001",
-			Name:   "Pereira Silveira",
-			Secret: "abc123",
+			CPF:    account.CPF,
+			Name:   account.Name,
+			Secret: account.Secret,
 		}
 		mockRepo.On("FindOne").Return(account, nil)
 		mockRepo.On("InsertAccount").Return(nil)

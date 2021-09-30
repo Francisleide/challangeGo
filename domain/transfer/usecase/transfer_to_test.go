@@ -41,7 +41,7 @@ func TestCreateTransfer(t *testing.T) {
 		assert.Equal(t, transferExpected.AccountDestinationID, transferReceived.AccountDestinationID)
 		assert.Equal(t, transferExpected.AccountOriginID, transferReceived.AccountOriginID)
 		assert.Equal(t, transferExpected.Amount, transferReceived.Amount)
-		assert.Nil(t, err)
+		assert.NoError(t, err)
 
 	})
 	t.Run("transfer should not occur due to database problem", func(t *testing.T) {
@@ -122,7 +122,7 @@ func TestListUserTransfers(t *testing.T) {
 		mockRepo.On("ListUserTransfers").Return(transferExpected, nil)
 		transfersReceived, err := transferUC.ListUserTransfers("2ab7195f-222a-45c3-9189-4f5da5cd745f")
 		assert.Equal(t, transferExpected, transfersReceived)
-		assert.Nil(t, err)
+		assert.NoError(t, err)
 	})
 	t.Run("an invalid account is fetched and the list of all transfers is not returned", func(t *testing.T) {
 		log := logrus.NewEntry(logrus.New())

@@ -14,7 +14,7 @@ import (
 func TestGetBalance(t *testing.T) {
 	//prepare
 	mockRepo := new(account.MockRepository)
-	t.Run("the account is found and the balance must be recovered without errors", func(t *testing.T) {
+	t.Run("the account is found and the balance must be retrieved without errors", func(t *testing.T) {
 		account := entities.Account{
 			Name:    "Silvia Silva",
 			ID:      "8aecf60b-b549-41a2-b9b9-143d2d513c87",
@@ -26,9 +26,9 @@ func TestGetBalance(t *testing.T) {
 
 		//test
 		balanceReceived, err := accountUC.GetBalance(account.ID)
-		
+
 		//assert
-		assert.Nil(t, err)
+		assert.NoError(t, err)
 		assert.Equal(t, account.Balance, balanceReceived)
 	})
 	t.Run("the account is not found and the error is displayed.", func(t *testing.T) {
@@ -45,7 +45,7 @@ func TestGetBalance(t *testing.T) {
 		}
 		mockRepo.On("FindByID").Return(entities.Account{}, errors.New(""))
 		accountUC := usecase.NewAccountUc(mockRepo, log)
-		
+
 		//test
 		balanceReceived, err := accountUC.GetBalance(account.ID)
 
