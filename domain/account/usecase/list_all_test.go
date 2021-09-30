@@ -13,7 +13,7 @@ import (
 
 func TestListAll(t *testing.T) {
 	t.Run("all accounts are recovered without error", func(t *testing.T) {
-		log := logrus.NewEntry(logrus.New())
+		//prepare
 		mockRepo := new(account.MockRepository)
 		accounts := []entities.Account{
 
@@ -29,17 +29,26 @@ func TestListAll(t *testing.T) {
 			},
 		}
 		mockRepo.On("ListAllAccounts").Return(accounts, nil)
-		accountUC := usecase.NewAccountUc(mockRepo, log)
+		accountUC := usecase.NewAccountUc(mockRepo, nil)
+
+		//test
 		receivedAccounts, err := accountUC.ListAll()
+
+		//assert
 		assert.Nil(t, err)
 		assert.Equal(t, accounts, receivedAccounts)
 	})
 	t.Run("accounts are not listed and the error is displayed", func(t *testing.T) {
+		//prepare
 		log := logrus.NewEntry(logrus.New())
 		mockRepo := new(account.MockRepository)
 		mockRepo.On("ListAllAccounts").Return([]entities.Account{}, errors.New("error"))
 		accountUC := usecase.NewAccountUc(mockRepo, log)
+
+		//test
 		receivedAccounts, err := accountUC.ListAll()
+
+		//assert
 		assert.Equal(t, err.Error(), "failed to list accounts")
 		assert.Equal(t, []entities.Account{}, receivedAccounts)
 	})
