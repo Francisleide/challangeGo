@@ -12,7 +12,7 @@ import (
 )
 
 func TestGetAccountByID(t *testing.T) {
-	t.Run("the account was found via ID and no error occurred", func(t *testing.T) {
+	t.Run("the account was found via id and no error occurred", func(t *testing.T) {
 		log := logrus.NewEntry(logrus.New())
 		mockRepo := new(account.MockRepository)
 		account := entities.Account{
@@ -49,7 +49,7 @@ func TestGetAccountByID(t *testing.T) {
 }
 
 func TestGetAccountByCPF(t *testing.T) {
-	t.Run("the account was found via CPF and no error occurred", func(t *testing.T) {
+	t.Run("the account was found via cpf and no error occurred", func(t *testing.T) {
 		log := logrus.NewEntry(logrus.New())
 		mockRepo := new(account.MockRepository)
 		account := entities.Account{
@@ -67,7 +67,7 @@ func TestGetAccountByCPF(t *testing.T) {
 		assert.Equal(t, account, accountReceived)
 		assert.Nil(t, err)
 	})
-	t.Run("the CPF was sent for the account to be found, but there was an error finding it", func(t *testing.T) {
+	t.Run("the cpf was sent for the account to be found, but there was an error finding it", func(t *testing.T) {
 		log := logrus.NewEntry(logrus.New())
 		mockRepo := new(account.MockRepository)
 		mockRepo.On("FindOne").Return(entities.Account{}, errors.New(""))

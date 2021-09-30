@@ -13,9 +13,9 @@ import (
 
 func TestCreateTransfer(t *testing.T) {
 	t.Run("the accounts exist and there is balance for transfer so it occurs", func(t *testing.T) {
-		log := logrus.NewEntry(logrus.New())
+		//log := logrus.NewEntry(logrus.New())
 		mockRepo := new(transfer.MockRepository)
-		transferUC := usecase.NewTransferUC(mockRepo, log)
+		transferUC := usecase.NewTransferUC(mockRepo, nil)
 		accountOrigin := entities.Account{
 			ID:      "2ab7195f-222a-45c3-9189-4f5da5cd745f",
 			CPF:     "47708141001",

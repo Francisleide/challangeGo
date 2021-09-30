@@ -13,7 +13,7 @@ import (
 )
 
 func TestCreateAccount(t *testing.T) {
-	t.Run("CPF does not exist in the bank and the account is created", func(t *testing.T) {
+	t.Run("cpf does not exist in the bank and the account is created", func(t *testing.T) {
 		log := logrus.NewEntry(logrus.New())
 		mockRepo := new(account.MockRepository)
 		accountUC := usecase.NewAccountUc(mockRepo, log)
@@ -33,7 +33,7 @@ func TestCreateAccount(t *testing.T) {
 
 	})
 
-	t.Run("CPF exists in the bank and the account is not created", func(t *testing.T) {
+	t.Run("cpf exists in the bank and the account is not created", func(t *testing.T) {
 		log := logrus.NewEntry(logrus.New())
 		mockRepo := new(account.MockRepository)
 		accountUC := usecase.NewAccountUc(mockRepo, log)
