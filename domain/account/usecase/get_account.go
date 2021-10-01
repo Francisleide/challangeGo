@@ -20,7 +20,8 @@ func (c AccountUc) GetAccountByCPF(CPF string) (entities.Account, error) {
 	account, err := c.r.FindOne(CPF)
 	if err != nil {
 		c.log.WithError(err).Errorln("failed to retrieve the account from repository")
-		return entities.Account{}, err
+		//TODO: add a new sentinel
+		return entities.Account{}, errors.New("failed to retrieve the account from repository")
 	}
 	return account, nil
 
