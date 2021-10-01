@@ -44,6 +44,8 @@ func TestCreateTransfer(t *testing.T) {
 		assert.Equal(t, transferExpected.AccountDestinationID, transferReceived.AccountDestinationID)
 		assert.Equal(t, transferExpected.AccountOriginID, transferReceived.AccountOriginID)
 		assert.Equal(t, transferExpected.Amount, transferReceived.Amount)
+		assert.NotNil(t, transferReceived.ID)
+		assert.NotNil(t, transferReceived.CreatedAt)
 		assert.NoError(t, err)
 
 	})
@@ -150,7 +152,7 @@ func TestListUserTransfers(t *testing.T) {
 		transfersReceived, err := transferUC.ListUserTransfers("2ab7195f-222a-45c3-9189-4f5da5cd745f")
 
 		//assert
-		assert.Equal(t, "unable to save transfer",  err.Error())
+		assert.Equal(t, "unable to save transfer", err.Error())
 		assert.Equal(t, []entities.Transfer{}, transfersReceived)
 	})
 }
