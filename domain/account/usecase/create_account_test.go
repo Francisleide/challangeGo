@@ -59,7 +59,7 @@ func TestCreateAccount(t *testing.T) {
 		accountReceived, err := accountUC.CreateAccount(accountInput)
 
 		//assert
-		assert.Equal(t, err.Error(), "the account already exists")
+		assert.Equal(t, "the account already exists", err.Error())
 		assert.Equal(t, entities.Account{}, accountReceived)
 	})
 	t.Run("the cpf is invalid and the account is not created", func(t *testing.T) {
@@ -79,7 +79,7 @@ func TestCreateAccount(t *testing.T) {
 		accountReceived, err := accountUC.CreateAccount(accountInput)
 
 		//assert
-		assert.Equal(t, err.Error(), "invalid cpf")
+		assert.Equal(t, "invalid cpf", err.Error())
 		assert.Equal(t, entities.Account{}, accountReceived)
 	})
 	t.Run("the cpf is invalid and the account is not created", func(t *testing.T) {
@@ -100,7 +100,7 @@ func TestCreateAccount(t *testing.T) {
 		accountReceived, err := accountUC.CreateAccount(accountInput)
 
 		//assert
-		assert.Equal(t, err.Error(), "invalid secret")
+		assert.Equal(t, "invalid secret", err.Error())
 		assert.Equal(t, entities.Account{}, accountReceived)
 	})
 	t.Run("the cpf is invalid and the account is not created", func(t *testing.T) {
@@ -118,7 +118,9 @@ func TestCreateAccount(t *testing.T) {
 
 		//test
 		accountReceived, err := accountUC.CreateAccount(accountInput)
-		assert.Equal(t, err.Error(), "the name cannot be null")
+
+		//assert
+		assert.Equal(t, "the name cannot be null", err.Error())
 		assert.Equal(t, entities.Account{}, accountReceived)
 	})
 

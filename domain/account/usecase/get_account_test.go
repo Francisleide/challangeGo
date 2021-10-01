@@ -51,7 +51,7 @@ func TestGetAccountByID(t *testing.T) {
 
 		//assert
 		assert.Equal(t, entities.Account{}, accountReceived)
-		assert.Equal(t, err.Error(), "failed to retrieve the account from repository")
+		assert.Equal(t, "failed to retrieve the account from repository", err.Error())
 	})
 
 }
@@ -98,6 +98,6 @@ func TestGetAccountByCPF(t *testing.T) {
 
 		//assert
 		assert.Equal(t, entities.Account{}, accountReceived)
-		assert.Equal(t, err.Error(), "failed to retrieve the account from repository")
+		assert.Equal(t, "failed to retrieve the account from repository", err.Error())
 	})
 }

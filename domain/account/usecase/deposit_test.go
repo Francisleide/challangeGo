@@ -43,7 +43,7 @@ func TestDeposit(t *testing.T) {
 		err := accountUC.Deposit("86419560004", 100)
 
 		//assert
-		assert.Equal(t, err.Error(), "failed to retrieve account")
+		assert.Equal(t, "failed to retrieve account", err.Error())
 
 	})
 	t.Run("the deposit must not be made because the amount is not valid", func(t *testing.T) {
@@ -57,13 +57,13 @@ func TestDeposit(t *testing.T) {
 		}
 		mockRepo.On("FindOne").Return(account, nil)
 		mockRepo.On("UpdateBalance").Return(nil)
-
-		//test
 		accountUC := usecase.NewAccountUc(mockRepo, log)
 
-		//assert
+		//test
 		err := accountUC.Deposit("86419560004", 0)
-		assert.Equal(t, err.Error(), "invalid value")
+
+		//assert
+		assert.Equal(t, "invalid value", err.Error())
 
 	})
 	t.Run("the deposit does not take place as there was a failure to update the balance", func(t *testing.T) {
@@ -83,7 +83,7 @@ func TestDeposit(t *testing.T) {
 		err := accountUC.Deposit("86419560004", 100)
 
 		//assert
-		assert.Equal(t, err.Error(), "failed to update balance")
+		assert.Equal(t, "failed to update balance", err.Error())
 
 	})
 

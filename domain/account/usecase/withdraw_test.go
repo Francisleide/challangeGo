@@ -46,7 +46,7 @@ func TestWithdraw(t *testing.T) {
 		err := accountUC.Withdraw(account.CPF, 3000)
 
 		//assert
-		assert.Equal(t, err.Error(), "insufficient balance")
+		assert.Equal(t, "insufficient balance", err.Error())
 	})
 
 }
