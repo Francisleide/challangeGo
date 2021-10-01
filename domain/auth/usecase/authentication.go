@@ -1,11 +1,12 @@
 package usecase
 
 import (
+	"errors"
 	"os"
 	"time"
 
 	"github.com/dgrijalva/jwt-go"
-	"github.com/francisleide/ChallengeGo/gateways/db/repository"
+	"github.com/francisleide/ChallengeGo/domain/auth"
 	"golang.org/x/crypto/bcrypt"
 )
 
@@ -20,10 +21,10 @@ type Claims struct {
 }
 
 type AuthenticationUc struct {
-	r repository.Repository
+	r auth.Repository
 }
 
-func NewAuthenticationUC(repo repository.Repository) AuthenticationUc {
+func NewAuthenticationUC(repo auth.Repository) AuthenticationUc {
 	return AuthenticationUc{
 		r: repo,
 	}
@@ -32,12 +33,14 @@ func NewAuthenticationUC(repo repository.Repository) AuthenticationUc {
 func (a AuthenticationUc) Login(CPF, secret string) error {
 	account, err := a.r.FindOne(CPF)
 	if err != nil {
-		return err
+		//TODO: add a sentinel
+		return errors.New("invalid CPF")
 	}
 
 	err = bcrypt.CompareHashAndPassword([]byte(account.Secret), []byte(secret))
 	if err != nil {
-		return err
+		//TODO: add a sentinel
+		return errors.New("incorrect password")
 	}
 	return nil
 
@@ -47,7 +50,7 @@ func (a AuthenticationUc) CreateToken(CPF string, secret string) (string, error)
 	err := a.Login(CPF, secret)
 	if err != nil {
 		//TODO: add a senitinel
-		return "", err
+		return "", errors.New("invalid login")
 	}
 	os.Setenv("ACCESS_SECRET", "asdhjkasjheee")
 
@@ -58,7 +61,8 @@ func (a AuthenticationUc) CreateToken(CPF string, secret string) (string, error)
 	})
 	tokenString, err := token.SignedString([]byte(os.Getenv("ACCESS_SECRET")))
 	if err != nil {
-		return "", err
+		//TODO: add a sentinel
+		return "", errors.New("it was not possible to generate the token")
 	}
 
 	return tokenString, nil
