@@ -13,7 +13,7 @@ import (
 
 func TestCreateTransfer(t *testing.T) {
 	t.Run("the accounts exist and there is balance for transfer so it occurs", func(t *testing.T) {
-		//log := logrus.NewEntry(logrus.New())
+		//prepare
 		mockRepo := new(transfer.MockRepository)
 		transferUC := usecase.NewTransferUC(mockRepo, nil)
 		accountOrigin := entities.Account{
@@ -36,8 +36,11 @@ func TestCreateTransfer(t *testing.T) {
 			Amount:               200,
 		}
 		mockRepo.On("InsertTransfer").Return(transferExpected, nil)
+
+		//test
 		transferReceived, err := transferUC.CreateTransfer(accountOrigin, accountDestination, 200)
 
+		//assert
 		assert.Equal(t, transferExpected.AccountDestinationID, transferReceived.AccountDestinationID)
 		assert.Equal(t, transferExpected.AccountOriginID, transferReceived.AccountOriginID)
 		assert.Equal(t, transferExpected.Amount, transferReceived.Amount)
@@ -45,6 +48,7 @@ func TestCreateTransfer(t *testing.T) {
 
 	})
 	t.Run("transfer should not occur due to database problem", func(t *testing.T) {
+		//prepare
 		log := logrus.NewEntry(logrus.New())
 		mockRepo := new(transfer.MockRepository)
 		transferUC := usecase.NewTransferUC(mockRepo, log)
@@ -62,15 +66,18 @@ func TestCreateTransfer(t *testing.T) {
 			Secret:  "abc123",
 			Balance: 0,
 		}
-
 		mockRepo.On("InsertTransfer").Return(entities.Transfer{}, errors.New(""))
+
+		//test
 		transferReceived, err := transferUC.CreateTransfer(accountOrigin, accountDestination, 200)
 
-		assert.Equal(t, err.Error(), "unable to save transfer")
+		//assert
+		assert.Equal(t, "unable to save transfer", err.Error())
 		assert.Equal(t, entities.Transfer{}, transferReceived)
 
 	})
 	t.Run("the source account does not have enough balance and the transfer does not take place", func(t *testing.T) {
+		//prepare
 		log := logrus.NewEntry(logrus.New())
 		mockRepo := new(transfer.MockRepository)
 		transferUC := usecase.NewTransferUC(mockRepo, log)
@@ -94,15 +101,19 @@ func TestCreateTransfer(t *testing.T) {
 			Amount:               200,
 		}
 		mockRepo.On("InsertTransfer").Return(transferExpected, nil)
+
+		//test
 		transferReceived, err := transferUC.CreateTransfer(accountOrigin, accountDestination, 200)
 
+		//assert
 		assert.Equal(t, entities.Transfer{}, transferReceived)
-		assert.Equal(t, err.Error(), "insufficient funds")
+		assert.Equal(t, "insufficient funds", err.Error())
 	})
 }
 
 func TestListUserTransfers(t *testing.T) {
 	t.Run("a valid account is fetched and the list of all transfers is returned", func(t *testing.T) {
+		//prepare
 		log := logrus.NewEntry(logrus.New())
 		mockRepo := new(transfer.MockRepository)
 		transferUC := usecase.NewTransferUC(mockRepo, log)
@@ -120,18 +131,26 @@ func TestListUserTransfers(t *testing.T) {
 		}
 
 		mockRepo.On("ListUserTransfers").Return(transferExpected, nil)
+
+		//test
 		transfersReceived, err := transferUC.ListUserTransfers("2ab7195f-222a-45c3-9189-4f5da5cd745f")
+
+		//assert
 		assert.Equal(t, transferExpected, transfersReceived)
 		assert.NoError(t, err)
 	})
 	t.Run("an invalid account is fetched and the list of all transfers is not returned", func(t *testing.T) {
+		//prepare
 		log := logrus.NewEntry(logrus.New())
 		mockRepo := new(transfer.MockRepository)
 		transferUC := usecase.NewTransferUC(mockRepo, log)
-
 		mockRepo.On("ListUserTransfers").Return([]entities.Transfer{}, errors.New(""))
+
+		//test
 		transfersReceived, err := transferUC.ListUserTransfers("2ab7195f-222a-45c3-9189-4f5da5cd745f")
-		assert.Equal(t, err.Error(), "unable to save transfer")
+
+		//assert
+		assert.Equal(t, "unable to save transfer",  err.Error())
 		assert.Equal(t, []entities.Transfer{}, transfersReceived)
 	})
 }
