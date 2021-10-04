@@ -44,8 +44,8 @@ func TestCreateTransfer(t *testing.T) {
 		assert.Equal(t, transferExpected.AccountDestinationID, transferReceived.AccountDestinationID)
 		assert.Equal(t, transferExpected.AccountOriginID, transferReceived.AccountOriginID)
 		assert.Equal(t, transferExpected.Amount, transferReceived.Amount)
-		assert.NotNil(t, transferReceived.ID)
-		assert.NotNil(t, transferReceived.CreatedAt)
+		assert.NotEmpty(t, transferReceived.ID)
+		assert.NotEmpty(t, transferReceived.CreatedAt)
 		assert.NoError(t, err)
 
 	})
