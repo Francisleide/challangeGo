@@ -32,8 +32,8 @@ func TestCreateAccount(t *testing.T) {
 		assert.NoError(t, err)
 		assert.Equal(t, accountInput.CPF, accountReceived.CPF)
 		assert.Equal(t, accountInput.Name, accountReceived.Name)
-		assert.NotNil(t, accountReceived.CreatedAt)
-		assert.NotNil(t, accountReceived.ID)
+		assert.NotEmpty(t, accountReceived.CreatedAt)
+		assert.NotEmpty(t, accountReceived.ID)
 		err = bcrypt.CompareHashAndPassword([]byte(accountReceived.Secret), []byte(accountInput.Secret))
 		assert.NoError(t, err)
 

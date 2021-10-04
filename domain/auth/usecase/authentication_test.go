@@ -35,8 +35,7 @@ func TestLogin(t *testing.T) {
 		//assert
 		assert.Equal(t, accountOrigin.CPF, accountReceived.CPF)
 		assert.NoError(t, err)
-		err = bcrypt.CompareHashAndPassword([]byte(accountReceived.Secret), []byte(accountOrigin.Secret))
-		assert.NoError(t, err)
+
 	})
 	t.Run("incorrect cpf and login is not performed", func(t *testing.T) {
 		//prepare
@@ -80,7 +79,7 @@ func TestLogin(t *testing.T) {
 	})
 }
 
-func TestCreateToken(t *testing.T){
+func TestCreateToken(t *testing.T) {
 	t.Run("login is valid and token is created", func(t *testing.T) {
 		//prepare
 		mockRepo := new(auth.MockRepository)
@@ -99,10 +98,10 @@ func TestCreateToken(t *testing.T){
 
 		//test
 		token, err := authUC.CreateToken(accountOrigin.CPF, accountOrigin.Secret)
-		
+
 		//assert
 		assert.NoError(t, err)
-		assert.NotNil(t, token)
+		assert.NotEmpty(t, token)
 	})
 	t.Run("invalid login and token is not created", func(t *testing.T) {
 		//prepare
@@ -116,7 +115,7 @@ func TestCreateToken(t *testing.T){
 
 		//test
 		token, err := authUC.CreateToken(accountOrigin.CPF, accountOrigin.Secret)
-		
+
 		//assert
 		assert.Equal(t, "invalid login", err.Error())
 		assert.Empty(t, token)
