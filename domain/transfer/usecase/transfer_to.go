@@ -28,12 +28,12 @@ func (t TransferUc) CreateTransfer(accountOrigin, accountDestination entities.Ac
 			return entities.Transfer{}, errors.New("invalid transfer")
 		}
 
-		tr, err := t.r.InsertTransfer(transfer)
+		err = t.r.InsertTransfer(transfer)
 		if err != nil {
 			t.log.WithError(err).Error("unable to save transfer")
 			return entities.Transfer{}, errors.New("unable to save transfer")
 		}
-		return tr, nil
+		return transfer , nil
 	} else {
 		//TODO add a sentinel
 		return entities.Transfer{}, errors.New("insufficient funds")

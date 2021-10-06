@@ -35,7 +35,7 @@ func TestCreateTransfer(t *testing.T) {
 			AccountDestinationID: "34add062-ccf4-4530-976d-da7b193a4db4",
 			Amount:               200,
 		}
-		mockRepo.On("InsertTransfer").Return(transferExpected, nil)
+		mockRepo.On("InsertTransfer").Return(nil)
 
 		//test
 		transferReceived, err := transferUC.CreateTransfer(accountOrigin, accountDestination, 200)
@@ -68,7 +68,7 @@ func TestCreateTransfer(t *testing.T) {
 			Secret:  "abc123",
 			Balance: 0,
 		}
-		mockRepo.On("InsertTransfer").Return(entities.Transfer{}, errors.New(""))
+		mockRepo.On("InsertTransfer").Return(errors.New(""))
 
 		//test
 		transferReceived, err := transferUC.CreateTransfer(accountOrigin, accountDestination, 200)
@@ -97,12 +97,7 @@ func TestCreateTransfer(t *testing.T) {
 			Secret:  "abc123",
 			Balance: 0,
 		}
-		transferExpected := entities.Transfer{
-			AccountOriginID:      "2ab7195f-222a-45c3-9189-4f5da5cd745f",
-			AccountDestinationID: "34add062-ccf4-4530-976d-da7b193a4db4",
-			Amount:               200,
-		}
-		mockRepo.On("InsertTransfer").Return(transferExpected, nil)
+		mockRepo.On("InsertTransfer").Return(nil)
 
 		//test
 		transferReceived, err := transferUC.CreateTransfer(accountOrigin, accountDestination, 200)

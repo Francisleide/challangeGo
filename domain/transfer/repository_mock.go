@@ -11,10 +11,9 @@ type MockRepository struct {
 
 //implementation of repository interfaces
 
-func (mock *MockRepository) InsertTransfer(transfer entities.Transfer) (entities.Transfer, error) {
+func (mock *MockRepository) InsertTransfer(transfer entities.Transfer) error {
 	args := mock.Called()
-	result := args.Get(0)
-	return result.(entities.Transfer), args.Error(1)
+	return args.Error(0)
 }
 func (mock *MockRepository) UpdateBalance(ID string, balance float64) error {
 	args := mock.Called()
