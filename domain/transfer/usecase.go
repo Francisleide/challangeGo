@@ -10,7 +10,7 @@ type UseCase interface {
 }
 
 type Repository interface {
-	InsertTransfer(transfer entities.Transfer) (entities.Transfer, error)
+	InsertTransfer(transfer entities.Transfer) error
 	UpdateBalance(ID string, balance float64) error
 	ListUserTransfers(CPF string) ([]entities.Transfer, error)
 }
