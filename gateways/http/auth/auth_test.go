@@ -17,6 +17,7 @@ import (
 func TestAuthentication(t *testing.T) {
 	r := mux.NewRouter()
 	t.Run("login and password data are passed correctly and 200 is returned", func(t *testing.T) {
+		//prepare
 		log := logrus.NewEntry(logrus.New())
 		account := a.Login{
 			CPF:    "86594861026",
@@ -24,19 +25,17 @@ func TestAuthentication(t *testing.T) {
 		}
 		requestBody, _ := json.Marshal(account)
 		req := bytes.NewReader(requestBody)
-
 		usecaseFake := new(auth.UsecaseMock)
 		usecaseFake.On("CreateToken").Return("valid-token", nil)
-
 		handler := a.Auth(r, usecaseFake, log)
-
 		request := httptest.NewRequest("Post", "/login", req)
-
 		response := httptest.NewRecorder()
 
+		//test
 		http.HandlerFunc(handler.Authentication).ServeHTTP(response, request)
 
+		//assert
 		assert.Equal(t, http.StatusOK, response.Result().StatusCode)
-
+		assert.NotEmpty(t, response)
 	})
 }

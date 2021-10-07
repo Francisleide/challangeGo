@@ -16,9 +16,9 @@ import (
 func TestGetBalance(t *testing.T){
 	r := mux.NewRouter()
 	t.Run("the account id is valid and the balance and status 200 is returned", func(t *testing.T) {
+		//prepare
 		accountID := "efb711fa-786e-4d57-9eeb-6fbaca8775a9"
 		balace := 200.0
-
 		usecaseFake := new(account.UsecaseMock)
 		usecaseFake.On("GetBalance").Return(balace, nil)
 		log := logrus.NewEntry(logrus.New())
@@ -27,11 +27,11 @@ func TestGetBalance(t *testing.T){
 		request := httptest.NewRequest("Get", path, nil)
 		response := httptest.NewRecorder()
 
+		//test
 		http.HandlerFunc(handler.GetBalance).ServeHTTP(response, request)
 
+		//assert
 		assert.Equal(t, http.StatusOK, response.Result().StatusCode)
-		
-
-
+		assert.Equal(t, "application/json", response.Header().Get("Content-Type"))
 	})
 }
