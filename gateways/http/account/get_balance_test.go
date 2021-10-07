@@ -18,9 +18,9 @@ func TestGetBalance(t *testing.T){
 	t.Run("the account id is valid and the balance and status 200 is returned", func(t *testing.T) {
 		//prepare
 		accountID := "efb711fa-786e-4d57-9eeb-6fbaca8775a9"
-		balace := 200.0
+		balance := 200.0
 		usecaseFake := new(account.UsecaseMock)
-		usecaseFake.On("GetBalance").Return(balace, nil)
+		usecaseFake.On("GetBalance").Return(balance, nil)
 		log := logrus.NewEntry(logrus.New())
 		handler := a.Accounts(r, usecaseFake, log)
 		path := fmt.Sprintf("/accounts/%s/balance", accountID)

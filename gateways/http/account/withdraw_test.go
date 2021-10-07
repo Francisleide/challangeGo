@@ -16,7 +16,7 @@ import (
 
 func TestWithdraw(t *testing.T) {
 	r := mux.NewRouter()
-	t.Run("the amount to be deposited is a valid amount and 200 is returned", func(t *testing.T) {
+	t.Run("The withdrawal amount is valid and 200 is returned", func(t *testing.T) {
 		
 		//prepare
 		withdrawInput := a.Withdraw{
