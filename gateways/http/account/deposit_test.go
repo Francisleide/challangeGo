@@ -17,24 +17,23 @@ import (
 func TestDeposit(t *testing.T) {
 	r := mux.NewRouter()
 	t.Run("the amount to be deposited is a valid amount and 200 is returned", func(t *testing.T) {
+		//prepare
 		depositInput := a.DepositInput{
 			Amount: 200,
 		}
-
 		requestBody, _ := json.Marshal(depositInput)
 		req := bytes.NewReader(requestBody)
-
 		usecaseFake := new(account.UsecaseMock)
 		usecaseFake.On("Deposit").Return(nil)
 		log := logrus.NewEntry(logrus.New())
 		handler := a.Accounts(r, usecaseFake, log)
-
 		request := httptest.NewRequest("Post", "/deposit", req)
-
 		response := httptest.NewRecorder()
 
+		//test
 		http.HandlerFunc(handler.Deposit).ServeHTTP(response, request)
 
+		//assert
 		assert.Equal(t, http.StatusOK, response.Result().StatusCode)
 
 	})

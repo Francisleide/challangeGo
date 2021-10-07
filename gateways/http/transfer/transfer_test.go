@@ -19,6 +19,7 @@ import (
 func TestCreateTransfer(t *testing.T) {
 	r := mux.NewRouter()
 	t.Run("the data was passed correctly and status 200 is returned", func(t *testing.T) {
+		//prepare
 		log := logrus.NewEntry(logrus.New())
 		accountOrigin := entities.Account{
 			ID:      "efb711fa-786e-4d57-9eeb-6fbaca8775a9",
@@ -42,16 +43,14 @@ func TestCreateTransfer(t *testing.T) {
 		usecaseFakeAccount.On("GetAccountByCPF").Return(accountOrigin, nil)
 		usecaseFakeAccount.On("GetAccountByCPF").Return(accountDestination, nil)
 		usecaseFakeTransfer.On("CreateTransfer").Return()
-
 		handler := tr.NewTransfer(r, usecaseFakeTransfer, usecaseFakeAccount, log)
-
 		request := httptest.NewRequest("Post", "/transfer", req)
-
 		response := httptest.NewRecorder()
 
+		//test
 		http.HandlerFunc(handler.CreateTransfer).ServeHTTP(response, request)
 
+		//test
 		assert.Equal(t, http.StatusOK, response.Result().StatusCode)
-
 	})
 }

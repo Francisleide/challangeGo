@@ -17,24 +17,24 @@ import (
 func TestWithdraw(t *testing.T) {
 	r := mux.NewRouter()
 	t.Run("the amount to be deposited is a valid amount and 200 is returned", func(t *testing.T) {
+		
+		//prepare
 		withdrawInput := a.Withdraw{
 			Amount: 200,
 		}
-
 		requestBody, _ := json.Marshal(withdrawInput)
 		req := bytes.NewReader(requestBody)
-
 		usecaseFake := new(account.UsecaseMock)
 		usecaseFake.On("Withdraw").Return(nil)
 		log := logrus.NewEntry(logrus.New())
 		handler := a.Accounts(r, usecaseFake, log)
-
 		request := httptest.NewRequest("Post", "/withdraw", req)
-
 		response := httptest.NewRecorder()
 
+		//test
 		http.HandlerFunc(handler.Deposit).ServeHTTP(response, request)
 
+		//assert
 		assert.Equal(t, http.StatusOK, response.Result().StatusCode)
 
 	})

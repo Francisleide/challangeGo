@@ -13,9 +13,10 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func TestListAccount(t *testing.T){
+func TestListAccount(t *testing.T) {
 	r := mux.NewRouter()
 	t.Run("the list of accounts is displayed and 200 is returned", func(t *testing.T) {
+		//prepare
 		accounts := []entities.Account{
 			{
 				Name:    "Lorena Morena",
@@ -28,18 +29,18 @@ func TestListAccount(t *testing.T){
 				Balance: 900,
 			},
 		}
-
 		usecaseFake := new(account.UsecaseMock)
-		usecaseFake.On("ListAll").Return(accounts)
+		usecaseFake.On("ListAll").Return(accounts, nil)
 		log := logrus.NewEntry(logrus.New())
 		handler := a.Accounts(r, usecaseFake, log)
-
 		request := httptest.NewRequest("Get", "/accounts", nil)
-
 		response := httptest.NewRecorder()
 
-		http.HandlerFunc(handler.Deposit).ServeHTTP(response, request)
+		//test
+		http.HandlerFunc(handler.ListAllAccounts).ServeHTTP(response, request)
 
+		//assert
 		assert.Equal(t, http.StatusOK, response.Result().StatusCode)
+		assert.Equal(t, "application/json", response.Header().Get("Content-Type"))
 	})
 }
