@@ -1,8 +1,10 @@
 package account_test
 
 import (
+	"encoding/json"
 	"net/http"
 	"net/http/httptest"
+	"strings"
 	"testing"
 
 	"github.com/francisleide/ChallengeGo/domain/account"
@@ -35,6 +37,8 @@ func TestListAccount(t *testing.T) {
 		handler := a.Accounts(r, usecaseFake, log)
 		request := httptest.NewRequest("Get", "/accounts", nil)
 		response := httptest.NewRecorder()
+		accounts2, _ := json.Marshal(accounts)
+		//resp := bytes.NewReader(accounts2)
 
 		//test
 		http.HandlerFunc(handler.ListAllAccounts).ServeHTTP(response, request)
@@ -42,5 +46,6 @@ func TestListAccount(t *testing.T) {
 		//assert
 		assert.Equal(t, http.StatusOK, response.Result().StatusCode)
 		assert.Equal(t, "application/json", response.Header().Get("Content-Type"))
+		assert.Equal(t, string(accounts2), strings.TrimSpace(response.Body.String()))
 	})
 }

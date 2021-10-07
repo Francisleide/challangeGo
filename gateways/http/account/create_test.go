@@ -30,7 +30,7 @@ func TestCreateAccount(t *testing.T) {
 		req := bytes.NewReader(requestBody)
 
 		resp, _ := json.Marshal(newAccount)
-		
+
 		usecaseFake := new(account.UsecaseMock)
 		usecaseFake.On("CreateAccount").Return(newAccount, nil)
 		log := logrus.NewEntry(logrus.New())
@@ -43,7 +43,7 @@ func TestCreateAccount(t *testing.T) {
 
 		//assert
 		assert.Equal(t, string(resp), strings.TrimSpace(response.Body.String()))
-		assert.Equal(t, http.StatusOK, response.Result().StatusCode)
+		assert.Equal(t, http.StatusCreated, response.Result().StatusCode)
 		assert.Equal(t, "application/json", response.Header().Get("Content-Type"))
 
 	})

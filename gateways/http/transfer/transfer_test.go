@@ -32,8 +32,8 @@ func TestCreateTransfer(t *testing.T) {
 			Balance: 0,
 		}
 		transferInput := tr.TransferInput{
-			AccountDestinationID: "280160d0-5c66-4faf-97c8-1512f90da152",
-			Amount:               200,
+			AccountDestinationID: "8b27748e-88a8-4792-b22a-67ba8f77179f",
+			Amount:               50,
 		}
 
 		requestBody, _ := json.Marshal(transferInput)

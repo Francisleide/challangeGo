@@ -23,7 +23,7 @@ type AccountInput struct {
 func Accounts(serv *mux.Router, usecase account.UseCase, log *logrus.Entry) *Handler {
 	h := &Handler{
 		account: usecase,
-		log: log,
+		log:     log,
 	}
 
 	serv.HandleFunc("/accounts", h.CreateAccount).Methods("Post")
@@ -60,6 +60,7 @@ func (h Handler) CreateAccount(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(201)
 	err = json.NewEncoder(w).Encode(account)
 	if err != nil {
 		h.log.WithError(err).Errorln("unable to write json")
