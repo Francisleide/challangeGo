@@ -60,7 +60,7 @@ func (h Handler) CreateAccount(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	w.Header().Set("Content-Type", "application/json")
-	w.WriteHeader(201)
+	w.WriteHeader(http.StatusCreated)
 	err = json.NewEncoder(w).Encode(account)
 	if err != nil {
 		h.log.WithError(err).Errorln("unable to write json")
