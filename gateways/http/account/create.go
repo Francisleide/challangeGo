@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"net/http"
 
+	_ "github.com/francisleide/ChallengeGo/app"
 	"github.com/francisleide/ChallengeGo/domain/account"
 	"github.com/francisleide/ChallengeGo/domain/entities"
 	"github.com/gorilla/mux"
@@ -31,6 +32,7 @@ func Accounts(serv *mux.Router, usecase account.UseCase, log *logrus.Entry) *Han
 	serv.HandleFunc("/accounts/{id}/balance", h.GetBalance).Methods(("Get"))
 
 	return h
+
 }
 
 // CreateAccount godoc
@@ -39,7 +41,9 @@ func Accounts(serv *mux.Router, usecase account.UseCase, log *logrus.Entry) *Han
 // @Param Body body AccountInput true "Body"
 // @Accept  json
 // @Produce  json
-// @Success 200 {object} Account
+// @Success 201 {object} Account
+// @Failure 500 "Unable to read/write json"
+// @Failure 400 "Incorrect data to create a new account"
 // @Router /accounts [post]
 func (h Handler) CreateAccount(w http.ResponseWriter, r *http.Request) {
 	var accountInput AccountInput
@@ -47,6 +51,7 @@ func (h Handler) CreateAccount(w http.ResponseWriter, r *http.Request) {
 	err := decoder.Decode(&accountInput)
 	if err != nil {
 		h.log.WithError(err).Errorln("unable to read json")
+		w.WriteHeader(http.StatusInternalServerError)
 		return
 	}
 
@@ -57,6 +62,7 @@ func (h Handler) CreateAccount(w http.ResponseWriter, r *http.Request) {
 	})
 	if err != nil {
 		h.log.WithError(err).Errorln("failed to create a new account")
+		w.WriteHeader(http.StatusBadRequest)
 		return
 	}
 	w.Header().Set("Content-Type", "application/json")
@@ -64,6 +70,7 @@ func (h Handler) CreateAccount(w http.ResponseWriter, r *http.Request) {
 	err = json.NewEncoder(w).Encode(account)
 	if err != nil {
 		h.log.WithError(err).Errorln("unable to write json")
+		w.WriteHeader(http.StatusInternalServerError)
 		return
 	}
 }

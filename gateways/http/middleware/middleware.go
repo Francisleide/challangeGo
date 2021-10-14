@@ -14,7 +14,7 @@ import (
 
 type AuthContextKey string
 
-var contextID = AuthContextKey("cpf")
+var ContextID = AuthContextKey("cpf")
 
 func ValidateToken(next http.Handler) http.Handler {
 	var x *jwt.Token
@@ -29,13 +29,14 @@ func ValidateToken(next http.Handler) http.Handler {
 			x, err = VerifyToken(strArr[1])
 			if err != nil {
 				logEntry.Errorf("invalid token")
+				w.WriteHeader(http.StatusUnauthorized)
 				return
 			}
 		}
 
 		accountID := usecase.Authentication(x)
 
-		ctx := context.WithValue(r.Context(), contextID, accountID)
+		ctx := context.WithValue(r.Context(), ContextID, accountID)
 		next.ServeHTTP(w, r.WithContext(ctx))
 	})
 
@@ -55,7 +56,7 @@ func VerifyToken(tokenstr string) (*jwt.Token, error) {
 }
 
 func GetCPF(ctx context.Context) (string, bool) {
-	tokenStr, ok := ctx.Value(contextID).(string)
+	tokenStr, ok := ctx.Value(ContextID).(string)
 
 	return tokenStr, ok
 }

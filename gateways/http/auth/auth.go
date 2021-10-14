@@ -36,7 +36,9 @@ func Auth(serv *mux.Router, usecase auth.UseCase, log *logrus.Entry) *Handler {
 // @Param Body body Login true "Body"
 // @Accept  json
 // @Produce  json
-// @Success 200 {string} string	"ok"
+// @Success 200 "Ok"
+// @Failure 400 "Unable to read/write json"
+// @Failure 500 "Failed to create token"
 // @Router /login [post]
 func (h Handler) Authentication(w http.ResponseWriter, r *http.Request) {
 	var login Login
@@ -44,16 +46,19 @@ func (h Handler) Authentication(w http.ResponseWriter, r *http.Request) {
 	err := decoder.Decode(&login)
 	if err != nil {
 		h.log.WithError(err).Errorln("unable to read json")
+		w.WriteHeader(http.StatusBadRequest)
 		return
 	}
 	token, err := h.auth.CreateToken(login.CPF, login.Secret)
 	if err != nil {
 		h.log.WithError(err).Errorln("failed to create token")
+		w.WriteHeader(http.StatusInternalServerError)
 		return
 	}
 	err = json.NewEncoder(w).Encode(token)
 	if err != nil {
 		h.log.WithError(err).Errorln("unable to write json")
+		w.WriteHeader(http.StatusInternalServerError)
 		return
 	}
 }
