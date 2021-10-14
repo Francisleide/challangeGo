@@ -49,7 +49,7 @@ func TestListAll(t *testing.T) {
 		receivedAccounts, err := accountUC.ListAll()
 
 		//assert
-		assert.Equal(t, "failed to list accounts", err.Error())
+		assert.ErrorIs(t, usecase.ErrorListAccounts, err)
 		assert.Equal(t, []entities.Account{}, receivedAccounts)
 	})
 

@@ -7,8 +7,8 @@ import (
 type UseCase interface {
 	CreateAccount(account entities.AccountInput) (entities.Account, error)
 	ListAll() ([]entities.Account, error)
-	Deposit(CPF string, amount float64) error
-	Withdraw(CPF string, amount float64) error
+	Deposit(CPF string, amount float64) (entities.TransactionOutput, error)
+	Withdraw(CPF string, amount float64) (entities.TransactionOutput,error)
 	GetBalance(accountID string) (float64, error)
 	GetAccountByID(ID string) (entities.Account, error)
 	GetAccountByCPF(CPF string) (entities.Account, error)

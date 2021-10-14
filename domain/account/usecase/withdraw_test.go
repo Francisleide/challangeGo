@@ -19,15 +19,22 @@ func TestWithdraw(t *testing.T) {
 			CPF:     "86419560004",
 			Balance: 2000,
 		}
+		accountExpected := entities.TransactionOutput{
+			PreviousBalance: account.Balance,
+			ActualBalance: 1500,
+		}
 		mockRepo.On("FindOne").Return(account, nil)
 		mockRepo.On("UpdateBalance").Return(nil)
 		accountUC := usecase.NewAccountUc(mockRepo, nil)
 
 		//test
-		err := accountUC.Withdraw(account.CPF, 500.0)
+		withdrawOutput, err := accountUC.Withdraw(account.CPF, 500.0)
 
 		//assert
 		assert.NoError(t, err)
+		assert.Equal(t, accountExpected.ActualBalance, withdrawOutput.ActualBalance)
+		assert.Equal(t, accountExpected.PreviousBalance, withdrawOutput.PreviousBalance)
+
 	})
 	t.Run("the withdrawal is not made due to lack of balance", func(t *testing.T) {
 		//prepare
@@ -43,10 +50,10 @@ func TestWithdraw(t *testing.T) {
 		accountUC := usecase.NewAccountUc(mockRepo, log)
 
 		//test
-		err := accountUC.Withdraw(account.CPF, 3000)
+		_, err := accountUC.Withdraw(account.CPF, 3000)
 
 		//assert
-		assert.Equal(t, "insufficient balance", err.Error())
+		assert.ErrorIs(t, usecase.ErrorInsufficientBalance, err)
 	})
 
 }
