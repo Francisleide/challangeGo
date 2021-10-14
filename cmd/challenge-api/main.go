@@ -40,8 +40,6 @@ func connect(mysql app.MysqlConfig, log logrus.Entry) *sql.DB {
 // @title Swagger Challenge API
 // @version 2.0
 // @description Documentation for Challenge-Go API
-
-// TODO edit basepath !!!
 // @BasePath /
 
 func main() {
