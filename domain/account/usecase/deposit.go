@@ -1,29 +1,27 @@
 package usecase
 
-import (
-	"errors"
-)
+import "github.com/francisleide/ChallengeGo/domain/entities"
 
-func (c AccountUc) Deposit(CPF string, amount float64) error {
-
+func (c AccountUc) Deposit(CPF string, amount float64) (entities.TransactionOutput, error) {
+	var depositOutput entities.TransactionOutput
 	account, err := c.r.FindOne(CPF)
+	depositOutput.PreviousBalance = account.Balance
+	depositOutput.ID = account.ID
 	if err != nil {
-		c.log.WithError(err).Errorln("failed to retrieve account")
-		//TODO add a new sentinel
-		return errors.New("failed to retrieve account")
+		c.log.WithError(err).Errorln(ErrorRetrieveAccount)
+		return entities.TransactionOutput{}, ErrorRetrieveAccount
 	}
 	if amount <= 0 {
-		c.log.WithError(err).Errorln("invalid value")
-		//TODO add a new sentinel
-		return errors.New("invalid value")
+		c.log.WithError(err).Errorln(ErrorInvalidValue)
+		return entities.TransactionOutput{}, ErrorInvalidValue
 	}
 	account.Balance += amount
 	err = c.r.UpdateBalance(account.ID, account.Balance)
 	if err != nil {
-		c.log.WithError(err).Errorf("failed to update balance")
-		//TODO ass a new sentinel
-		return errors.New("failed to update balance")
+		c.log.WithError(err).Errorln(ErrorUpdateBalance)
+		return entities.TransactionOutput{}, ErrorUpdateBalance
 	}
-	return nil
+	depositOutput.ActualBalance = account.Balance
+	return depositOutput, nil
 
 }

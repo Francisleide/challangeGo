@@ -21,22 +21,24 @@ func NewTransferUC(repo transfer.Repository, log *logrus.Entry) TransferUc {
 }
 
 func (t TransferUc) CreateTransfer(accountOrigin, accountDestination entities.Account, amount float64) (entities.Transfer, error) {
+	if amount <= 0 {
+		return entities.Transfer{}, ErrorInvalidTransfer
+	}
 	if accountOrigin.Balance >= amount {
 		transfer, err := entities.NewTransfer(accountOrigin.ID, accountDestination.ID, amount)
 		if err != nil {
-			//TODO: add a sentinel
-			return entities.Transfer{}, errors.New("invalid transfer")
+			t.log.WithError(err).Error(ErrorInvalidTransfer)
+			return entities.Transfer{}, ErrorInvalidTransfer
 		}
 
 		err = t.r.InsertTransfer(transfer)
 		if err != nil {
-			t.log.WithError(err).Error("unable to save transfer")
-			return entities.Transfer{}, errors.New("unable to save transfer")
+			t.log.WithError(err).Error(ErrorSaveTransfer)
+			return entities.Transfer{}, ErrorSaveTransfer
 		}
-		return transfer , nil
+		return transfer, nil
 	} else {
-		//TODO add a sentinel
-		return entities.Transfer{}, errors.New("insufficient funds")
+		return entities.Transfer{}, ErrorInsufficientFunds
 	}
 
 }
