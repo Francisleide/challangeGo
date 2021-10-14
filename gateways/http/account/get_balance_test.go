@@ -1,6 +1,7 @@
 package account_test
 
 import (
+	"errors"
 	"fmt"
 	"net/http"
 	"net/http/httptest"
@@ -33,5 +34,24 @@ func TestGetBalance(t *testing.T){
 		//assert
 		assert.Equal(t, http.StatusOK, response.Result().StatusCode)
 		assert.Equal(t, "application/json", response.Header().Get("Content-Type"))
+	})
+	t.Run("the account is not found and the 404 error is returned", func(t *testing.T) {
+		r := mux.NewRouter()
+		//prepare
+		accountID := "efb711fa-786e-4d57-9eeb-6fbaca8445a9"
+		usecaseFake := new(account.UsecaseMock)
+		usecaseFake.On("GetBalance").Return(0.0, errors.New(""))
+		log := logrus.NewEntry(logrus.New())
+		handler := a.Accounts(r, usecaseFake, log)
+		path := fmt.Sprintf("/accounts/%s/balance", accountID)
+		request := httptest.NewRequest("Get", path, nil)
+		response := httptest.NewRecorder()
+
+		//test
+		http.HandlerFunc(handler.GetBalance).ServeHTTP(response, request)
+
+		//assert
+		assert.Equal(t, http.StatusNotFound, response.Result().StatusCode)
+		
 	})
 }
