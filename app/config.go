@@ -29,6 +29,7 @@ type HttpServerConfig struct {
 	ShutdownTimeout time.Duration `env:"HTTP_SHUTDOWN_TIMEOUT" default:"1s"`
 	ReadTimeout     time.Duration `env:"HTTP_READ_TIMEOUT" default:"30s"`
 	WriteTimeout    time.Duration `env:"HTTP_WRITE_TIMEOUT" default:"10s"`
+	AccessSecret    string        `env:"ACCESS_SECRET" default:"asdhjkasjheee"`
 }
 
 type SwaggerConfig struct {

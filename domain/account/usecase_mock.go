@@ -1,6 +1,8 @@
 package account
 
 import (
+	"context"
+
 	"github.com/francisleide/ChallengeGo/domain/entities"
 	"github.com/stretchr/testify/mock"
 )
@@ -31,14 +33,16 @@ func (mock *UsecaseMock) ListAll() ([]entities.Account, error) {
 	return result.([]entities.Account), args.Error(1)
 }
 
-func (mock *UsecaseMock) Deposit(CPF string, amount float64) error {
+func (mock *UsecaseMock) Deposit(CPF string, amount float64) (TransactionOutput, error) {
 	args := mock.Called()
-	return args.Error(0)
+	result := args.Get(0)
+	return result.(TransactionOutput), args.Error(1)
 }
 
-func (mock *UsecaseMock) Withdraw(CPF string, amount float64) error {
+func (mock *UsecaseMock) Withdraw(CPF string, amount float64) (TransactionOutput, error) {
 	args := mock.Called()
-	return args.Error(1)
+	result := args.Get(0)
+	return result.(TransactionOutput), args.Error(1)
 }
 
 func (mock *UsecaseMock) GetBalance(accountID string) (float64, error) {
@@ -55,4 +59,9 @@ func (mock *UsecaseMock) GetAccountByCPF(CPF string) (entities.Account, error) {
 	args := mock.Called()
 	result := args.Get(0)
 	return result.(entities.Account), args.Error(1)
+}
+func (mock *UsecaseMock) GetCPF(ctx context.Context) (string, bool) {
+	args := mock.Called()
+	result := args.Get(0)
+	return result.(string), result.(bool)
 }

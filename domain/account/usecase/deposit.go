@@ -1,29 +1,27 @@
 package usecase
 
 import (
-	"errors"
+	ac "github.com/francisleide/ChallengeGo/domain/account"
 )
 
-func (c AccountUc) Deposit(CPF string, amount float64) error {
-
+func (c AccountUc) Deposit(CPF string, amount float64) (ac.TransactionOutput, error) {
+	var depositOutput ac.TransactionOutput
 	account, err := c.r.FindOne(CPF)
 	if err != nil {
-		c.log.WithError(err).Errorln("failed to retrieve account")
-		//TODO add a new sentinel
-		return errors.New("failed to retrieve account")
+		c.log.WithError(err).Errorln(ErrorRetrieveAccount)
+		return ac.TransactionOutput{}, ErrorRetrieveAccount
 	}
+	depositOutput.PreviousBalance = account.Balance
+	depositOutput.ID = account.ID
 	if amount <= 0 {
-		c.log.WithError(err).Errorln("invalid value")
-		//TODO add a new sentinel
-		return errors.New("invalid value")
+		return ac.TransactionOutput{}, ErrorInvalidValue
 	}
 	account.Balance += amount
 	err = c.r.UpdateBalance(account.ID, account.Balance)
 	if err != nil {
-		c.log.WithError(err).Errorf("failed to update balance")
-		//TODO ass a new sentinel
-		return errors.New("failed to update balance")
+		return ac.TransactionOutput{}, ErrorUpdateBalance
 	}
-	return nil
+	depositOutput.ActualBalance = account.Balance
+	return depositOutput, nil
 
 }

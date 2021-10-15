@@ -3,6 +3,7 @@ package auth_test
 import (
 	"bytes"
 	"encoding/json"
+	"errors"
 	"net/http"
 	"net/http/httptest"
 	"testing"
@@ -37,5 +38,26 @@ func TestAuthentication(t *testing.T) {
 		//assert
 		assert.Equal(t, http.StatusOK, response.Result().StatusCode)
 		assert.NotEmpty(t, response)
+	})
+	t.Run("incorrect cpf or password and error 400 is returned", func(t *testing.T) {
+		//prepare
+		log := logrus.NewEntry(logrus.New())
+		account := a.Login{
+			CPF:    "86594861026",
+			Secret: "123abc",
+		}
+		requestBody, _ := json.Marshal(account)
+		req := bytes.NewReader(requestBody)
+		usecaseFake := new(auth.UsecaseMock)
+		usecaseFake.On("CreateToken").Return("", errors.New(""))
+		handler := a.Auth(r, usecaseFake, log)
+		request := httptest.NewRequest("Post", "/login", req)
+		response := httptest.NewRecorder()
+
+		//test
+		http.HandlerFunc(handler.Authentication).ServeHTTP(response, request)
+
+		//assert
+		assert.Equal(t, http.StatusInternalServerError, response.Result().StatusCode)
 	})
 }

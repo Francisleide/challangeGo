@@ -1,7 +1,6 @@
 package entities
 
 import (
-	"errors"
 	"strconv"
 	"time"
 	"unicode/utf8"
@@ -9,6 +8,7 @@ import (
 	"github.com/satori/uuid.go"
 	"golang.org/x/crypto/bcrypt"
 )
+
 
 type Account struct {
 	ID        string
@@ -102,17 +102,14 @@ func ValidateName(name string) bool {
 
 func NewAccount(name, CPF, secret string) (Account, error) {
 	if !ValidateSecret(secret) {
-		//TODO: add a sentinel
-		return Account{}, errors.New("invalid secret")
+		return Account{}, ErrorInvalidSecret
 	}
 
 	if !ValidateName(name) {
-		//TODO: add a sentinel
-		return Account{}, errors.New("the name cannot be null")
+		return Account{}, ErrorNameEmpty
 	}
 	if !ValidateCPF(CPF) {
-		//TODO: add a sentinel
-		return Account{}, errors.New("invalid cpf")
+		return Account{}, ErrorInvalidCPF
 	}
 
 	secret, err := EncryptSecret(secret)

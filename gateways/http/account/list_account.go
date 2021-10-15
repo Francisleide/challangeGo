@@ -19,10 +19,12 @@ type Account struct {
 // @Accept  json
 // @Produce  json
 // @Success 200 {object} []Account
+// @Success 500 "Failed to retrieve accounts"
 // @Router /accounts [GET]
 func (h Handler) ListAllAccounts(w http.ResponseWriter, r *http.Request) {
 	accounts, err := h.account.ListAll()
 	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
 		h.log.WithError(err).Errorln("failed to retrieve accounts")
 	}
 	w.Header().Set("Content-Type", "application/json")

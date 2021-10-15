@@ -52,7 +52,6 @@ func (a AuthenticationUc) CreateToken(CPF string, secret string) (string, error)
 		//TODO: add a senitinel
 		return "", errors.New("invalid login")
 	}
-	os.Setenv("ACCESS_SECRET", "asdhjkasjheee")
 
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
 		"user": CPF,

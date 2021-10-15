@@ -74,7 +74,7 @@ func TestCreateTransfer(t *testing.T) {
 		transferReceived, err := transferUC.CreateTransfer(accountOrigin, accountDestination, 200)
 
 		//assert
-		assert.Equal(t, "unable to save transfer", err.Error())
+		assert.Equal(t, usecase.ErrorSaveTransfer, err)
 		assert.Equal(t, entities.Transfer{}, transferReceived)
 
 	})
@@ -104,7 +104,7 @@ func TestCreateTransfer(t *testing.T) {
 
 		//assert
 		assert.Equal(t, entities.Transfer{}, transferReceived)
-		assert.Equal(t, "insufficient funds", err.Error())
+		assert.Equal(t, usecase.ErrorInsufficientFunds, err)
 	})
 }
 
@@ -147,7 +147,7 @@ func TestListUserTransfers(t *testing.T) {
 		transfersReceived, err := transferUC.ListUserTransfers("2ab7195f-222a-45c3-9189-4f5da5cd745f")
 
 		//assert
-		assert.Equal(t, "unable to save transfer", err.Error())
+		assert.Equal(t, usecase.ErrorSaveTransfer, err)
 		assert.Equal(t, []entities.Transfer{}, transfersReceived)
 	})
 }

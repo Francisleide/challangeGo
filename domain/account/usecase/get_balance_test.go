@@ -50,7 +50,7 @@ func TestGetBalance(t *testing.T) {
 		balanceReceived, err := accountUC.GetBalance(account.ID)
 
 		//assert
-		assert.Equal(t, "failed to retrieve the account from repository", err.Error())
+		assert.ErrorIs(t, usecase.ErrorRetrieveAccount, err)
 		assert.Equal(t, float64(0), balanceReceived)
 	})
 }

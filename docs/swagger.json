@@ -23,6 +23,9 @@
                                 "$ref": "#/definitions/account.Account"
                             }
                         }
+                    },
+                    "500": {
+                        "description": "Failed to retrieve accounts"
                     }
                 }
             },
@@ -47,11 +50,17 @@
                     }
                 ],
                 "responses": {
-                    "200": {
-                        "description": "OK",
+                    "201": {
+                        "description": "Created",
                         "schema": {
                             "$ref": "#/definitions/account.Account"
                         }
+                    },
+                    "400": {
+                        "description": "Incorrect data to create a new account"
+                    },
+                    "500": {
+                        "description": "Unable to read/write json"
                     }
                 }
             }
@@ -75,6 +84,9 @@
                     },
                     "400": {
                         "description": "Failed to decode"
+                    },
+                    "401": {
+                        "description": "Invalid or missing token"
                     },
                     "404": {
                         "description": "Account not found"
@@ -114,8 +126,14 @@
                     }
                 ],
                 "responses": {
-                    "200": {
-                        "description": ""
+                    "201": {
+                        "description": "Created"
+                    },
+                    "401": {
+                        "description": "Invalid or missing token"
+                    },
+                    "500": {
+                        "description": "Unable to read/write json"
                     }
                 }
             }
@@ -143,10 +161,13 @@
                 ],
                 "responses": {
                     "200": {
-                        "description": "ok",
-                        "schema": {
-                            "type": "string"
-                        }
+                        "description": "Ok"
+                    },
+                    "400": {
+                        "description": "Unable to read/write json"
+                    },
+                    "500": {
+                        "description": "Failed to create token"
                     }
                 }
             }
@@ -179,6 +200,12 @@
                                 "$ref": "#/definitions/transfer.Transfer"
                             }
                         }
+                    },
+                    "401": {
+                        "description": "Invalid or missing token"
+                    },
+                    "500": {
+                        "description": "Problems finding the transfers"
                     }
                 }
             },
@@ -201,8 +228,14 @@
                     }
                 ],
                 "responses": {
-                    "200": {
-                        "description": ""
+                    "201": {
+                        "description": "Created"
+                    },
+                    "401": {
+                        "description": "Invalid or missing token"
+                    },
+                    "404": {
+                        "description": "Account origin/destination not found"
                     }
                 }
             }
@@ -234,7 +267,12 @@
                         "in": "header",
                         "required": true
                     }
-                ]
+                ],
+                "responses": {
+                    "401": {
+                        "description": "Invalid or missing token"
+                    }
+                }
             }
         }
     },

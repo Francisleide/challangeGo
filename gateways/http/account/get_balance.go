@@ -18,6 +18,7 @@ type AccountBalance struct {
 // @Produce  json
 // @Success 200 {object} AccountBalance
 // @Failure 400 "Failed to decode"
+// @Failure 401 "Invalid or missing token"
 // @Failure 404 "Account not found"
 // @Failure 500 "Unexpected internal server error"
 // @Router /accounts/{id}/balance [GET]
@@ -26,14 +27,18 @@ func (h Handler) GetBalance(w http.ResponseWriter, r *http.Request) {
 	balance, err := h.account.GetBalance(accountID)
 	if err != nil {
 		h.log.WithError(err).Errorf("failed to find balance")
+		w.WriteHeader(http.StatusNotFound)
 		return
 	}
 	var accountBalance AccountBalance
 	accountBalance.Balance = balance
 	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(http.StatusOK)
 	err = json.NewEncoder(w).Encode(accountBalance)
 	if err != nil {
 		h.log.WithError(err).Errorf("failed to write json")
+		w.WriteHeader(http.StatusInternalServerError)
+		return
 	}
 
 }

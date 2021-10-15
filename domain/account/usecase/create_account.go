@@ -1,8 +1,6 @@
 package usecase
 
 import (
-	"errors"
-
 	"github.com/francisleide/ChallengeGo/domain/account"
 	"github.com/francisleide/ChallengeGo/domain/entities"
 	"github.com/sirupsen/logrus"
@@ -23,14 +21,12 @@ func NewAccountUc(repo account.Repository, log *logrus.Entry) AccountUc {
 func (c AccountUc) CreateAccount(accountInput entities.AccountInput) (entities.Account, error) {
 	account, _ := c.r.FindOne(accountInput.CPF)
 	if account != (entities.Account{}) {
-		//TODO: add a sentinel
-		return entities.Account{}, errors.New("the account already exists")
+		return entities.Account{}, ErrorAccountAlreadyExists
 	}
 
 	newAccount, err := entities.NewAccount(accountInput.Name, accountInput.CPF, accountInput.Secret)
 	if err != nil {
 		c.log.WithError(err).Errorln("unable to create account")
-		//TODO: add a sentinel
 		return entities.Account{}, err
 	}
 

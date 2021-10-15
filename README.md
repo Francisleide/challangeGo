@@ -58,21 +58,21 @@ http://localhost:8080/accounts<br>
 
 Body json:
 
-```javascript
+```json
 {
     "nome": "Fran",
     "cpf":"98711222334",
-    "secret": "123"  
+    "secret": "abc123"  
 }
 ```
 Para efetuar login e gerar o token, que permitirá o acesso às rotas autenticadas (/transfer, /deposit, /withdraw), é preciso passar as credenciais, conforme o exemplo:
 
 http://localhost:8080/auth<br>
 
-```javascript
+```json
 {
     "cpf":"98711222334",
-    "secret": "123"  
+    "secret": "abc123"  
 }
 ```
 
@@ -127,3 +127,4 @@ Executando a aplicação sem o docker, é necessário configurar as variáveis d
 |  DB_PASS |  Senha do banco   |
 |  DB_HOST |  Endereço do servidor (ex: localhost)
 |  DB_PORT |  Porta do banco (3306 - mysql)
+| ACCESS_SECRET | Segredo do token

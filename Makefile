@@ -6,5 +6,7 @@ build:
 
 run: 
 	go run cmd/challenge-api/main.go
+swagger:
+	swag init -g docs/docs.go
 
 
