@@ -4,7 +4,7 @@ import (
 	"errors"
 	"testing"
 
-	"github.com/francisleide/ChallengeGo/domain/account"
+	ac "github.com/francisleide/ChallengeGo/domain/account"
 	"github.com/francisleide/ChallengeGo/domain/account/usecase"
 	"github.com/francisleide/ChallengeGo/domain/entities"
 	"github.com/sirupsen/logrus"
@@ -14,7 +14,7 @@ import (
 func TestDeposit(t *testing.T) {
 	t.Run("deposit should take place without errors", func(t *testing.T) {
 		//prepare
-		mockRepo := new(account.MockRepository)
+		mockRepo := new(ac.MockRepository)
 		account := entities.Account{
 			ID:      "8aecf60b-b549-41a2-b9b9-143d2d513c87",
 			Name:    "Lorena Morena",
@@ -24,7 +24,7 @@ func TestDeposit(t *testing.T) {
 		mockRepo.On("FindOne").Return(account, nil)
 		mockRepo.On("UpdateBalance").Return(nil)
 		accountUC := usecase.NewAccountUc(mockRepo, nil)
-		expectedDepositOut := entities.TransactionOutput{
+		expectedDepositOut := ac.TransactionOutput{
 			ID:              account.ID,
 			PreviousBalance: account.Balance,
 			ActualBalance:   account.Balance + 100,
@@ -41,7 +41,7 @@ func TestDeposit(t *testing.T) {
 	t.Run("the deposit must not be made because the account cannot be found", func(t *testing.T) {
 		//prepare
 		log := logrus.NewEntry(logrus.New())
-		mockRepo := new(account.MockRepository)
+		mockRepo := new(ac.MockRepository)
 
 		mockRepo.On("FindOne").Return(entities.Account{}, errors.New("error"))
 		mockRepo.On("UpdateBalance").Return(nil)
@@ -52,13 +52,13 @@ func TestDeposit(t *testing.T) {
 
 		//assert
 		assert.ErrorIs(t, usecase.ErrorRetrieveAccount, err)
-		assert.Equal(t, entities.TransactionOutput{}, depositOutReceived)
+		assert.Equal(t, ac.TransactionOutput{}, depositOutReceived)
 
 	})
 	t.Run("the deposit must not be made because the amount is not valid", func(t *testing.T) {
 		//prepare
 		log := logrus.NewEntry(logrus.New())
-		mockRepo := new(account.MockRepository)
+		mockRepo := new(ac.MockRepository)
 		account := entities.Account{
 			Name:    "Lorena Morena",
 			CPF:     "86419560004",
@@ -73,13 +73,13 @@ func TestDeposit(t *testing.T) {
 
 		//assert
 		assert.ErrorIs(t, usecase.ErrorInvalidValue, err)
-		assert.Equal(t, entities.TransactionOutput{}, depositOutReceived)
+		assert.Equal(t, ac.TransactionOutput{}, depositOutReceived)
 
 	})
 	t.Run("the deposit does not take place as there was a failure to update the balance", func(t *testing.T) {
 		//prepare
 		log := logrus.NewEntry(logrus.New())
-		mockRepo := new(account.MockRepository)
+		mockRepo := new(ac.MockRepository)
 		account := entities.Account{
 			Name:    "Lorena Morena",
 			CPF:     "86419560004",
@@ -94,7 +94,7 @@ func TestDeposit(t *testing.T) {
 
 		//assert
 		assert.ErrorIs(t, usecase.ErrorUpdateBalance, err)
-		assert.Equal(t, entities.TransactionOutput{}, depositOutReceived)
+		assert.Equal(t, ac.TransactionOutput{}, depositOutReceived)
 
 	})
 

@@ -9,7 +9,7 @@ import (
 	"net/http/httptest"
 	"testing"
 
-	"github.com/francisleide/ChallengeGo/domain/account"
+	ac "github.com/francisleide/ChallengeGo/domain/account"
 	"github.com/francisleide/ChallengeGo/domain/entities"
 	"github.com/francisleide/ChallengeGo/domain/transfer"
 	"github.com/francisleide/ChallengeGo/gateways/http/middleware"
@@ -41,12 +41,12 @@ func TestCreateTransfer(t *testing.T) {
 			AccountDestinationID: "8b27748e-88a8-4792-b22a-67ba8f77179f",
 			Amount:               50,
 		}
-		withdrawOutput := entities.TransactionOutput{
+		withdrawOutput := ac.TransactionOutput{
 			ID:              "efb711fa-786e-4d57-9eeb-6fbaca8775a9",
 			PreviousBalance: 100,
 			ActualBalance:   50,
 		}
-		depositOutput := entities.TransactionOutput{
+		depositOutput := ac.TransactionOutput{
 			ID:              "8b27748e-88a8-4792-b22a-67ba8f77179f",
 			PreviousBalance: 0,
 			ActualBalance:   50,
@@ -59,7 +59,7 @@ func TestCreateTransfer(t *testing.T) {
 
 		requestBody, _ := json.Marshal(transferInput)
 		req := bytes.NewReader(requestBody)
-		usecaseFakeAccount := new(account.UsecaseMock)
+		usecaseFakeAccount := new(ac.UsecaseMock)
 		usecaseFakeTransfer := new(transfer.UsecaseMock)
 		usecaseFakeAccount.On("GetAccountByCPF").Return(accountOrigin, nil)
 		usecaseFakeAccount.On("GetAccountByID").Return(accountDestination, nil)
@@ -89,7 +89,7 @@ func TestCreateTransfer(t *testing.T) {
 
 		requestBody, _ := json.Marshal(transferInput)
 		req := bytes.NewReader(requestBody)
-		usecaseFakeAccount := new(account.UsecaseMock)
+		usecaseFakeAccount := new(ac.UsecaseMock)
 		usecaseFakeTransfer := new(transfer.UsecaseMock)
 		usecaseFakeAccount.On("GetAccountByCPF").Return(entities.Account{}, errors.New(""))
 		usecaseFakeTransfer.On("CreateTransfer").Return()
@@ -123,12 +123,12 @@ func TestCreateTransfer(t *testing.T) {
 			AccountDestinationID: "8b27748e-88a8-4792-b22a-67ba8f77179f",
 			Amount:               50,
 		}
-		withdrawOutput := entities.TransactionOutput{
+		withdrawOutput := ac.TransactionOutput{
 			ID:              "efb711fa-786e-4d57-9eeb-6fbaca8775a9",
 			PreviousBalance: 100,
 			ActualBalance:   50,
 		}
-		depositOutput := entities.TransactionOutput{
+		depositOutput := ac.TransactionOutput{
 			ID:              "8b27748e-88a8-4792-b22a-67ba8f77179f",
 			PreviousBalance: 0,
 			ActualBalance:   50,
@@ -141,7 +141,7 @@ func TestCreateTransfer(t *testing.T) {
 
 		requestBody, _ := json.Marshal(transferInput)
 		req := bytes.NewReader(requestBody)
-		usecaseFakeAccount := new(account.UsecaseMock)
+		usecaseFakeAccount := new(ac.UsecaseMock)
 		usecaseFakeTransfer := new(transfer.UsecaseMock)
 		usecaseFakeAccount.On("GetAccountByCPF").Return(accountOrigin, nil)
 		usecaseFakeAccount.On("GetAccountByID").Return(entities.Account{}, errors.New(""))
@@ -171,7 +171,7 @@ func TestCreateTransfer(t *testing.T) {
 
 		requestBody, _ := json.Marshal(transferInput)
 		req := bytes.NewReader(requestBody)
-		usecaseFakeAccount := new(account.UsecaseMock)
+		usecaseFakeAccount := new(ac.UsecaseMock)
 		usecaseFakeTransfer := new(transfer.UsecaseMock)
 		usecaseFakeAccount.On("GetAccountByCPF").Return(entities.Account{}, errors.New(""))
 		usecaseFakeTransfer.On("CreateTransfer").Return()
@@ -205,12 +205,12 @@ func TestCreateTransfer(t *testing.T) {
 			AccountDestinationID: "8b27748e-88a8-4792-b22a-67ba8f77179f",
 			Amount:               50,
 		}
-		withdrawOutput := entities.TransactionOutput{
+		withdrawOutput := ac.TransactionOutput{
 			ID:              "efb711fa-786e-4d57-9eeb-6fbaca8775a9",
 			PreviousBalance: 100,
 			ActualBalance:   50,
 		}
-		depositOutput := entities.TransactionOutput{
+		depositOutput := ac.TransactionOutput{
 			ID:              "8b27748e-88a8-4792-b22a-67ba8f77179f",
 			PreviousBalance: 0,
 			ActualBalance:   50,
@@ -223,7 +223,7 @@ func TestCreateTransfer(t *testing.T) {
 
 		requestBody, _ := json.Marshal(transferInput)
 		req := bytes.NewReader(requestBody)
-		usecaseFakeAccount := new(account.UsecaseMock)
+		usecaseFakeAccount := new(ac.UsecaseMock)
 		usecaseFakeTransfer := new(transfer.UsecaseMock)
 		usecaseFakeAccount.On("GetAccountByCPF").Return(accountOrigin, nil)
 		usecaseFakeAccount.On("GetAccountByID").Return(accountDestination, nil)
@@ -264,12 +264,12 @@ func TestCreateTransfer(t *testing.T) {
 			AccountDestinationID: "8b27748e-88a8-4792-b22a-67ba8f77179f",
 			Amount:               -50,
 		}
-		withdrawOutput := entities.TransactionOutput{
+		withdrawOutput := ac.TransactionOutput{
 			ID:              "efb711fa-786e-4d57-9eeb-6fbaca8775a9",
 			PreviousBalance: 100,
 			ActualBalance:   50,
 		}
-		depositOutput := entities.TransactionOutput{
+		depositOutput := ac.TransactionOutput{
 			ID:              "8b27748e-88a8-4792-b22a-67ba8f77179f",
 			PreviousBalance: 0,
 			ActualBalance:   50,
@@ -277,7 +277,7 @@ func TestCreateTransfer(t *testing.T) {
 
 		requestBody, _ := json.Marshal(transferInput)
 		req := bytes.NewReader(requestBody)
-		usecaseFakeAccount := new(account.UsecaseMock)
+		usecaseFakeAccount := new(ac.UsecaseMock)
 		usecaseFakeTransfer := new(transfer.UsecaseMock)
 		usecaseFakeAccount.On("GetAccountByCPF").Return(accountOrigin, nil)
 		usecaseFakeAccount.On("GetAccountByID").Return(accountDestination, nil)
@@ -328,7 +328,7 @@ func TestListUserTransfers(t *testing.T) {
 			Balance: 0,
 		}
 		usecaseFake := new(transfer.UsecaseMock)
-		usecaseFakeAccount := new(account.UsecaseMock)
+		usecaseFakeAccount := new(ac.UsecaseMock)
 		usecaseFakeAccount.On("GetAccountByCPF").Return(accountOrigin, nil)
 		usecaseFake.On("ListUserTransfers").Return(transfers, nil)
 		usecaseFakeAccount.On("GetCPF").Return("86419560004", true)
@@ -371,7 +371,7 @@ func TestListUserTransfers(t *testing.T) {
 			Balance: 0,
 		}
 		usecaseFake := new(transfer.UsecaseMock)
-		usecaseFakeAccount := new(account.UsecaseMock)
+		usecaseFakeAccount := new(ac.UsecaseMock)
 		usecaseFakeAccount.On("GetAccountByCPF").Return(accountOrigin, nil)
 		usecaseFake.On("ListUserTransfers").Return(transfers, nil)
 		usecaseFakeAccount.On("GetCPF").Return("", false)
@@ -413,7 +413,7 @@ func TestListUserTransfers(t *testing.T) {
 			Balance: 0,
 		}
 		usecaseFake := new(transfer.UsecaseMock)
-		usecaseFakeAccount := new(account.UsecaseMock)
+		usecaseFakeAccount := new(ac.UsecaseMock)
 		usecaseFakeAccount.On("GetAccountByCPF").Return(accountOrigin, nil)
 		usecaseFake.On("ListUserTransfers").Return(transfers, errors.New(""))
 		usecaseFakeAccount.On("GetCPF").Return("86419560004", true)

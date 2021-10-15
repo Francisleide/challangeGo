@@ -33,16 +33,16 @@ func (mock *UsecaseMock) ListAll() ([]entities.Account, error) {
 	return result.([]entities.Account), args.Error(1)
 }
 
-func (mock *UsecaseMock) Deposit(CPF string, amount float64) (entities.TransactionOutput, error) {
+func (mock *UsecaseMock) Deposit(CPF string, amount float64) (TransactionOutput, error) {
 	args := mock.Called()
 	result := args.Get(0)
-	return result.(entities.TransactionOutput), args.Error(1)
+	return result.(TransactionOutput), args.Error(1)
 }
 
-func (mock *UsecaseMock) Withdraw(CPF string, amount float64) (entities.TransactionOutput, error) {
+func (mock *UsecaseMock) Withdraw(CPF string, amount float64) (TransactionOutput, error) {
 	args := mock.Called()
 	result := args.Get(0)
-	return result.(entities.TransactionOutput), args.Error(1)
+	return result.(TransactionOutput), args.Error(1)
 }
 
 func (mock *UsecaseMock) GetBalance(accountID string) (float64, error) {

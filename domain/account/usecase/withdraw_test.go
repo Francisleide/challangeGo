@@ -3,7 +3,7 @@ package usecase_test
 import (
 	"testing"
 
-	"github.com/francisleide/ChallengeGo/domain/account"
+	ac "github.com/francisleide/ChallengeGo/domain/account"
 	"github.com/francisleide/ChallengeGo/domain/account/usecase"
 	"github.com/francisleide/ChallengeGo/domain/entities"
 	"github.com/sirupsen/logrus"
@@ -13,15 +13,15 @@ import (
 func TestWithdraw(t *testing.T) {
 	t.Run("withdraw should take place without errors", func(t *testing.T) {
 		//prepare
-		mockRepo := new(account.MockRepository)
+		mockRepo := new(ac.MockRepository)
 		account := entities.Account{
 			Name:    "Lorena Morena",
 			CPF:     "86419560004",
 			Balance: 2000,
 		}
-		accountExpected := entities.TransactionOutput{
+		accountExpected := ac.TransactionOutput{
 			PreviousBalance: account.Balance,
-			ActualBalance: 1500,
+			ActualBalance:   1500,
 		}
 		mockRepo.On("FindOne").Return(account, nil)
 		mockRepo.On("UpdateBalance").Return(nil)
@@ -39,7 +39,7 @@ func TestWithdraw(t *testing.T) {
 	t.Run("the withdrawal is not made due to lack of balance", func(t *testing.T) {
 		//prepare
 		log := logrus.NewEntry(logrus.New())
-		mockRepo := new(account.MockRepository)
+		mockRepo := new(ac.MockRepository)
 		account := entities.Account{
 			Name:    "Lorena Morena",
 			CPF:     "86419560004",

@@ -11,7 +11,6 @@ import (
 	"testing"
 
 	"github.com/francisleide/ChallengeGo/domain/account"
-	"github.com/francisleide/ChallengeGo/domain/entities"
 	a "github.com/francisleide/ChallengeGo/gateways/http/account"
 	"github.com/francisleide/ChallengeGo/gateways/http/middleware"
 	"github.com/gorilla/mux"
@@ -26,7 +25,7 @@ func TestWithdraw(t *testing.T) {
 		withdrawInput := a.Withdraw{
 			Amount: 200,
 		}
-		withdrawOutput := entities.TransactionOutput{
+		withdrawOutput := account.TransactionOutput{
 			ID:              "34add062-ccf4-4530-976d-da7b193a4db4",
 			PreviousBalance: 300,
 			ActualBalance:   100,
@@ -61,7 +60,7 @@ func TestWithdraw(t *testing.T) {
 		requestBody, _ := json.Marshal(withdrawInput)
 		req := bytes.NewReader(requestBody)
 		usecaseFake := new(account.UsecaseMock)
-		usecaseFake.On("Withdraw").Return(entities.TransactionOutput{}, errors.New(""))
+		usecaseFake.On("Withdraw").Return(account.TransactionOutput{}, errors.New(""))
 		usecaseFake.On("GetCPF").Return("", false)
 		log := logrus.NewEntry(logrus.New())
 		handler := a.Accounts(r, usecaseFake, log)
@@ -83,7 +82,7 @@ func TestWithdraw(t *testing.T) {
 		requestBody, _ := json.Marshal(withdrawInput)
 		req := bytes.NewReader(requestBody)
 		usecaseFake := new(account.UsecaseMock)
-		usecaseFake.On("Withdraw").Return(entities.TransactionOutput{}, errors.New(""))
+		usecaseFake.On("Withdraw").Return(account.TransactionOutput{}, errors.New(""))
 		usecaseFake.On("GetCPF").Return("86419560004", true)
 		log := logrus.NewEntry(logrus.New())
 		handler := a.Accounts(r, usecaseFake, log)

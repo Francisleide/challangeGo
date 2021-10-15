@@ -11,7 +11,6 @@ import (
 	"testing"
 
 	"github.com/francisleide/ChallengeGo/domain/account"
-	"github.com/francisleide/ChallengeGo/domain/entities"
 	a "github.com/francisleide/ChallengeGo/gateways/http/account"
 	"github.com/francisleide/ChallengeGo/gateways/http/middleware"
 	"github.com/gorilla/mux"
@@ -26,7 +25,7 @@ func TestDeposit(t *testing.T) {
 		depositInput := a.DepositInput{
 			Amount: 200,
 		}
-		depositOutput := entities.TransactionOutput{
+		depositOutput := account.TransactionOutput{
 			ID:              "2ab7195f-222a-45c3-9189-4f5da5cd745f",
 			PreviousBalance: 500,
 			ActualBalance:   700,
@@ -58,7 +57,7 @@ func TestDeposit(t *testing.T) {
 			Amount: 200,
 		}
 		usecaseFake := new(account.UsecaseMock)
-		usecaseFake.On("Deposit").Return(entities.TransactionOutput{}, errors.New(""))
+		usecaseFake.On("Deposit").Return(account.TransactionOutput{}, errors.New(""))
 		usecaseFake.On("GetCPF").Return("", false)
 		requestBody, _ := json.Marshal(depositInput)
 		req := bytes.NewReader(requestBody)
@@ -79,9 +78,9 @@ func TestDeposit(t *testing.T) {
 		depositInput := a.DepositInput{
 			Amount: -200,
 		}
-		
+
 		usecaseFake := new(account.UsecaseMock)
-		usecaseFake.On("Deposit").Return(entities.TransactionOutput{}, errors.New(""))
+		usecaseFake.On("Deposit").Return(account.TransactionOutput{}, errors.New(""))
 		usecaseFake.On("GetCPF").Return("86419560004", true)
 		requestBody, _ := json.Marshal(depositInput)
 		req := bytes.NewReader(requestBody)

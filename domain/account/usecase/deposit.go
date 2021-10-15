@@ -1,25 +1,25 @@
 package usecase
 
-import "github.com/francisleide/ChallengeGo/domain/entities"
+import (
+	ac "github.com/francisleide/ChallengeGo/domain/account"
+)
 
-func (c AccountUc) Deposit(CPF string, amount float64) (entities.TransactionOutput, error) {
-	var depositOutput entities.TransactionOutput
+func (c AccountUc) Deposit(CPF string, amount float64) (ac.TransactionOutput, error) {
+	var depositOutput ac.TransactionOutput
 	account, err := c.r.FindOne(CPF)
-	depositOutput.PreviousBalance = account.Balance
-	depositOutput.ID = account.ID
 	if err != nil {
 		c.log.WithError(err).Errorln(ErrorRetrieveAccount)
-		return entities.TransactionOutput{}, ErrorRetrieveAccount
+		return ac.TransactionOutput{}, ErrorRetrieveAccount
 	}
+	depositOutput.PreviousBalance = account.Balance
+	depositOutput.ID = account.ID
 	if amount <= 0 {
-		c.log.WithError(err).Errorln(ErrorInvalidValue)
-		return entities.TransactionOutput{}, ErrorInvalidValue
+		return ac.TransactionOutput{}, ErrorInvalidValue
 	}
 	account.Balance += amount
 	err = c.r.UpdateBalance(account.ID, account.Balance)
 	if err != nil {
-		c.log.WithError(err).Errorln(ErrorUpdateBalance)
-		return entities.TransactionOutput{}, ErrorUpdateBalance
+		return ac.TransactionOutput{}, ErrorUpdateBalance
 	}
 	depositOutput.ActualBalance = account.Balance
 	return depositOutput, nil

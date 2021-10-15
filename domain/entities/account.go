@@ -9,11 +9,7 @@ import (
 	"golang.org/x/crypto/bcrypt"
 )
 
-type TransactionOutput struct {
-	ID              string
-	PreviousBalance float64
-	ActualBalance   float64
-}
+
 type Account struct {
 	ID        string
 	Name      string
